@@ -3,7 +3,7 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Window/Event.hpp"
 
-#include "../Core/Common.h"
+#include "Core/Common.h"
 
 class CVrdxScene
 {

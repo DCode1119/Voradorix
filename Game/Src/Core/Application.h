@@ -3,8 +3,8 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include "../Core/Common.h"
-#include "../Scene/SceneManager.h"
+#include "Core/Common.h"
+#include "Scene/SceneManager.h"
 
 class CVrdxApplication
 {

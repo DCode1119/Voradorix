@@ -5,8 +5,8 @@
 #include <memory>
 #include <cstdint>
 
-#include "../Core/Common.h"
-#include "../Core/Vector.h"
+#include "Core/Common.h"
+#include "Core/Vector.h"
 
 class CVrdxScene;
 

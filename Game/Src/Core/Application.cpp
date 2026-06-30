@@ -1,6 +1,6 @@
 ﻿#include "Application.h"
 
-#include "../Scene/TestScene.h"
+#include "Scene/TestScene.h"
 
 CVrdxApplication::CVrdxApplication()
 {
