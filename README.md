@@ -7,7 +7,9 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 C++17, Visual Studio 2022 x64 환경에서 SFML 3.1.0을 사용하여 구축하는
 비주얼 노벨(미연시) 스타일 게임 엔진입니다.
 
-씬 기반 아키텍처, 스크립트 엔진, 텍스트 중심 스토리텔링을 지원합니다.
+씬 기반 아키텍처, 텍스트 출력, 스크립트/분기 확장 구조를 지원합니다.
+
+현재 1단계 Scene 시스템과 2단계 기반 문자열/대사 UI 구성이 준비되어 있습니다.
 
 ## 기술 스택
 
@@ -30,11 +32,14 @@ Game/
 │   ├── Extern/SFML-3.1.0/
 │   └── Src/
 │       ├── Main.cpp
-│       ├── Core/             # Application, Common, Vector
-│       ├── Scene/            # Scene, SceneManager, TestScene
-│       ├── Novel/            # (예정) ScriptEngine, DialogueBox
-│       ├── Ui/               # (예정) UI 컴포넌트
+│       ├── Core/             # Application, Common, Vector, String
+│       ├── Scene/            # Scene, SceneManager, TestScene, NovelScene
+│       ├── Novel/            # 노벨 재생 로직
+│       ├── Ui/               # BaseWidget, DialogueBox
 │       └── Save/             # (예정) SaveManager
+├── Docs/                     # 설계/작업 기록 문서
+├── graphify-out/             # 그래프 분석 산출물
+├── Assets/                   # 폰트 및 리소스
 ├── .gitignore
 └── README.md
 ```
@@ -42,7 +47,7 @@ Game/
 ## 구현 현황
 
 - [x] **1단계 — Scene 시스템**: Scene 인터페이스, SceneManager, Application, 검증용 TestScene 완료
-- [ ] 2단계 — NovelScene + DialogueBox
+- [x] **2단계 — NovelScene + DialogueBox + String 기반**: 대사창/문자열 기반과 노벨 본문 흐름 준비 완료
 - [ ] 3단계 — 배경 및 캐릭터
 - [ ] 4단계 — ScriptEngine
 - [ ] 5단계 — 선택지 시스템
@@ -69,6 +74,11 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 2. x64 Debug (또는 Release) 선택
 3. 빌드 → PostBuild에서 SFML DLL 자동 복사
 4. 실행
+
+## 현재 상태
+
+- 빌드/테스트 확인 완료
+- 작업 기록과 프로젝트 인덱스 문서는 `Docs/`를 참고
 
 ## 라이선스
 

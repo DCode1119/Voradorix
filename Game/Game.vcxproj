@@ -90,18 +90,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Core\Application.cpp" />
+    <ClCompile Include="Src\Core\String.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Scene\NovelScene.cpp" />
     <ClCompile Include="Src\Scene\Scene.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TestScene.cpp" />
+    <ClCompile Include="Src\Ui\DialogueBox.cpp" />
+    <ClCompile Include="Src\Ui\WidgetBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Application.h" />
     <ClInclude Include="Src\Core\Common.h" />
+    <ClInclude Include="Src\Core\String.h" />
     <ClInclude Include="Src\Core\Vector.h" />
+    <ClInclude Include="Src\Novel\DialogueLine.h" />
+    <ClInclude Include="Src\Scene\NovelScene.h" />
     <ClInclude Include="Src\Scene\Scene.h" />
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TestScene.h" />
+    <ClInclude Include="Src\Ui\DialogueBox.h" />
+    <ClInclude Include="Src\Ui\WidgetBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

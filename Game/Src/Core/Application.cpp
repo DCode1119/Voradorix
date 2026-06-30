@@ -1,6 +1,7 @@
 ﻿#include "Application.h"
 
 #include "Scene/TestScene.h"
+#include "Scene/NovelScene.h"
 
 CVrdxApplication::CVrdxApplication()
 {
@@ -9,6 +10,7 @@ CVrdxApplication::CVrdxApplication()
 	Window.setFramerateLimit(60);
 	bIsRunning = true;
 	SceneManager.Push(MakeVrdxUnique<CVrdxTestScene>());
+	SceneManager.Push(MakeVrdxUnique<CVrdxNovelScene>());
 }
 
 CVrdxApplication::~CVrdxApplication()
