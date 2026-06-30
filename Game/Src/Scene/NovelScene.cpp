@@ -6,7 +6,7 @@
 
 CVrdxNovelScene::CVrdxNovelScene()
 {
-	FVrdxDialogueLine DialogueLine =  { "Voradorix", "Voradorix의 세계에 오신 것을 환영합니다." };
+	FVrdxDialogueLine DialogueLine =  { "Voradorix", "세계에 오신 것을 환영합니다." };
 	Script.Add(DialogueLine);
 	CurrentIndex = 0;
 }
@@ -40,13 +40,6 @@ void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
 		}
 	}
 
-	#if 0
-	struct MouseButtonPressed
-	{
-		Mouse::Button button{}; //!< Code of the button that has been pressed
-		Vector2i      position; //!< Position of the mouse pointer, relative to the top left of the owner window
-	};
-	#endif
 	else if (const auto* MousePressed = Event.getIf<sf::Event::MouseButtonPressed>())
 	{
 		if (MousePressed->button  == sf::Mouse::Button::Left)
