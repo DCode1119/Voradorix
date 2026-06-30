@@ -89,7 +89,19 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Core\Application.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Scene\Scene.cpp" />
+    <ClCompile Include="Src\Scene\SceneManager.cpp" />
+    <ClCompile Include="Src\Scene\TestScene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Core\Application.h" />
+    <ClInclude Include="Src\Core\Common.h" />
+    <ClInclude Include="Src\Core\Vector.h" />
+    <ClInclude Include="Src\Scene\Scene.h" />
+    <ClInclude Include="Src\Scene\SceneManager.h" />
+    <ClInclude Include="Src\Scene\TestScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
