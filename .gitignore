@@ -1,0 +1,25 @@
+# Visual Studio
+bin/
+obj/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.log
+*.tlog
+*.ilk
+*.pdb
+ipch/
+.vs/
+
+# Docs (design documents, work logs)
+Docs/
+
+# Build output
+*.exe
+*.dll
+*.lib
+
+# IDE
+*.vcxproj.user
+*.sln.docstates
