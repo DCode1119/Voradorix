@@ -1,3 +1,6 @@
+# graphify knowledge graph output
+graphify-out/
+
 # Visual Studio
 bin/
 obj/
