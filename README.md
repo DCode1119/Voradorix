@@ -23,25 +23,20 @@ C++17, Visual Studio 2022 x64 환경에서 SFML 3.1.0을 사용하여 구축하�
 
 ```
 Game/
-├── Game/                     # 솔루션 루트
-│   ├── Game.sln              # Visual Studio 솔루션
-│   ├── Game/                 # 프로젝트 디렉토리
-│   │   ├── Game.vcxproj
-│   │   ├── Extern/SFML-3.1.0/
-│   │   └── Src/
-│   │       ├── Main.cpp
-│   │       ├── Core/         # Application, Common, Vector
-│   │       ├── Scene/        # Scene, SceneManager, TestScene
-│   │       ├── Novel/        # (예정) ScriptEngine, DialogueBox
-│   │       ├── Ui/           # (예정) UI 컴포넌트
-│   │       └── Save/         # (예정) SaveManager
-│   └── README.md
-├── Docs/                     # 설계 문서 및 작업 기록 (git 제외, 별도 관리)
-│   ├── NAMING.md             # 네이밍 규칙
-│   ├── 1-SceneSystem.md      # 1단계 명세
-│   ├── GAME_DESIGN.md        # 전체 설계
-│   └── WORK_LOG.md           # 작업 기록
-└── opencode.json             # MCP 에이전트 설정
+├── Game.sln                  # Visual Studio 솔루션
+├── Game/
+│   ├── Game.vcxproj
+│   ├── Game.vcxproj.filters
+│   ├── Extern/SFML-3.1.0/
+│   └── Src/
+│       ├── Main.cpp
+│       ├── Core/             # Application, Common, Vector
+│       ├── Scene/            # Scene, SceneManager, TestScene
+│       ├── Novel/            # (예정) ScriptEngine, DialogueBox
+│       ├── Ui/               # (예정) UI 컴포넌트
+│       └── Save/             # (예정) SaveManager
+├── .gitignore
+└── README.md
 ```
 
 ## 구현 현황
@@ -58,7 +53,6 @@ Game/
 ## 네이밍 규칙
 
 Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase를 사용합니다.
-자세한 내용은 프로젝트 로컬 `Docs/NAMING.md` 참조 (git 제외, 별도 관리).
 
 | 접두어 | 대상 | 예시 |
 |--------|------|------|
