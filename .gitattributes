@@ -1,0 +1,42 @@
+# Auto detect text files and convert to native line endings
+* text=auto
+
+# Source code
+*.c     text
+*.cpp   text
+*.h     text
+*.hpp   text
+*.cxx   text
+*.hxx   text
+*.ixx   text
+*.tpp   text
+
+# Scripts and config
+*.cmake text
+*.yml   text
+*.yaml  text
+*.json  text
+*.xml   text
+*.sln   text
+*.vcxproj text
+*.props text
+*.filters text
+*.gitignore text
+*.gitattributes text
+
+# Documentation
+*.md    text
+*.txt   text
+
+# Binary files — do not touch
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.ico   binary
+*.bmp   binary
+*.gif   binary
+*.ttf   binary
+*.otf   binary
+*.wav   binary
+*.ogg   binary
+*.mp3   binary

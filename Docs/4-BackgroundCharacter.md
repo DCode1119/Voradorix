@@ -34,15 +34,15 @@ tags:
 
 ## 2. 파일 구성
 
-| # | 파일 | 설명 | 상태 |
-|---|------|------|:----:|
-| 1 | `Src/Novel/Background.h` | `CVrdxBackground` 선언 | ✅ 완료 |
-| 2 | `Src/Novel/Background.cpp` | `CVrdxBackground` 구현 | ✅ 완료 |
-| 3 | `Src/Novel/CharacterManager.h` | `CVrdxCharacterManager` 선언 | ✅ 완료 |
-| 4 | `Src/Novel/CharacterManager.cpp` | `CVrdxCharacterManager` 구현 | ✅ 완료 |
-| 5 | `Src/Novel/NovelScene.h/cpp` | 배경/캐릭터 렌더링 연동 | 📝 수정 예정 |
-| 6 | `Game.vcxproj` | ClCompile/ClInclude 항목 등록 | 📝 등록 예정 |
-| 7 | `Game.vcxproj.filters` | Novel/ 필터 구성 | 📝 구성 예정 |
+| #   | 파일                               | 설명                         |    상태    |
+| --- | -------------------------------- | -------------------------- | :------: |
+| 1   | `Src/Novel/Background.h`         | `CVrdxBackground` 선언       |   ✅ 완료   |
+| 2   | `Src/Novel/Background.cpp`       | `CVrdxBackground` 구현       |   ✅ 완료   |
+| 3   | `Src/Novel/CharacterManager.h`   | `CVrdxCharacterManager` 선언 |   ✅ 완료   |
+| 4   | `Src/Novel/CharacterManager.cpp` | `CVrdxCharacterManager` 구현 |   ✅ 완료   |
+| 5   | `Src/Novel/NovelScene.h/cpp`     | 배경/캐릭터 렌더링 연동              | 📝 수정 예정 |
+| 6   | `Game.vcxproj`                   | ClCompile/ClInclude 항목 등록  | 📝 등록 예정 |
+| 7   | `Game.vcxproj.filters`           | Novel/ 필터 구성               | 📝 구성 예정 |
 
 ---
 
