@@ -1,0 +1,1329 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "Main.cpp",
+      "file_type": "code",
+      "source_file": "Main.cpp",
+      "source_location": "L1",
+      "community": 8,
+      "norm_label": "main.cpp",
+      "id": "main_cpp"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "Main.cpp",
+      "source_location": "L3",
+      "community": 8,
+      "norm_label": "main()",
+      "id": "src_main_main"
+    },
+    {
+      "label": "Application.cpp",
+      "file_type": "code",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "application.cpp",
+      "id": "core_application_cpp"
+    },
+    {
+      "label": "CVrdxApplication()",
+      "file_type": "code",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L6",
+      "community": 5,
+      "norm_label": "cvrdxapplication()",
+      "id": "core_application_cvrdxapplication"
+    },
+    {
+      "label": "Run()",
+      "file_type": "code",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L21",
+      "community": 0,
+      "norm_label": "run()",
+      "id": "core_application_run"
+    },
+    {
+      "label": "Application.h",
+      "file_type": "code",
+      "source_file": "Core/Application.h",
+      "source_location": "L1",
+      "community": 5,
+      "norm_label": "application.h",
+      "id": "core_application_h"
+    },
+    {
+      "label": "Common.h",
+      "file_type": "code",
+      "source_file": "Core/Common.h",
+      "source_location": "L1",
+      "community": 10,
+      "norm_label": "common.h",
+      "id": "core_common_h"
+    },
+    {
+      "label": "String.cpp",
+      "file_type": "code",
+      "source_file": "Core/String.cpp",
+      "source_location": "L1",
+      "community": 11,
+      "norm_label": "string.cpp",
+      "id": "core_string_cpp"
+    },
+    {
+      "label": "String.h",
+      "file_type": "code",
+      "source_file": "Core/String.h",
+      "source_location": "L1",
+      "community": 4,
+      "norm_label": "string.h",
+      "id": "core_string_h"
+    },
+    {
+      "label": "Front()",
+      "file_type": "code",
+      "source_file": "Core/String.h",
+      "source_location": "L37",
+      "community": 4,
+      "norm_label": "front()",
+      "id": "core_string_front"
+    },
+    {
+      "label": "FVrdxString()",
+      "file_type": "code",
+      "source_file": "Core/String.h",
+      "source_location": "L81",
+      "community": 4,
+      "norm_label": "fvrdxstring()",
+      "id": "core_string_fvrdxstring"
+    },
+    {
+      "label": "DecodeUtf8()",
+      "file_type": "code",
+      "source_file": "Core/String.h",
+      "source_location": "L289",
+      "community": 4,
+      "norm_label": "decodeutf8()",
+      "id": "core_string_decodeutf8"
+    },
+    {
+      "label": "Vector.h",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "vector.h",
+      "id": "core_vector_h"
+    },
+    {
+      "label": "Data()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L14",
+      "community": 1,
+      "norm_label": "data()",
+      "id": "core_vector_data"
+    },
+    {
+      "label": "Begin()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L16",
+      "community": 1,
+      "norm_label": "begin()",
+      "id": "core_vector_begin"
+    },
+    {
+      "label": "End()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L18",
+      "community": 1,
+      "norm_label": "end()",
+      "id": "core_vector_end"
+    },
+    {
+      "label": "operator()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L32",
+      "community": 1,
+      "norm_label": "operator()",
+      "id": "core_vector_operator"
+    },
+    {
+      "label": "Add()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L35",
+      "community": 1,
+      "norm_label": "add()",
+      "id": "core_vector_add"
+    },
+    {
+      "label": "RemoveAt()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L37",
+      "community": 1,
+      "norm_label": "removeat()",
+      "id": "core_vector_removeat"
+    },
+    {
+      "label": "Pop()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L38",
+      "community": 3,
+      "norm_label": "pop()",
+      "id": "core_vector_pop"
+    },
+    {
+      "label": "Clear()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L39",
+      "community": 1,
+      "norm_label": "clear()",
+      "id": "core_vector_clear"
+    },
+    {
+      "label": "Contains()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L40",
+      "community": 1,
+      "norm_label": "contains()",
+      "id": "core_vector_contains"
+    },
+    {
+      "label": "Reserve()",
+      "file_type": "code",
+      "source_file": "Core/Vector.h",
+      "source_location": "L43",
+      "community": 1,
+      "norm_label": "reserve()",
+      "id": "core_vector_reserve"
+    },
+    {
+      "label": "DialogueLine.h",
+      "file_type": "code",
+      "source_file": "Novel/DialogueLine.h",
+      "source_location": "L1",
+      "community": 12,
+      "norm_label": "dialogueline.h",
+      "id": "novel_dialogueline_h"
+    },
+    {
+      "label": "CVrdxNovelScene()",
+      "file_type": "code",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L7",
+      "community": 0,
+      "norm_label": "cvrdxnovelscene()",
+      "id": "scene_novelscene_cvrdxnovelscene"
+    },
+    {
+      "label": "ShowNextLine()",
+      "file_type": "code",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L85",
+      "community": 0,
+      "norm_label": "shownextline()",
+      "id": "scene_novelscene_shownextline"
+    },
+    {
+      "label": "EndScenario()",
+      "file_type": "code",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L98",
+      "community": 0,
+      "norm_label": "endscenario()",
+      "id": "scene_novelscene_endscenario"
+    },
+    {
+      "label": "NovelScene.h",
+      "file_type": "code",
+      "source_file": "Scene/NovelScene.h",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "novelscene.h",
+      "id": "scene_novelscene_h"
+    },
+    {
+      "label": "Scene.cpp",
+      "file_type": "code",
+      "source_file": "Scene/Scene.cpp",
+      "source_location": "L1",
+      "community": 13,
+      "norm_label": "scene.cpp",
+      "id": "scene_scene_cpp"
+    },
+    {
+      "label": "Scene.h",
+      "file_type": "code",
+      "source_file": "Scene/Scene.h",
+      "source_location": "L1",
+      "community": 6,
+      "norm_label": "scene.h",
+      "id": "scene_scene_h"
+    },
+    {
+      "label": "CVrdxScene()",
+      "file_type": "code",
+      "source_file": "Scene/Scene.h",
+      "source_location": "L8",
+      "community": 6,
+      "norm_label": "cvrdxscene()",
+      "id": "scene_scene_cvrdxscene"
+    },
+    {
+      "label": "Push()",
+      "file_type": "code",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L6",
+      "community": 3,
+      "norm_label": "push()",
+      "id": "scene_scenemanager_push"
+    },
+    {
+      "label": "Switch()",
+      "file_type": "code",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L22",
+      "community": 3,
+      "norm_label": "switch()",
+      "id": "scene_scenemanager_switch"
+    },
+    {
+      "label": "IsEmpty()",
+      "file_type": "code",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L58",
+      "community": 0,
+      "norm_label": "isempty()",
+      "id": "scene_scenemanager_isempty"
+    },
+    {
+      "label": "GetCount()",
+      "file_type": "code",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L63",
+      "community": 3,
+      "norm_label": "getcount()",
+      "id": "scene_scenemanager_getcount"
+    },
+    {
+      "label": "SceneManager.h",
+      "file_type": "code",
+      "source_file": "Scene/SceneManager.h",
+      "source_location": "L1",
+      "community": 3,
+      "norm_label": "scenemanager.h",
+      "id": "scene_scenemanager_h"
+    },
+    {
+      "label": "CVrdxSceneManager()",
+      "file_type": "code",
+      "source_file": "Scene/SceneManager.h",
+      "source_location": "L13",
+      "community": 3,
+      "norm_label": "cvrdxscenemanager()",
+      "id": "scene_scenemanager_cvrdxscenemanager"
+    },
+    {
+      "label": "TestScene.cpp",
+      "file_type": "code",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "testscene.cpp",
+      "id": "scene_testscene_cpp"
+    },
+    {
+      "label": "OnEnter()",
+      "file_type": "code",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L6",
+      "community": 0,
+      "norm_label": "onenter()",
+      "id": "scene_testscene_onenter"
+    },
+    {
+      "label": "OnExit()",
+      "file_type": "code",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L11",
+      "community": 0,
+      "norm_label": "onexit()",
+      "id": "scene_testscene_onexit"
+    },
+    {
+      "label": "TestScene.h",
+      "file_type": "code",
+      "source_file": "Scene/TestScene.h",
+      "source_location": "L1",
+      "community": 7,
+      "norm_label": "testscene.h",
+      "id": "scene_testscene_h"
+    },
+    {
+      "label": "CVrdxTestScene()",
+      "file_type": "code",
+      "source_file": "Scene/TestScene.h",
+      "source_location": "L5",
+      "community": 7,
+      "norm_label": "cvrdxtestscene()",
+      "id": "scene_testscene_cvrdxtestscene"
+    },
+    {
+      "label": "CVrdxDialogueBox()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L3",
+      "community": 2,
+      "norm_label": "cvrdxdialoguebox()",
+      "id": "ui_dialoguebox_cvrdxdialoguebox"
+    },
+    {
+      "label": "HandleEvent()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L29",
+      "community": 0,
+      "norm_label": "handleevent()",
+      "id": "ui_dialoguebox_handleevent"
+    },
+    {
+      "label": "Update()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L40",
+      "community": 0,
+      "norm_label": "update()",
+      "id": "ui_dialoguebox_update"
+    },
+    {
+      "label": "Draw()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L58",
+      "community": 0,
+      "norm_label": "draw()",
+      "id": "ui_dialoguebox_draw"
+    },
+    {
+      "label": "SetSpeaker()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L69",
+      "community": 2,
+      "norm_label": "setspeaker()",
+      "id": "ui_dialoguebox_setspeaker"
+    },
+    {
+      "label": "SetLine()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L79",
+      "community": 2,
+      "norm_label": "setline()",
+      "id": "ui_dialoguebox_setline"
+    },
+    {
+      "label": "IsTyping()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L85",
+      "community": 2,
+      "norm_label": "istyping()",
+      "id": "ui_dialoguebox_istyping"
+    },
+    {
+      "label": "IsFinished()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L90",
+      "community": 2,
+      "norm_label": "isfinished()",
+      "id": "ui_dialoguebox_isfinished"
+    },
+    {
+      "label": "StartTyping()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L95",
+      "community": 2,
+      "norm_label": "starttyping()",
+      "id": "ui_dialoguebox_starttyping"
+    },
+    {
+      "label": "FinishTyping()",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L106",
+      "community": 2,
+      "norm_label": "finishtyping()",
+      "id": "ui_dialoguebox_finishtyping"
+    },
+    {
+      "label": "DialogueBox.h",
+      "file_type": "code",
+      "source_file": "Ui/DialogueBox.h",
+      "source_location": "L1",
+      "community": 2,
+      "norm_label": "dialoguebox.h",
+      "id": "ui_dialoguebox_h"
+    },
+    {
+      "label": "WidgetBase.cpp",
+      "file_type": "code",
+      "source_file": "Ui/WidgetBase.cpp",
+      "source_location": "L1",
+      "community": 14,
+      "norm_label": "widgetbase.cpp",
+      "id": "ui_widgetbase_cpp"
+    },
+    {
+      "label": "WidgetBase.h",
+      "file_type": "code",
+      "source_file": "Ui/WidgetBase.h",
+      "source_location": "L1",
+      "community": 9,
+      "norm_label": "widgetbase.h",
+      "id": "ui_widgetbase_h"
+    },
+    {
+      "label": "CVrdxBaseWidget()",
+      "file_type": "code",
+      "source_file": "Ui/WidgetBase.h",
+      "source_location": "L7",
+      "community": 9,
+      "norm_label": "cvrdxbasewidget()",
+      "id": "ui_widgetbase_cvrdxbasewidget"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Main.cpp",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_cpp",
+      "target": "src_main_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_cpp",
+      "target": "core_application_cvrdxapplication"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_cpp",
+      "target": "core_application_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_cpp",
+      "target": "ui_dialoguebox_handleevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_cpp",
+      "target": "ui_dialoguebox_update"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_cpp",
+      "target": "ui_dialoguebox_draw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.h",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_h",
+      "target": "core_application_cvrdxapplication"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_run",
+      "target": "ui_dialoguebox_handleevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_run",
+      "target": "ui_dialoguebox_update"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Application.cpp",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_application_run",
+      "target": "ui_dialoguebox_draw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/String.h",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_string_h",
+      "target": "core_string_front"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/String.h",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_string_h",
+      "target": "core_string_fvrdxstring"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/String.h",
+      "source_location": "L289",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_string_h",
+      "target": "core_string_decodeutf8"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/String.h",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_string_front",
+      "target": "core_string_decodeutf8"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_begin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_end"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_operator"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_add"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_removeat"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_pop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_clear"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_contains"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_h",
+      "target": "core_vector_reserve"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_begin",
+      "target": "core_vector_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_end",
+      "target": "core_vector_data"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_removeat",
+      "target": "core_vector_begin"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_contains",
+      "target": "core_vector_begin"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Core/Vector.h",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_contains",
+      "target": "core_vector_end"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "core_vector_pop"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_vector_pop",
+      "target": "scene_scenemanager_isempty"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_switch",
+      "target": "core_vector_pop"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_handleevent",
+      "target": "core_vector_pop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.h",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "scene_novelscene_cvrdxnovelscene"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "scene_novelscene_shownextline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_onenter",
+      "target": "scene_novelscene_shownextline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_handleevent",
+      "target": "scene_novelscene_shownextline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_shownextline",
+      "target": "scene_novelscene_endscenario"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L98",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "scene_novelscene_endscenario"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "scene_testscene_onenter"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "scene_testscene_onexit"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "ui_dialoguebox_handleevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "ui_dialoguebox_update"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/NovelScene.cpp",
+      "source_location": "L79",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_novelscene_h",
+      "target": "ui_dialoguebox_draw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/Scene.h",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scene_h",
+      "target": "scene_scene_cvrdxscene"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "scene_scenemanager_push"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_switch",
+      "target": "scene_scenemanager_push"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "scene_scenemanager_switch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "scene_scenemanager_isempty"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_handleevent",
+      "target": "scene_scenemanager_isempty"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_update",
+      "target": "scene_scenemanager_isempty"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_draw",
+      "target": "scene_scenemanager_isempty"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "scene_scenemanager_getcount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "ui_dialoguebox_handleevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "ui_dialoguebox_update"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.cpp",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "ui_dialoguebox_draw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/SceneManager.h",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_scenemanager_h",
+      "target": "scene_scenemanager_cvrdxscenemanager"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_cpp",
+      "target": "scene_testscene_onenter"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_cpp",
+      "target": "scene_testscene_onexit"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_cpp",
+      "target": "ui_dialoguebox_handleevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_cpp",
+      "target": "ui_dialoguebox_update"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/TestScene.cpp",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_cpp",
+      "target": "ui_dialoguebox_draw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Scene/TestScene.h",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scene_testscene_h",
+      "target": "scene_testscene_cvrdxtestscene"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.h",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_cvrdxdialoguebox"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_handleevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_handleevent",
+      "target": "ui_dialoguebox_istyping"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_handleevent",
+      "target": "ui_dialoguebox_finishtyping"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_update"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_update",
+      "target": "ui_dialoguebox_istyping"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_draw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_setspeaker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L79",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_setline"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_setline",
+      "target": "ui_dialoguebox_starttyping"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_istyping"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_isfinished",
+      "target": "ui_dialoguebox_istyping"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_isfinished"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_starttyping"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/DialogueBox.cpp",
+      "source_location": "L106",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_dialoguebox_h",
+      "target": "ui_dialoguebox_finishtyping"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "Ui/WidgetBase.h",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_widgetbase_h",
+      "target": "ui_widgetbase_cvrdxbasewidget"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "44d6e29a9d36c766362534691c2d3c9aa3c28a45"
+}

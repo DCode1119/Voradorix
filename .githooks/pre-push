@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Pre-push hook: update graphify knowledge graph incrementally before push.
+# Only re-extracts code files (AST) — no LLM calls, fast enough for a hook.
+# If graphify-out changes, auto-commits them with [skip ci].
+
+set -e
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+
+GRAPH_DIR="$REPO_ROOT/graphify-out"
+
+# Skip if no graph exists yet (first push before any graphify run)
+if [ ! -f "$GRAPH_DIR/graph.json" ]; then
+    exit 0
+fi
+
+# Run graphify update — code-only AST re-extraction, no LLM
+python3 -m graphify update "$REPO_ROOT" --force 2>/dev/null || true
+
+# Commit any graph changes
+if ! git diff --quiet graphify-out/; then
+    git add graphify-out/
+    git commit -m "chore: update graphify knowledge graph [skip ci]"
+fi
+
+exit 0

@@ -15,6 +15,12 @@
     <Filter Include="소스 파일\Core">
       <UniqueIdentifier>{5f888559-a26c-40d1-acc7-fc54b71ca3db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Ui">
+      <UniqueIdentifier>{e72f4337-fbfe-4f31-88b6-e2f60a95b935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Novel">
+      <UniqueIdentifier>{a27009cd-0d41-44fe-82bb-6493f70a7ec4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -30,6 +36,18 @@
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\TestScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Core\String.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Ui\WidgetBase.cpp">
+      <Filter>소스 파일\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Ui\DialogueBox.cpp">
+      <Filter>소스 파일\Ui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scene\NovelScene.cpp">
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,6 +68,21 @@
       <Filter>소스 파일\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\TestScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\String.h">
+      <Filter>소스 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Novel\DialogueLine.h">
+      <Filter>소스 파일\Novel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Ui\WidgetBase.h">
+      <Filter>소스 파일\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Ui\DialogueBox.h">
+      <Filter>소스 파일\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\NovelScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>
