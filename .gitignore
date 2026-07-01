@@ -1,3 +1,6 @@
+# Generated artifacts (Graphify, Obsidian, etc.)
+graphify-out/
+.obsidian/
 
 # Visual Studio
 bin/
@@ -13,14 +16,10 @@ obj/
 ipch/
 .vs/
 
-
 # Build output
 *.exe
 *.dll
 *.lib
-
-# Obsidian vault local config
-.obsidian/
 
 # IDE
 *.vcxproj.user
