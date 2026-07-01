@@ -76,6 +76,45 @@ tags:
   - overlong/surrogate/truncation 검증 포함
 - `Assets/Fonts/malgun.ttf` — Malgun Gothic 폰트 설치 (13.5MB)
 
+## 2026-07-01
+
+### 3단계 — CVrdxBackground 구현
+
+- `Src/Novel/Background.h` + `Src/Novel/Background.cpp` — `CVrdxBackground` 구현 완료
+  - 생성자: `CVrdxBackground(float TargetWidth, float TargetHeight)` — 출력 해상도 기반, 1×1 투명 텍스처로 초기화
+  - `SetBackground(FVrdxString& AssetName, float TransitionSeconds)` — `Assets/Backgrounds/`에서 이미지 로드
+    - **중복 요청 무시**: 전환 중 아닐 때 동일 CurrentAssetName, 전환 중일 때 동일 NextAssetName → 로드 생략
+    - 첫 배경이거나 TransitionSeconds ≤ 0이면 **즉시 전환** (페이드 없음)
+    - 그 외에는 `bIsTransitioning = true` → 페이드 전환 시작
+  - `Update(float DeltaTick)` — 전환 시간 누적, `TransitionDuration` 경과 시 Next → Current 교체
+  - `Draw(sf::RenderWindow&) const` — 비전환 시 CurrentSprite 단독 출력, 전환 중에는 `TransitionTime / TransitionDuration` 진행도로 현재/다음 스프라이트 알파 블렌딩하여 동시 출력
+  - 비공개 헬퍼: `SetupSprite` (텍스처 + 스케일 + 색상 초기화), `ApplyFullScreenTransform` (전체화면 스케일), `SetSpriteAlpha` (알파 클램프), `CreateTransparentTexture` (1×1 투명 텍스처, static)
+- `Src/Core/String.h` 의존: `FVrdxString`으로 에셋명 비교
+
+### 3단계 — CVrdxCharacterManager 구현
+
+- `Src/Novel/CharacterManager.h` + `Src/Novel/CharacterManager.cpp` — `CVrdxCharacterManager` 구현 완료
+  - 열거형: `EVrdxCharacterPosition { Left, Center, Right }`
+  - 구조체: `FVrdxCharacterSlot` — CharacterName, PoseName, Alpha, 페이드 상태(`StartAlpha`/`TargetAlpha`/`FadeTime`/`FadeDuration`), 공유 텍스처, Sprite
+  - 생성자: Left/Center/Right 슬롯 3개를 미리 생성, 투명 텍스처로 초기화
+  - `ShowCharacter(Name, Pose, Position)` — 지정 슬롯에 텍스처 로드/캐시 후 즉시 표시 (Alpha=1.0)
+  - `HideCharacter(Name, FadeSeconds)` — 이름 일치 슬롯 페이드아웃
+  - `ClearSlot(Position, FadeSeconds)` — 지정 슬롯 페이드아웃
+  - `Update(DeltaTick)` — 페이드 진행률 선형 보간, 완료 시 슬롯 리셋
+  - `Draw(Window)` — 보이는 슬롯만 Alpha 적용하여 렌더링
+  - 텍스처 캐시: `std::map<FVrdxString, TVrdxSharedPtr<sf::Texture>>` — `"{Name}/{Pose}"` 키, 실패 시 투명 텍스처 반환
+  - 슬롯 위치: Left=320, Center=640, Right=960, AnchorY=660, 높이 제한 640px, 중심점 기준 정렬
+  - 파일 경로: `Assets/Characters/{Name}/{Pose}.png`
+
+### 문서 갱신
+
+- `Docs/4-BackgroundCharacter.md` — 설계서를 실제 구현과 정합하도록 갱신
+  - 1차: 클래스명 `CBackground` → `CVrdxBackground`, 생성자 시그니처, 헬퍼 메서드, 중복 무시 조건, 전환 메커니즘 상세 보강
+  - 2차: `CCharacterManager` → `CVrdxCharacterManager`, `EVrdxCharacterSlot` → `EVrdxCharacterPosition`, `FCharacterSlot` → `FVrdxCharacterSlot`, 페이드 시스템 상세, 텍스처 캐싱 명세, 슬롯 좌표값 반영
+  - 파일 상태표 항목들 ✅ 완료로 변경
+- `Docs/Voradorix.md` — phase 갱신 (`3 (Background + CharacterManager 완료)`), 3단계 세부 항목에 CharacterManager 추가
+- `Docs/WORK_LOG.md` — 본 항목 (작업 기록 추가)
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (8단계)
@@ -105,8 +144,8 @@ Game/Game/Assets/
 | 단계 | 내용 | 핵심 파일 |
 |------|------|-----------|
 | **1단계** | Scene 인터페이스 + SceneManager 도입, main.cpp 리팩터 | `Scene.h`, `SceneManager.h/cpp`, `Application.h/cpp` |
-| **2단계** | NovelScene + BaseWidget + DialogueBox + FVrdxString (명세 완료, 코드 진행 중) | `NovelScene.h/cpp`, `BaseWidget.h`, `DialogueBox.h/cpp`, `String.h/cpp` |
-| **3단계** | Background 전환, CharacterManager (스프라이트 표시/전환) | `Background.h/cpp`, `CharacterManager.h/cpp` |
+| **2단계** | NovelScene + BaseWidget + DialogueBox + FVrdxString | `NovelScene.h/cpp`, `BaseWidget.h`, `DialogueBox.h/cpp`, `String.h/cpp` |
+| **3단계** | Background 전환 + CharacterManager (좌/중/우 슬롯, 페이드, 텍스처 캐싱) | `Background.h/cpp`, `CharacterManager.h/cpp` |
 | **4단계** | ScriptEngine — 텍스트 스크립트 파서/실행기 | `ScriptEngine.h/cpp` |
 | **5단계** | ChoiceManager — 선택지 UI 및 분기 처리 | `ChoiceManager.h/cpp` |
 | **6단계** | SaveManager — 세이브/로드 | `SaveManager.h/cpp` |

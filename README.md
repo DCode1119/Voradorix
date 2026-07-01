@@ -48,7 +48,7 @@ Game/
 
 - [x] **1단계 — Scene 시스템**: Scene 인터페이스, SceneManager, Application, 검증용 TestScene 완료
 - [x] **2단계 — NovelScene + DialogueBox + String 기반**: 대사창/문자열 기반과 노벨 본문 흐름 준비 완료
-- [ ] 3단계 — 배경 및 캐릭터
+- [x] **3단계 — 배경 및 캐릭터**: CVrdxBackground (페이드 전환) + CVrdxCharacterManager (슬롯/페이드/텍스처 캐싱) 구현 완료
 - [ ] 4단계 — ScriptEngine
 - [ ] 5단계 — 선택지 시스템
 - [ ] 6단계 — 세이브/로드
@@ -77,7 +77,7 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 
 ## 현재 상태
 
-- 빌드/테스트 확인 완료
+- 1~3단계 빌드/테스트 확인 완료
 - 작업 기록과 프로젝트 인덱스 문서는 `Docs/`를 참고
 
 ## 라이선스

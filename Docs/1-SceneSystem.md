@@ -220,7 +220,7 @@ private:
 
 1. `sf::RenderWindow` 생성
    - 해상도: 1280×720
-   - 타이틀: `"Visual Novel Engine"`
+   - 타이틀: `"Voradorix"`
    - VSync 활성화 (`setVerticalSyncEnabled(true)`)
    - 프레임 제한: 60fps (`setFramerateLimit(60)`)
 2. `bIsRunning = true` 초기화
@@ -389,7 +389,7 @@ Main.cpp
 
 ## 13. 다음 단계
 
-2단계에서 `CNovelScene`이 `CVrdxTestScene`을 대체한다.
+2단계에서 `CVrdxNovelScene`이 `CVrdxTestScene`을 대체한다.
 
 ---
 

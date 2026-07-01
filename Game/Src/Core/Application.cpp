@@ -5,7 +5,7 @@
 
 CVrdxApplication::CVrdxApplication()
 {
-	Window.create(sf::VideoMode({ 1280, 720 }), "Visual Novel Engine");
+	Window.create(sf::VideoMode({ 1280, 720 }), "Voradorix");
 	Window.setVerticalSyncEnabled(true);
 	Window.setFramerateLimit(60);
 	bIsRunning = true;

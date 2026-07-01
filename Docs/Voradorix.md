@@ -5,7 +5,7 @@ tags:
   - project
   - index
 status: active
-phase: 2
+phase: 3 (Background + CharacterManager 완료)
 ---
 
 # Voradorix
@@ -16,7 +16,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - **기술**: C++17, SFML 3.1.0, Visual Studio 2022 x64
 - **GitHub**: https://github.com/DCode1119/Voradorix
-- **상태**: 2단계 NovelScene + DialogueBox + String 기반 구현 완료, 빌드/테스트 확인
+- **상태**: 3단계 Background + CharacterManager 구현 완료
 
 ## 구현 현황
 
@@ -31,11 +31,13 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
   - [[3-String.md]] — `FVrdxString` 유니코드 문자열 (UTF-32, UTF-8 입출력, SFML 연동)
   - `Ui/BaseWidget.h` — `CVrdxBaseWidget` 위젯 베이스 클래스
   - `Ui/DialogueBox.h/cpp` — `CDialogueBox`
-  - `Novel/NovelScene.h/cpp` — `CNovelScene`
+  - `Novel/NovelScene.h/cpp` — `CVrdxNovelScene`
   - `Assets/Fonts/malgun.ttf` — Malgun Gothic 폰트
 
-- [ ] **3단계 — 배경 및 캐릭터** (설계서 작성 완료)
+- [x] **3단계 — 배경 및 캐릭터** (Background + CharacterManager 구현 완료)
   - [[4-BackgroundCharacter.md]] — 배경 전환 + 캐릭터 슬롯/표정 관리 명세
+  - `Novel/Background.h/cpp` — `CVrdxBackground` (배경 로드, 페이드 전환, 전체화면 스케일)
+  - `Novel/CharacterManager.h/cpp` — `CVrdxCharacterManager` (좌/중/우 슬롯, 페이드 전환, 텍스처 캐싱)
 - [ ] **4단계 — ScriptEngine** (예정)
 - [ ] **5단계 — 선택지 시스템** (예정)
 - [ ] **6단계 — 세이브/로드** (예정)

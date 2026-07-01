@@ -6,14 +6,20 @@
 
 CVrdxNovelScene::CVrdxNovelScene()
 {
-	FVrdxDialogueLine DialogueLine =  { "Voradorix", "세계에 오신 것을 환영합니다." };
+	FVrdxDialogueLine DialogueLine =  { "???", "Welcome to the Chamber of Creation." };
 	Script.Add(DialogueLine);
 	CurrentIndex = 0;
+
+	//First initialize.
+	BackgroundIndex = -1;
+	SwitchBackground(0);
+	ShowCharacter("Laura", EVrdxCharacterPosition::Center);
 }
 
 void CVrdxNovelScene::OnEnter()
 {
 	CurrentIndex = 0;
+	BackgroundIndex = 0;
 	ShowNextLine();
 }
 
@@ -52,27 +58,58 @@ void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
 	{
 		if (CurrentIndex < Script.Num())
 		{
-			if (DialogeBox.IsFinished())
-			{
-				ShowNextLine();
-			}
-			else
+			if (DialogeBox.IsTyping())
 			{
 				DialogeBox.FinishTyping();
 			}
+			else
+			{
+				SwitchBackground((BackgroundIndex == 0) ? 1 : 0);
+				CurrentIndex = 0;
+				DialogeBox.SetLine(Script[CurrentIndex].Text);
+			}
+		}
+		else
+		{
+			
 		}
 	}
 }
 
 void CVrdxNovelScene::Update(const float DeltaTick)
 {
+	Background.Update(DeltaTick);
+	CharacterManager.Update(DeltaTick);
 	DialogeBox.Update(DeltaTick);
 }
 
 void CVrdxNovelScene::Draw(sf::RenderWindow& Window)
 {
 	Window.clear(sf::Color::Black);
+
+	Background.Draw(Window);
+	CharacterManager.Draw(Window);
 	DialogeBox.Draw(Window);
+}
+
+void CVrdxNovelScene::SetBackground(const FVrdxString& BackgroundName)
+{
+	Background.SetBackground(BackgroundName);
+}
+
+void CVrdxNovelScene::ShowCharacter(const FVrdxString& Character, const EVrdxCharacterPosition Position)
+{
+	CharacterManager.ShowCharacter(Character, Position);
+}
+
+void CVrdxNovelScene::HideCharacter(const FVrdxString& Character)
+{
+	CharacterManager.HideCharacter(Character);
+}
+
+void CVrdxNovelScene::SetCharacterPose(const FVrdxString& Character, const FVrdxString& Pose)
+{
+	CharacterManager.SetCharacterPose(Character, Pose);
 }
 
 void CVrdxNovelScene::ShowNextLine()
@@ -91,4 +128,20 @@ void CVrdxNovelScene::ShowNextLine()
 void CVrdxNovelScene::EndScenario()
 {
 	RequestExit();
+}
+
+void CVrdxNovelScene::SwitchBackground(int32_t InBackgroundIndex)
+{
+	if (InBackgroundIndex == BackgroundIndex)
+	{
+		return;
+	}
+
+	switch (InBackgroundIndex)
+	{
+		case 0:	SetBackground("WhiteRoom");	break;
+		case 1:	SetBackground("WhiteRoom_SunSet");	break;
+	}
+
+	BackgroundIndex = InBackgroundIndex;
 }
