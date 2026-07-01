@@ -2,7 +2,7 @@
 title: "3단계: Background + Character"
 project: Voradorix
 phase: 3
-status: 구현 중 (Background + CharacterManager 완료)
+status: 완료
 tags:
   - voradorix
   - background
@@ -40,9 +40,9 @@ tags:
 | 2   | `Src/Novel/Background.cpp`       | `CVrdxBackground` 구현       |   ✅ 완료   |
 | 3   | `Src/Novel/CharacterManager.h`   | `CVrdxCharacterManager` 선언 |   ✅ 완료   |
 | 4   | `Src/Novel/CharacterManager.cpp` | `CVrdxCharacterManager` 구현 |   ✅ 완료   |
-| 5   | `Src/Novel/NovelScene.h/cpp`     | 배경/캐릭터 렌더링 연동              | 📝 수정 예정 |
-| 6   | `Game.vcxproj`                   | ClCompile/ClInclude 항목 등록  | 📝 등록 예정 |
-| 7   | `Game.vcxproj.filters`           | Novel/ 필터 구성               | 📝 구성 예정 |
+| 5   | `Src/Novel/NovelScene.h/cpp`     | 배경/캐릭터 렌더링 연동              |   ✅ 완료   |
+| 6   | `Game.vcxproj`                   | ClCompile/ClInclude 항목 등록  |   ✅ 완료   |
+| 7   | `Game.vcxproj.filters`           | Novel/ 필터 구성               |   ✅ 완료   |
 
 ---
 
@@ -317,9 +317,9 @@ private:
 
 1. ✅ `CVrdxBackground` 설계/구현
 2. ✅ `CVrdxCharacterManager` 설계/구현
-3. ⬜ `NovelScene`에 렌더 순서 연동
-4. ⬜ `Game.vcxproj` 및 필터 등록
-5. ⬜ 배경/캐릭터 테스트용 장면 확인
+3. ✅ `NovelScene`에 렌더 순서 연동
+4. ✅ `Game.vcxproj` 및 필터 등록
+5. ✅ 배경/캐릭터 테스트용 장면 확인
 
 ---
 
