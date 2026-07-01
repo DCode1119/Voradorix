@@ -1,0 +1,25 @@
+@jump "Main"
+
+@label "A"
+@bg "WhiteRoom_Sunset"
+@dialogue "Laura" "확인되었나요? B로 점프합니다."
+@jump "B"
+
+@label "B"
+@bg "WhiteRoom"
+@dialogue "Laura" "확인되었나요? 자 이제 마무리!"
+@jump "Finish"
+
+@label "Main"
+@bg "WhiteRoom"
+@show "Laura"
+@dialogue "Laura" "안녕하세요?"
+@dialogue "Laura" "숨어볼게요."
+@hide "Laura"
+@dialogue "Laura" "어때요? 다시 나갈게요."
+@show "Laura"
+@dialogue "Laura" "헤헤 이제 레이블 테스트를 할게요. A로 점프합니다."
+@jump "A"
+
+@label "Finish"
+@dialogue "Laura" "마지막 레이블에 도달했어요. 수고했어요."

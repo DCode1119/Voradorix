@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <string>
 #include <cstdint>
+#include <string>
 #include <SFML/System/String.hpp>
 
 #include "Core/Common.h"
@@ -349,4 +349,16 @@ inline char32_t FVrdxString::DecodeUtf8(const char*& Input, const char* End)
 	}
 
 	return static_cast<char32_t>(CP);
+}
+
+namespace std
+{
+	template<>
+	struct hash<FVrdxString>
+	{
+		size_t operator()(const FVrdxString& Str) const noexcept
+		{
+			return std::hash<std::string>{}(Str.ToUtf8());
+		}
+	};
 }

@@ -1,7 +1,7 @@
-﻿#pragma once
+#pragma once
 
-#include <type_traits>
 #include <memory>
+#include <type_traits>
 
 // ============================================================================
 // Voradorix Naming Convention Types (Unreal Engine Style)
@@ -29,6 +29,9 @@ template <typename ElementType>
 using TVrdxSharedPtr = std::shared_ptr<ElementType>;
 
 template <typename ElementType>
+using TVrdxWeakPtr = std::weak_ptr<ElementType>;
+
+template <typename ElementType>
 constexpr std::remove_reference_t<ElementType>&& VrdxMove(ElementType&& Value) noexcept
 {
 	return static_cast<std::remove_reference_t<ElementType>&&>(Value);
@@ -38,6 +41,12 @@ template <typename ElementType, typename... ArgTypes>
 TVrdxUniquePtr<ElementType> MakeVrdxUnique(ArgTypes&&... Args)
 {
 	return std::make_unique<ElementType>(std::forward<ArgTypes>(Args)...);
+}
+
+template <typename ElementType, typename... ArgTypes>
+TVrdxSharedPtr<ElementType> MakeVrdxShared(ArgTypes&&... Args)
+{
+	return std::make_shared<ElementType>(std::forward<ArgTypes>(Args)...);
 }
 
 // ----------------------------------------------------------------------------

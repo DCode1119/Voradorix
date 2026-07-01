@@ -1,4 +1,4 @@
-﻿#include "DialogueBox.h"
+#include "Ui/DialogueBox.h"
 
 CVrdxDialogueBox::CVrdxDialogueBox()
 	: SpeakerText(Font)

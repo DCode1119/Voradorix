@@ -1,31 +1,25 @@
-﻿#include "NovelScene.h"
+#include "NovelScene.h"
+
+#include "SFML/Graphics/CircleShape.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
-#include "SFML/Graphics/CircleShape.hpp"
 #include "SFML/Window/Mouse.hpp"
 
 CVrdxNovelScene::CVrdxNovelScene()
 {
-	FVrdxDialogueLine DialogueLine =  { "???", "Welcome to the Chamber of Creation." };
-	Script.Add(DialogueLine);
-	CurrentIndex = 0;
-
-	//First initialize.
-	BackgroundIndex = -1;
-	SwitchBackground(0);
-	ShowCharacter("Laura", EVrdxCharacterPosition::Center);
 }
 
 void CVrdxNovelScene::OnEnter()
 {
-	CurrentIndex = 0;
-	BackgroundIndex = 0;
-	ShowNextLine();
+	ScriptEngine.SetNovelScene(shared_from_this());
+	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
+	{
+		return;
+	}
 }
 
 void CVrdxNovelScene::OnExit()
 {
-	//
 }
 
 void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
@@ -56,31 +50,33 @@ void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
 
 	if (bProceed)
 	{
-		if (CurrentIndex < Script.Num())
+		if (DialogueBox.IsTyping())
 		{
-			if (DialogeBox.IsTyping())
-			{
-				DialogeBox.FinishTyping();
-			}
-			else
-			{
-				SwitchBackground((BackgroundIndex == 0) ? 1 : 0);
-				CurrentIndex = 0;
-				DialogeBox.SetLine(Script[CurrentIndex].Text);
-			}
+			// Complete typing, wait for user input.
+			DialogueBox.FinishTyping();
+			bWaitingInput = true;
 		}
 		else
 		{
-			
+			// Go next script.
+			bWaitingInput = false;
 		}
 	}
 }
 
 void CVrdxNovelScene::Update(const float DeltaTick)
 {
+	ScriptEngine.Update(DeltaTick);
 	Background.Update(DeltaTick);
 	CharacterManager.Update(DeltaTick);
-	DialogeBox.Update(DeltaTick);
+	DialogueBox.Update(DeltaTick);
+
+	if (RemainingWaitSeconds > 0.f)
+	{
+		RemainingWaitSeconds = std::max(0.f, RemainingWaitSeconds - DeltaTick);
+	}
+
+	bWaitingInput = DialogueBox.IsFinished();
 }
 
 void CVrdxNovelScene::Draw(sf::RenderWindow& Window)
@@ -89,7 +85,12 @@ void CVrdxNovelScene::Draw(sf::RenderWindow& Window)
 
 	Background.Draw(Window);
 	CharacterManager.Draw(Window);
-	DialogeBox.Draw(Window);
+	DialogueBox.Draw(Window);
+}
+
+bool CVrdxNovelScene::CanAdvance() const
+{
+	return !DialogueBox.IsTyping() && !(RemainingWaitSeconds > 0) && !bWaitingInput;
 }
 
 void CVrdxNovelScene::SetBackground(const FVrdxString& BackgroundName)
@@ -112,36 +113,23 @@ void CVrdxNovelScene::SetCharacterPose(const FVrdxString& Character, const FVrdx
 	CharacterManager.SetCharacterPose(Character, Pose);
 }
 
-void CVrdxNovelScene::ShowNextLine()
+void CVrdxNovelScene::SetDialogue(const FVrdxDialogueLine& DialogueLine)
 {
-	if (CurrentIndex < Script.Num())
-	{
-		DialogeBox.SetSpeaker(Script[CurrentIndex].Speaker);
-		DialogeBox.SetLine(Script[CurrentIndex].Text);
-	}
-	else
-	{
-		EndScenario();
-	}
+	DialogueBox.SetSpeaker(DialogueLine.Speaker);
+	DialogueBox.SetLine(DialogueLine.Text);
+}
+
+void CVrdxNovelScene::JumpToLabel(const FVrdxString& TargetLabelName)
+{
+	ScriptEngine.JumpToLabel(TargetLabelName);
+}
+
+void CVrdxNovelScene::WaitForSeconds(const float Seconds)
+{
+	RemainingWaitSeconds = Seconds;
 }
 
 void CVrdxNovelScene::EndScenario()
 {
 	RequestExit();
-}
-
-void CVrdxNovelScene::SwitchBackground(int32_t InBackgroundIndex)
-{
-	if (InBackgroundIndex == BackgroundIndex)
-	{
-		return;
-	}
-
-	switch (InBackgroundIndex)
-	{
-		case 0:	SetBackground("WhiteRoom");	break;
-		case 1:	SetBackground("WhiteRoom_SunSet");	break;
-	}
-
-	BackgroundIndex = InBackgroundIndex;
 }

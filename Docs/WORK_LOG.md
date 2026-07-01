@@ -115,6 +115,31 @@ tags:
 - `Docs/Voradorix.md` — phase 갱신 (`3 (Background + CharacterManager 완료)`), 3단계 세부 항목에 CharacterManager 추가
 - `Docs/WORK_LOG.md` — 본 항목 (작업 기록 추가)
 
+### 4단계 명세서 작성
+
+- `Docs/5-ScriptEngine.md` — ScriptEngine 로드/파싱/실행 명세 작성
+- `Docs/Voradorix.md` — 4단계 항목에 ScriptEngine 명세 링크 추가
+- `Docs/GAME_DESIGN.md` — ScriptEngine 세부 명세 링크 추가
+
+## 2026-07-02
+
+### 4단계 — ScriptEngine 구현 완료
+
+- `Src/Scene/SceneManager.h/cpp` — Scene 소유권 `unique_ptr` → `shared_ptr`로 전환
+- `Src/Scene/NovelScene.h/cpp` — `enable_shared_from_this` 상속, `OnEnter()`에서 `ScriptEngine.SetNovelScene(shared_from_this())`
+- `Src/Novel/ScriptEngine.h/cpp` — `weak_ptr<NovelScene>` 저장, `Update()` 내 while 루프로 연속 실행, `JumpToLabel()`로 분기
+- `Src/Novel/ScriptLine.h/cpp` — 명령어별 파생 struct + 팩토리 테이블 + Construct/Dispatch 패턴, 8개 명령어 지원
+- `Assets/Scripts/TestScript.txt` — @label/@jump 분기 포함 25라인 테스트 스크립트
+- `Application.cpp` — `MakeVrdxShared<CVrdxNovelScene>()`로 시작
+
+### 문서 갱신
+
+- `Docs/Voradorix.md` — phase를 4로 갱신, 4단계 완료 항목 추가
+- `Docs/GAME_DESIGN.md` — shared_ptr 소유권, ScriptEngine 명령어 리스트, 디렉토리 구조 갱신
+- `Docs/1-SceneSystem.md` — SceneManager `TVrdxSharedPtr` 전환 반영, 소유권 정책 갱신
+- `Docs/2-NovelScene.md` — ScriptEngine 연동 구조로 전면 재작성 (shared_from_this, CanAdvance, 갱신/렌더 순서, 메서드 상세)
+- `Docs/5-ScriptEngine.md` — 상태를 "구현 완료"로 변경, 실제 인터페이스/실행 규칙/테스트 스크립트 반영
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (8단계)

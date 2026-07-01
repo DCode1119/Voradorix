@@ -56,10 +56,11 @@ Scene (추상 인터페이스)
 | `Update(float dt)` | 프레임 갱신 |
 | `Draw(sf::RenderWindow&)` | 렌더링 |
 
-**SceneManager**: Scene 포인터를 스택으로 관리.
-- `Push(Scene*)` — 현재 씬 위에 새 씬 푸시 (일시 정지)
-- `Pop()` — 현재 씬 제거, 이전 씬 복귀
-- `Switch(Scene*)` — 현재 씬을 완전히 교체
+**SceneManager**: Scene 포인터를 스택으로 관리 (`TVrdxSharedPtr<CVrdxScene>` 기반).
+- `Push(TVrdxSharedPtr<CVrdxScene>)` — 현재 씬 위에 새 씬 푸시 (일시 정지)
+- `Pop()` — 현재 씬 제거
+- `Switch(TVrdxSharedPtr<CVrdxScene>)` — 현재 씬을 완전히 교체
+- `shared_ptr` 소유권: NovelScene이 `shared_from_this()`로 ScriptEngine에 `weak_ptr` 전달 필요
 
 ### 2.2 어셋 관리 (AssetManager)
 
@@ -70,25 +71,27 @@ Scene (추상 인터페이스)
 ### 2.3 스크립트 엔진 (ScriptEngine)
 
 텍스트 파일 기반 시나리오를 파싱하여 명령 단위로 실행.
+NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참조한다.
 
-**지원 명령어 (초안)**:
+**현재 지원 명령어 (4단계 완료)**:
 
 ```
-@bg filename.jpg        — 배경 전환 (페이드 옵션)
-@bgm filename.mp3       — BGM 재생
-@stopbgm                — BGM 정지
-@se filename.wav        — 효과음 재생
-@show char_name pose pos — 캐릭터 표시 (pos: left/center/right)
-@hide char_name          — 캐릭터 숨김
-@fadeout duration        — 화면 페이드아웃
-@fadein duration         — 화면 페이드인
-@shake intensity duration — 화면 흔들림
-@choice "text" → label   — 선택지 (분기)
-@jump label              — 레이블로 이동
-@if flag = value → label — 조건 분기
-@set flag = value        — 플래그 설정
-char_name "대사"         — 대사 출력 (캐릭터명 자동 표시)
-"대사"                   — 내레이션 (캐릭터명 없음)
+@bg "map_name"              — 배경 전환
+@show "char" ["pos"] ["pose"] — 캐릭터 표시 (pos: Left/Center/Right, 기본 Center)
+@hide "char"                — 캐릭터 숨김
+@pose "char" "pose"         — 캐릭터 표정 변경
+@wait "seconds"             — 지정 시간 동안 진행 정지
+@label "name"               — 레이블 정의 (점프 목적지)
+@jump "name"                — 레이블로 이동
+@dialogue "speaker" "text"  — 대사 출력 (스피커명 + 텍스트)
+```
+
+**후속 단계에서 추가 예정**:
+```
+@choice "text" → label   — 선택지 (5단계)
+@bgm / @se               — 오디오 (추후)
+@fadeout / @fadein / @shake — 연출 효과 (8단계)
+@if / @set               — 조건 분기 (추후)
 ```
 
 ### 2.4 세이브/로드 (SaveManager)
@@ -111,16 +114,17 @@ Game/Game/
 │   ├── Scene/
 │   │   ├── Scene.h           # 인터페이스
 │   │   ├── SceneManager.h/cpp
-│   │   ├── TitleScene.h/cpp
-│   │   ├── NovelScene.h/cpp
-│   │   └── ConfigScene.h/cpp
+│   │   ├── NovelScene.h/cpp  # 노벨 씬 (Background + CharacterManager + ScriptEngine 통합)
+│   │   ├── TestScene.h/cpp
+│   │   └── (TitleScene, ConfigScene — 7단계 예정)
 │   ├── Novel/
-│   │   ├── NovelScene.h/cpp
 │   │   ├── ScriptEngine.h/cpp
+│   │   ├── ScriptLine.h/cpp  # 명령어별 파싱/Construct/Dispatch, 팩토리 테이블
 │   │   ├── CharacterManager.h/cpp
 │   │   ├── Background.h/cpp
-│   │   ├── ChoiceManager.h/cpp
-│   │   └── EffectManager.h/cpp
+│   │   ├── DialogueLine.h
+│   │   ├── ChoiceManager.h/cpp    # 5단계 예정
+│   │   └── EffectManager.h/cpp    # 8단계 예정
 │   ├── Ui/
 │   │   ├── BaseWidget.h
 │   │   ├── DialogueBox.h/cpp
@@ -152,18 +156,19 @@ Game/Game/
 - `main.cpp` — 최소화 (Application 생성/실행)
 - **결과물**: 기존 원 그리기 코드가 Scene 위에서 동작
 
-### 2단계 — NovelScene + DialogueBox (명세 완료, 코드 진행 중)
+### 2단계 — NovelScene + DialogueBox (구현 완료)
 - `Core/String.h/cpp` — `FVrdxString` 유니코드 문자열 클래스 (UTF-32 기반)
   - UTF-8 입출력, SFML `sf::String` 변환, 코드 포인트 단위 `Left(N)`/`Substr`
   - DialogueBox 타이핑 애니메이션의 기반 타입
 - `Ui/BaseWidget.h` — `CVrdxBaseWidget` (UI 위젯 공통 인터페이스)
 - `Ui/DialogueBox.h/cpp` — 하단 대사창 (CVrdxBaseWidget 상속)
-  - 타이핑 출력 + 클릭 시 전체 표시 / 다음 대사
+  - 타이핑 출력 + 클릭 시 전체 표시
   - 캐릭터명 표시 영역
   - Scene 시스템 의존성 없음 (순수 위젯)
-- `Novel/NovelScene.h/cpp` — 기본 노벨 화면
-  - `FDialogueLine` 목록 순회, DialogueBox 소유
-  - 확인 입력 시 `ShowNextLine()` 호출
+- `Scene/NovelScene.h/cpp` — 노벨 화면 (추후 ScriptEngine 연동 기반)
+  - Background + CharacterManager + DialogueBox 통합 소유
+  - Update 순서: Background → CharacterManager → DialogueBox
+  - Draw 순서: Background → CharacterManager → DialogueBox
 - 폰트: `Assets/Fonts/malgun.ttf` (Malgun Gothic)
 
 ### 3단계 — 배경 및 캐릭터
@@ -173,10 +178,16 @@ Game/Game/
   - 표정 변경 시 페이드
   - 세부 명세: `Docs/4-BackgroundCharacter.md`
 
-### 4단계 — ScriptEngine
+### 4단계 — ScriptEngine (완료)
 - `ScriptEngine.h/cpp` — 스크립트 파일 로드, 파싱, 명령 실행
-- NovelScene이 ScriptEngine에서 명령을 꺼내 실행하는 루프
-- `@bg`, `@show`, `@hide`, `say` 등 기본 명령어 처리
+  - `weak_ptr<NovelScene>` 저장, `SetNovelScene(shared_from_this())`로 연결
+  - `Update()` 내 while 루프: `CanAdvance() && ParseLine()` 연속 실행
+  - `JumpToLabel()`로 레이블 이동, `Labels` 맵 구축
+- `ScriptLine.h/cpp` — 명령어별 파생 struct, `ParseScriptLine()` 팩토리 테이블, `Construct()`/`Dispatch()` 패턴
+- NovelScene — `ScriptEngine` 멤버 소유, `OnEnter()`에서 초기화
+- 지원 명령어: `@bg`, `@show`, `@hide`, `@pose`, `@wait`, `@label`, `@jump`, `@dialogue`
+- 테스트 스크립트: `Assets/Scripts/TestScript.txt` (@label/@jump 분기 포함 25라인)
+- 세부 명세: `Docs/5-ScriptEngine.md`
 
 ### 5단계 — 선택지 시스템
 - `ChoiceManager.h/cpp` — 선택지 버튼 표시, 선택 대기

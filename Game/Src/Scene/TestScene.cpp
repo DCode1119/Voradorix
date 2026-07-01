@@ -1,7 +1,8 @@
-﻿#include "TestScene.h"
+#include "Scene/TestScene.h"
+
+#include "SFML/Graphics/CircleShape.hpp"
 #include "SFML/Window/Event.hpp"
 #include "SFML/Window/Keyboard.hpp"
-#include "SFML/Graphics/CircleShape.hpp"
 
 void CVrdxTestScene::OnEnter()
 {

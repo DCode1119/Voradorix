@@ -112,8 +112,12 @@ private:
 
 ### 4.1 역할
 
-`CVrdxScene` 포인터를 `TVrdxVector<TVrdxUniquePtr<CVrdxScene>>` 스택으로 관리한다.
+`CVrdxScene` 포인터를 `TVrdxVector<TVrdxSharedPtr<CVrdxScene>>` 스택으로 관리한다.
 최상위 씬만 활성화되고, 아래 씬은 일시 정지된다.
+
+> **소유권 변경 사항**: 4단계에서 `unique_ptr` → `shared_ptr`로 전환.
+> NovelScene이 `enable_shared_from_this`를 상속하고 ScriptEngine에 `weak_ptr`을 전달해야 하므로,
+> SceneManager의 소유권을 `shared_ptr`로 통일.
 
 ### 4.2 클래스 설계
 
@@ -127,9 +131,9 @@ public:
     CVrdxSceneManager(const CVrdxSceneManager&) VRDX_NO_COPY;
     CVrdxSceneManager& operator=(const CVrdxSceneManager&) VRDX_NO_COPY;
 
-    void Push(TVrdxUniquePtr<CVrdxScene> Scene);
+    void Push(TVrdxSharedPtr<CVrdxScene> Scene);
     void Pop();
-    void Switch(TVrdxUniquePtr<CVrdxScene> Scene);
+    void Switch(TVrdxSharedPtr<CVrdxScene> Scene);
 
     void HandleEvent(const sf::Event& Event);
     void Update(const float DeltaTick);
@@ -138,16 +142,16 @@ public:
     VRDX_NO_DISCARD bool IsEmpty() const;
 
 private:
-    TVrdxVector<TVrdxUniquePtr<CVrdxScene>> SceneStack;
+    TVrdxVector<TVrdxSharedPtr<CVrdxScene>> SceneStack;
 };
 ```
 
 ### 4.3 주요 구현 상세
 
-#### `Push(TVrdxUniquePtr<CVrdxScene> Scene)`
+#### `Push(TVrdxSharedPtr<CVrdxScene> Scene)`
 
 1. `Scene->OnEnter()` — 새 씬 초기화 (스택 추가 전)
-2. `SceneStack.Add(VrdxMove(Scene))` — 스택에 새 씬 추가
+2. `SceneStack.Add(VrdxMove(Scene))` — 스택에 새 씬 추가 (shared_ptr 이동)
 3. 이전 씬의 `OnExit()`은 호출하지 않음 (일시 정지)
 
 #### `Pop()`
@@ -157,7 +161,7 @@ private:
 3. `SceneStack.Pop()` — 현재 씬 제거
 4. **이전 씬의 `OnEnter()`를 호출하지 않음** — 스택이 비면 Application의 Run 루프가 `IsEmpty()` 감지 → 종료
 
-#### `Switch(TVrdxUniquePtr<CVrdxScene> Scene)`
+#### `Switch(TVrdxSharedPtr<CVrdxScene> Scene)`
 
 1. `Pop()` 호출 (내부에서 OnExit + Pop)
 2. `Push(VrdxMove(Scene))` 호출 (내부에서 OnEnter + Add)
@@ -180,9 +184,11 @@ private:
 
 ### 4.4 소유권 정책
 
-- `TVrdxUniquePtr<CVrdxScene>` 사용 — 외부에서 소유권을 넘기면 SceneManager가 독점 관리
-- SceneManager 소멸 시 모든 Scene이 자동 정리 (`TVrdxVector` 소멸자 → `unique_ptr` 소멸자 연쇄)
-- 씬 외부에서 Scene 포인터를 보관하지 않음 (dangling 방지)
+- `TVrdxSharedPtr<CVrdxScene>` 사용 — SceneManager가 `shared_ptr`로 씬을 소유
+- NovelScene은 `enable_shared_from_this`를 상속하여 ScriptEngine에 `weak_ptr` 전달
+- SceneManager 소멸 시 모든 Scene이 자동 정리 (참조 카운트 0 → 소멸)
+- 씬 외부에서 shared_ptr을 보관할 수 있으나, **순환 참조 방지**를 위해 `weak_ptr` 사용 권장
+- `MakeVrdxShared<T>()`로 인스턴스 생성 후 `Push(VrdxMove(...))`
 
 ---
 
@@ -224,7 +230,8 @@ private:
    - VSync 활성화 (`setVerticalSyncEnabled(true)`)
    - 프레임 제한: 60fps (`setFramerateLimit(60)`)
 2. `bIsRunning = true` 초기화
-3. 최초 Scene Push: `SceneManager.Push(MakeVrdxUnique<CTestScene>())`
+3. 최초 Scene Push: `SceneManager.Push(MakeVrdxShared<CVrdxNovelScene>())` (4단계 기준)
+   - 1단계 테스트 시: `SceneManager.Push(MakeVrdxShared<CVrdxTestScene>())`
 
 ### 5.4 메인 루프
 
@@ -319,7 +326,7 @@ SceneManager에서 사용하는 메서드:
 | `Add(T&&)` | Push/Switch에서 씬 추가 |
 | `Pop()` | Pop/Switch에서 씬 제거 |
 
-- `Last()`는 `TVrdxUniquePtr<CVrdxScene>&`를 반환하므로, `.get()` 또는 `->`로 접근
+- `Last()`는 `TVrdxSharedPtr<CVrdxScene>&`를 반환하므로, `->`로 접근
 - `TVrdxVector`가 비어있을 때 `Last()`를 호출하지 않도록 주의 (Pop 등에서 IsEmpty 검사 선행)
 
 ---
@@ -383,7 +390,7 @@ Main.cpp
 1. **빌드**: Visual Studio 2022 x64 Debug, Warning Level 3, Clean Build 성공
 2. **실행**: 1280×720 창이 열리고, 가운데 파란색 원이 표시됨
 3. **종료**: ESC 키 입력 → Pop → 스택 empty → 자동 종료
-4. **메모리**: 종료 시 `unique_ptr` 정리 — leak 없음 (VS Debug 출력 확인)
+4. **메모리**: 종료 시 `shared_ptr` 정리 — leak 없음 (VS Debug 출력 확인)
 
 ---
 

@@ -1,9 +1,11 @@
-﻿#include "SceneManager.h"
-#include "Scene.h"
+﻿#include "Scene/SceneManager.h"
 
 #include <algorithm>
 
-void CVrdxSceneManager::Push(TVrdxUniquePtr<CVrdxScene> Scene)
+#include "Scene/Scene.h"
+
+
+void CVrdxSceneManager::Push(TVrdxSharedPtr<CVrdxScene> Scene)
 {
 	Scene->OnEnter();
 	SceneStack.Add(VrdxMove(Scene));
@@ -14,12 +16,11 @@ void CVrdxSceneManager::Pop()
 	if (!SceneStack.IsEmpty())
 	{
 		SceneStack.Last()->OnExit();
+		SceneStack.Pop();
 	}
-
-	SceneStack.Pop();
 }
 
-void CVrdxSceneManager::Switch(TVrdxUniquePtr<CVrdxScene> Scene)
+void CVrdxSceneManager::Switch(TVrdxSharedPtr<CVrdxScene> Scene)
 {
 	Pop();
 

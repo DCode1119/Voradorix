@@ -1,7 +1,7 @@
-﻿#include "Application.h"
+#include "Core/Application.h"
 
-#include "Scene/TestScene.h"
 #include "Scene/NovelScene.h"
+#include "Scene/TestScene.h"
 
 CVrdxApplication::CVrdxApplication()
 {
@@ -9,8 +9,8 @@ CVrdxApplication::CVrdxApplication()
 	Window.setVerticalSyncEnabled(true);
 	Window.setFramerateLimit(60);
 	bIsRunning = true;
-	SceneManager.Push(MakeVrdxUnique<CVrdxTestScene>());
-	SceneManager.Push(MakeVrdxUnique<CVrdxNovelScene>());
+	//SceneManager.Push(MakeVrdxUnique<CVrdxTestScene>());
+	SceneManager.Push(MakeVrdxShared<CVrdxNovelScene>());
 }
 
 CVrdxApplication::~CVrdxApplication()

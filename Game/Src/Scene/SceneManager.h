@@ -1,9 +1,10 @@
 ﻿#pragma once
 
+#include <cstdint>
+#include <memory>
+
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <memory>
-#include <cstdint>
 
 #include "Core/Common.h"
 #include "Core/Vector.h"
@@ -19,9 +20,9 @@ public:
 	CVrdxSceneManager(const CVrdxSceneManager&) VRDX_NO_COPY;
 	CVrdxSceneManager& operator=(const CVrdxSceneManager&) VRDX_NO_COPY;
 
-	void Push(TVrdxUniquePtr<CVrdxScene> Scene);
+	void Push(TVrdxSharedPtr<CVrdxScene> Scene);
 	void Pop();
-	void Switch(TVrdxUniquePtr<CVrdxScene> Scene);
+	void Switch(TVrdxSharedPtr<CVrdxScene> Scene);
 
 	void HandleEvent(const sf::Event& Event);
 	void Update(const float DeltaTick);
@@ -32,5 +33,5 @@ public:
 	VRDX_NO_DISCARD int32_t GetCount() const;
 
 private:
-	TVrdxVector<TVrdxUniquePtr<CVrdxScene>> SceneStack;
+	TVrdxVector<TVrdxSharedPtr<CVrdxScene>> SceneStack;
 };

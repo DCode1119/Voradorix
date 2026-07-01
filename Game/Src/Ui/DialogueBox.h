@@ -1,10 +1,11 @@
-﻿#pragma once
+#pragma once
 
-#include "Core/String.h"
-#include "Ui/WidgetBase.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Text.hpp"
+
+#include "Core/String.h"
+#include "Ui/WidgetBase.h"
 
 class CVrdxDialogueBox : public CVrdxBaseWidget
 {

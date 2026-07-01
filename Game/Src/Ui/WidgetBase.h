@@ -1,8 +1,9 @@
-﻿#pragma once
+#pragma once
+
+#include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/Window/Event.hpp"
 
 #include "Core/Common.h"
-#include "SFML/Window/Event.hpp"
-#include "SFML/Graphics/RenderWindow.hpp"
 
 class CVrdxBaseWidget
 {

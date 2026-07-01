@@ -5,7 +5,7 @@ tags:
   - project
   - index
 status: active
-phase: 3 (Background + CharacterManager 완료)
+phase: 4 (ScriptEngine 완료)
 ---
 
 # Voradorix
@@ -16,13 +16,13 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - **기술**: C++17, SFML 3.1.0, Visual Studio 2022 x64
 - **GitHub**: https://github.com/DCode1119/Voradorix
-- **상태**: 3단계 Background + CharacterManager 구현 완료
+- **상태**: 4단계 ScriptEngine 구현 완료
 
 ## 구현 현황
 
 - [x] **1단계 — Scene 시스템** (완료)
   - Scene 인터페이스 (`CVrdxScene`) — OnEnter/OnExit/HandleEvent/Update/Draw + WantsExit 디커플링
-  - SceneManager (`CVrdxSceneManager`) — Push/Pop/Switch + 프레임 이벤트 처리
+  - SceneManager (`CVrdxSceneManager`) — Push/Pop/Switch + 프레임 이벤트 처리 (shared_ptr 기반)
   - Application (`CVrdxApplication`) — Window + SceneManager + Run 루프
   - TestScene (`CVrdxTestScene`) — 검증용 (중앙 파란 원, ESC 종료)
   - Core (`Common.h`, `Vector.h`) — 타입 alias, TVrdxVector, VrdxMove, 매크로
@@ -30,15 +30,20 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 - [x] **2단계 — NovelScene + DialogueBox + String 기반** (구현 및 검증 완료)
   - [[3-String.md]] — `FVrdxString` 유니코드 문자열 (UTF-32, UTF-8 입출력, SFML 연동)
   - `Ui/BaseWidget.h` — `CVrdxBaseWidget` 위젯 베이스 클래스
-  - `Ui/DialogueBox.h/cpp` — `CDialogueBox`
-  - `Novel/NovelScene.h/cpp` — `CVrdxNovelScene`
+  - `Ui/DialogueBox.h/cpp` — `CDialogueBox` (타이핑 애니메이션, Speaker/Line 분리)
+  - `Scene/NovelScene.h/cpp` — `CVrdxNovelScene` (Background + CharacterManager + DialogueBox + ScriptEngine 통합)
   - `Assets/Fonts/malgun.ttf` — Malgun Gothic 폰트
 
 - [x] **3단계 — 배경 및 캐릭터** (Background + CharacterManager 구현 완료)
   - [[4-BackgroundCharacter.md]] — 배경 전환 + 캐릭터 슬롯/표정 관리 명세
   - `Novel/Background.h/cpp` — `CVrdxBackground` (배경 로드, 페이드 전환, 전체화면 스케일)
   - `Novel/CharacterManager.h/cpp` — `CVrdxCharacterManager` (좌/중/우 슬롯, 페이드 전환, 텍스처 캐싱)
-- [ ] **4단계 — ScriptEngine** (예정)
+- [x] **4단계 — ScriptEngine** (완료)
+  - [[5-ScriptEngine.md]] — 스크립트 로드/파싱/실행 구현
+  - `ScriptEngine.h/cpp` — `weak_ptr<NovelScene>` 기반 명령 실행기, 8개 명령어 지원
+  - `ScriptLine.h/cpp` — 명령어별 파싱/Construct/Dispatch, 팩토리 테이블 패턴
+  - `NovelScene.h/cpp` — `shared_from_this()`로 ScriptEngine 연결, `CanAdvance()`로 흐름 제어
+  - `Assets/Scripts/TestScript.txt` — @label/@jump 분기 포함 테스트 스크립트
 - [ ] **5단계 — 선택지 시스템** (예정)
 - [ ] **6단계 — 세이브/로드** (예정)
 - [ ] **7단계 — 메뉴 구성** (예정)

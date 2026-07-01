@@ -1,12 +1,11 @@
 ﻿#pragma once
 
+#include <string>
+#include <unordered_map>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
-
-#include <string>
-#include <map>
 
 #include "Core/Common.h"
 #include "Core/String.h"
@@ -69,6 +68,6 @@ private:
 	void SetSpriteAlpha(sf::Sprite& Sprite, float Alpha) const;
 
 	TVrdxSharedPtr<sf::Texture> TransparentTexture;
-	std::map<FVrdxString, TVrdxSharedPtr<sf::Texture>> TextureCache;
+	std::unordered_map<FVrdxString, TVrdxSharedPtr<sf::Texture>> TextureCache;
 	TVrdxVector<FVrdxCharacterSlot> Slots;
 };

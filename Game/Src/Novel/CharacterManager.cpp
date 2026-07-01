@@ -1,9 +1,8 @@
-﻿#include "CharacterManager.h"
+﻿#include "Novel/CharacterManager.h"
 
 #include <algorithm>
 #include <cstdint>
 #include <string>
-
 #include <SFML/Graphics/Color.hpp>
 
 namespace

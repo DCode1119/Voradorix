@@ -1,8 +1,7 @@
-﻿#include "Background.h"
+﻿#include "Novel/Background.h"
 
 #include <algorithm>
 #include <cstdint>
-
 #include <SFML/Graphics/Color.hpp>
 
 //Will be moved to configuration module.
