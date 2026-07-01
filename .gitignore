@@ -15,8 +15,6 @@ obj/
 ipch/
 .vs/
 
-# Docs (design documents, work logs)
-Docs/
 
 # Build output
 *.exe
