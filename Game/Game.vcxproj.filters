@@ -59,6 +59,12 @@
     <ClCompile Include="Src\Novel\ScriptEngine.cpp">
       <Filter>소스 파일\Novel</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Novel\ScriptLine.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Novel\ChoiceManager.cpp">
+      <Filter>소스 파일\Novel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene\Scene.h">
@@ -101,6 +107,10 @@
       <Filter>소스 파일\Novel</Filter>
     </ClInclude>
     <ClInclude Include="Src\Novel\ScriptEngine.h">
+      <Filter>소스 파일\Novel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Novel\ScriptLine.h" />
+    <ClInclude Include="Src\Novel\ChoiceManager.h">
       <Filter>소스 파일\Novel</Filter>
     </ClInclude>
   </ItemGroup>

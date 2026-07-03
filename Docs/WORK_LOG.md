@@ -140,6 +140,29 @@ tags:
 - `Docs/2-NovelScene.md` — ScriptEngine 연동 구조로 전면 재작성 (shared_from_this, CanAdvance, 갱신/렌더 순서, 메서드 상세)
 - `Docs/5-ScriptEngine.md` — 상태를 "구현 완료"로 변경, 실제 인터페이스/실행 규칙/테스트 스크립트 반영
 
+### 5단계 명세서 작성
+
+- `Docs/6-ChoiceSystem.md` — 선택지 UI/분기 시스템 명세 작성
+- `Docs/Voradorix.md` — 5단계 항목을 명세 작성 완료 상태로 갱신
+- `Docs/GAME_DESIGN.md` — `@choice` 파라미터 규칙과 ChoiceManager 흐름 반영
+- `Docs/5-ScriptEngine.md` — `@choice` 후속 명세 링크 추가
+
+## 2026-07-04
+
+### 5단계 — ChoiceSystem 구현 완료
+
+- `Src/Novel/ChoiceManager.h/cpp` — 선택지 UI, hover, keyboard, click, 즉시 분기 처리 구현
+- `Src/Novel/ScriptLine.h/cpp` — `FVrdxChoiceScriptLine` 및 `@choice` 파싱/실행 연결
+- `Src/Scene/NovelScene.h/cpp` — ChoiceManager 소유 및 입력/렌더 통합, `CanAdvance()` 연동
+- `Assets/Scripts/TestScript.txt` — 선택지 분기 검증용 샘플 스크립트 추가
+
+### 문서 갱신
+
+- `Docs/6-ChoiceSystem.md` — 구현 완료 상태로 갱신
+- `Docs/Voradorix.md` — 5단계 완료 상태로 갱신
+- `Docs/GAME_DESIGN.md` — 5단계/`@choice` 구현 완료 반영
+- `Docs/5-ScriptEngine.md` — `@choice` 후속 항목을 구현 완료로 정리
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (8단계)
@@ -195,3 +218,10 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 
 - 에이전트는 직접 코드를 작성/수정하지 않으며, 코드 리뷰/설계 검토/조언 역할로 한정.
 - 파일 생성 및 설정, 작업 기록 관리 등 코드 외 업무는 수행 가능.
+
+### 향후 UI 컴포넌트 작업 메모
+
+- **당장은 기존 ChoiceSystem 설계 유지**: `ChoiceManager` 중심으로 5단계를 우선 진행
+- **이후 분리 검토 대상**: `BaseWidget` 확장, `Box` / `Button` / `TextLabel` 같은 재사용 UI 컴포넌트
+- **적용 후보**: `DialogueBox`, `ChoicePanel`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
+- **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 중복 UI 로직 축소

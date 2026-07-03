@@ -4,6 +4,7 @@
 #include "Core/String.h"
 #include "Core/Vector.h"
 #include "Novel/CharacterManager.h"
+#include "ChoiceManager.h"
 
 class CVrdxNovelScene;
 
@@ -18,6 +19,7 @@ class CVrdxNovelScene;
 | `@label`     | 현재 위치를 레이블로 저장                        | @label "Label"                                          |
 | `@jump`      | 레이블 위치로 인덱스 이동                        | @jump "Label"                                           |
 | `@dialogue`  | `CDialogueBox`에 스피커/텍스트 전달 후 입력 대기 | @dialogue "Laura" "Welcome to the Chamber of Creation." |
+| `@choice`    | ChoiceOption들을 전달 후 입력 대기               | @choice "Repeat" "Main" "Exit" "Exit"                   |
 | ------------ | ------------------------------------------------ | ------------------------------------------------------- |
 */
 
@@ -27,6 +29,9 @@ struct FVrdxScriptLine
 	static TVrdxSharedPtr<FVrdxScriptLine> ParseScriptLine(const std::string& Line);
 	static bool Test();
 	virtual bool Construct() { return false; }
+
+	//true to continue parse
+	//false to wait user input
 	virtual bool Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene) { return false; }
 
 	FVrdxString RawText;
@@ -100,4 +105,12 @@ struct FVrdxDialogueScriptLine : FVrdxScriptLine
 
 	FVrdxString Speaker;
 	FVrdxString Dialogue;
+};
+
+struct FVrdxChoiceScriptLine : FVrdxScriptLine
+{
+	virtual bool Construct() override;
+	virtual bool Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene) override;
+
+	TVrdxVector<FVrdxChoiceOption> ChoiceOptions;
 };

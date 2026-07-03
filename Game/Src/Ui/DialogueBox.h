@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/RectangleShape.hpp"
-#include "SFML/Graphics/Text.hpp"
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 #include "Core/String.h"
 #include "Ui/WidgetBase.h"
@@ -25,6 +25,7 @@ public:
 	// 상태
 	bool IsTyping() const;      // 타이핑 진행 중?
 	bool IsFinished() const;    // 현재 대사 출력 완료?
+	bool IsWaiting() const;
 	void FinishTyping();        // 즉시 전체 표시
 
 private:
@@ -33,6 +34,7 @@ private:
 	// 위젯
 	sf::Font           Font;            // 폰트
 	bool               bFontLoaded;     // 폰트 로드 성공 여부
+	bool bWaiting = false;
 	sf::RectangleShape Panel;           // 대사창 배경
 	sf::Text           SpeakerText;     // 발화자명 (Font 참조 필요)
 	sf::Text           LineText;        // 대사 내용 (Font 참조 필요)

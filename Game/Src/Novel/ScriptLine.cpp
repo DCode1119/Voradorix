@@ -1,9 +1,10 @@
 #include "Novel/ScriptLine.h"
 
-#include <string>
 #include <regex>
+#include <string>
 #include <unordered_map>
 
+#include "Novel/DialogueLine.h"
 #include "Scene/NovelScene.h"
 
 TVrdxSharedPtr<FVrdxScriptLine> FVrdxScriptLine::ParseScriptLine(const std::string& Line)
@@ -32,6 +33,7 @@ TVrdxSharedPtr<FVrdxScriptLine> FVrdxScriptLine::ParseScriptLine(const std::stri
 		{ "label",    []() -> TVrdxSharedPtr<FVrdxScriptLine> { return MakeVrdxShared<FVrdxLabelScriptLine>();         } },
 		{ "jump",     []() -> TVrdxSharedPtr<FVrdxScriptLine> { return MakeVrdxShared<FVrdxJumpScriptLine>();          } },
 		{ "dialogue", []() -> TVrdxSharedPtr<FVrdxScriptLine> { return MakeVrdxShared<FVrdxDialogueScriptLine>();      } },
+		{ "choice",   []() -> TVrdxSharedPtr<FVrdxScriptLine> { return MakeVrdxShared<FVrdxChoiceScriptLine>();        } },
 	};
 
 	auto It = Table.find(Match[1].str());
@@ -199,7 +201,7 @@ bool FVrdxWaitScriptLine::Construct()
 bool FVrdxWaitScriptLine::Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene)
 {
 	Scene->WaitForSeconds(Seconds);
-	return true;
+	return false;
 }
 
 bool FVrdxLabelScriptLine::Construct()
@@ -255,5 +257,26 @@ bool FVrdxDialogueScriptLine::Construct()
 bool FVrdxDialogueScriptLine::Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene)
 {
 	Scene->SetDialogue({Speaker, Dialogue});
+	return false;
+}
+
+bool FVrdxChoiceScriptLine::Construct()
+{
+	if ( Arguments.Num() < 3 || 0 == (Arguments.Num() % 2) )
+	{
+		return false;
+	}
+
+	for (int32_t Index = 1; Index < Arguments.Num(); Index += 2)
+	{
+		ChoiceOptions.Add({Arguments[Index + 0], Arguments[Index + 1]});
+	}
+
 	return true;
+}
+
+bool FVrdxChoiceScriptLine::Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene)
+{
+	Scene->SetChoices(ChoiceOptions);
+	return false;
 }

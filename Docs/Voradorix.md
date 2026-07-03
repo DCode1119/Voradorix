@@ -5,7 +5,7 @@ tags:
   - project
   - index
 status: active
-phase: 4 (ScriptEngine 완료)
+phase: 5 (ChoiceSystem 완료)
 ---
 
 # Voradorix
@@ -16,7 +16,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - **기술**: C++17, SFML 3.1.0, Visual Studio 2022 x64
 - **GitHub**: https://github.com/DCode1119/Voradorix
-- **상태**: 4단계 ScriptEngine 구현 완료
+- **상태**: 5단계 ChoiceSystem 구현 완료
 
 ## 구현 현황
 
@@ -44,7 +44,12 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
   - `ScriptLine.h/cpp` — 명령어별 파싱/Construct/Dispatch, 팩토리 테이블 패턴
   - `NovelScene.h/cpp` — `shared_from_this()`로 ScriptEngine 연결, `CanAdvance()`로 흐름 제어
   - `Assets/Scripts/TestScript.txt` — @label/@jump 분기 포함 테스트 스크립트
-- [ ] **5단계 — 선택지 시스템** (예정)
+- [x] **5단계 — 선택지 시스템** (구현 완료)
+  - [[6-ChoiceSystem.md]] — 선택지 UI/분기 시스템 구현 문서
+  - `ChoiceManager.h/cpp` — 선택지 패널/버튼/입력 처리/즉시 분기
+  - `ScriptLine.h/cpp` — `@choice` 파싱 및 분기용 라인 추가
+  - `NovelScene.h/cpp` — ChoiceManager 소유 및 ScriptEngine 분기 연동
+  - `Assets/Scripts/TestScript.txt` — 선택지 검증용 샘플 스크립트
 - [ ] **6단계 — 세이브/로드** (예정)
 - [ ] **7단계 — 메뉴 구성** (예정)
 - [ ] **8단계 — 연출 효과** (예정)

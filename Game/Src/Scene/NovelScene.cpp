@@ -1,9 +1,11 @@
 #include "NovelScene.h"
 
-#include "SFML/Graphics/CircleShape.hpp"
-#include "SFML/Window/Event.hpp"
-#include "SFML/Window/Keyboard.hpp"
-#include "SFML/Window/Mouse.hpp"
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Window/Event.hpp>
+
+#include "Core/String.h"
+#include "Novel/ChoiceManager.h"
+#include "Novel/DialogueLine.h"
 
 CVrdxNovelScene::CVrdxNovelScene()
 {
@@ -12,6 +14,7 @@ CVrdxNovelScene::CVrdxNovelScene()
 void CVrdxNovelScene::OnEnter()
 {
 	ScriptEngine.SetNovelScene(shared_from_this());
+	ChoiceManager.SetNovelScene(shared_from_this());
 	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
 	{
 		return;
@@ -24,43 +27,16 @@ void CVrdxNovelScene::OnExit()
 
 void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
 {
-	static TVrdxVector<sf::Keyboard::Scan> SkipKeys =
+	// Dialogue typing state
+	if (const bool bIsWaiting = DialogueBox.IsWaiting())
 	{
-		sf::Keyboard::Scan::Enter,
-		sf::Keyboard::Scan::Space,
-	};
-
-	bool bProceed = false;
-
-	if (const auto* KeyPressed = Event.getIf<sf::Event::KeyPressed>())
-	{
-		if (SkipKeys.Contains(KeyPressed->scancode))
-		{
-			bProceed = true;
-		}
+		DialogueBox.HandleEvent(Event);
 	}
 
-	else if (const auto* MousePressed = Event.getIf<sf::Event::MouseButtonPressed>())
+	// Choice wait state
+	if (const bool bIsWaiting = ChoiceManager.IsWaiting())
 	{
-		if (MousePressed->button  == sf::Mouse::Button::Left)
-		{
-			bProceed = true;
-		}
-	}
-
-	if (bProceed)
-	{
-		if (DialogueBox.IsTyping())
-		{
-			// Complete typing, wait for user input.
-			DialogueBox.FinishTyping();
-			bWaitingInput = true;
-		}
-		else
-		{
-			// Go next script.
-			bWaitingInput = false;
-		}
+		ChoiceManager.HandleEvent(Event);
 	}
 }
 
@@ -70,13 +46,12 @@ void CVrdxNovelScene::Update(const float DeltaTick)
 	Background.Update(DeltaTick);
 	CharacterManager.Update(DeltaTick);
 	DialogueBox.Update(DeltaTick);
+	ChoiceManager.Update(DeltaTick);
 
 	if (RemainingWaitSeconds > 0.f)
 	{
 		RemainingWaitSeconds = std::max(0.f, RemainingWaitSeconds - DeltaTick);
 	}
-
-	bWaitingInput = DialogueBox.IsFinished();
 }
 
 void CVrdxNovelScene::Draw(sf::RenderWindow& Window)
@@ -86,11 +61,12 @@ void CVrdxNovelScene::Draw(sf::RenderWindow& Window)
 	Background.Draw(Window);
 	CharacterManager.Draw(Window);
 	DialogueBox.Draw(Window);
+	ChoiceManager.Draw(Window);
 }
 
 bool CVrdxNovelScene::CanAdvance() const
 {
-	return !DialogueBox.IsTyping() && !(RemainingWaitSeconds > 0) && !bWaitingInput;
+	return !ChoiceManager.IsWaiting() && !DialogueBox.IsWaiting() && !(RemainingWaitSeconds > 0);
 }
 
 void CVrdxNovelScene::SetBackground(const FVrdxString& BackgroundName)
@@ -117,6 +93,11 @@ void CVrdxNovelScene::SetDialogue(const FVrdxDialogueLine& DialogueLine)
 {
 	DialogueBox.SetSpeaker(DialogueLine.Speaker);
 	DialogueBox.SetLine(DialogueLine.Text);
+}
+
+void CVrdxNovelScene::SetChoices(const TVrdxVector<FVrdxChoiceOption>& ChoiceOptions)
+{
+	ChoiceManager.SetChoices(ChoiceOptions);
 }
 
 void CVrdxNovelScene::JumpToLabel(const FVrdxString& TargetLabelName)

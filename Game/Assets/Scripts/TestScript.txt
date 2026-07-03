@@ -8,7 +8,10 @@
 @label "B"
 @bg "WhiteRoom"
 @dialogue "Laura" "확인되었나요? 자 이제 마무리!"
-@jump "Finish"
+@jump "Choice"
+
+@label "Choice"
+@choice "Exit" "Finish" "Repeat" "Main"
 
 @label "Main"
 @bg "WhiteRoom"

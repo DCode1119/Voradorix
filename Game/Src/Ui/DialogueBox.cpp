@@ -1,5 +1,10 @@
 #include "Ui/DialogueBox.h"
 
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Mouse.hpp>
+
+#include "Core/Vector.h"
+
 CVrdxDialogueBox::CVrdxDialogueBox()
 	: SpeakerText(Font)
 	, LineText(Font)
@@ -28,11 +33,41 @@ CVrdxDialogueBox::CVrdxDialogueBox()
 
 void CVrdxDialogueBox::HandleEvent(const sf::Event& Event)
 {
-	if (Event.is<sf::Event::MouseButtonPressed>())
+	static TVrdxVector<sf::Keyboard::Scan> ScanKeys =
 	{
+		sf::Keyboard::Scan::Enter,
+		sf::Keyboard::Scan::Space,
+	};
+
+	bool bFinishTyping = false;
+	if (const auto* KeyPressed = Event.getIf<sf::Event::KeyPressed>())
+	{
+		if (ScanKeys.Contains(KeyPressed->scancode))
+		{
+			bFinishTyping = true;
+		}
+	}
+
+	else if (const auto* MousePressed = Event.getIf<sf::Event::MouseButtonPressed>())
+	{
+		if (MousePressed->button == sf::Mouse::Button::Left)
+		{
+			bFinishTyping = true;
+		}
+	}
+
+	if (bFinishTyping)
+	{
+
+
 		if (IsTyping())
 		{
+			// Complete typing, wait for user input.
 			FinishTyping();
+		}
+		else
+		{
+			bWaiting = false;
 		}
 	}
 }
@@ -92,8 +127,14 @@ bool CVrdxDialogueBox::IsFinished() const
 	return !CurrentText.IsEmpty() && !IsTyping();
 }
 
+bool CVrdxDialogueBox::IsWaiting() const
+{
+	return bWaiting;
+}
+
 void CVrdxDialogueBox::StartTyping()
 {
+	bWaiting = true;
 	VisibleCount = 0;
 	TypeTimer = 0.f;
 

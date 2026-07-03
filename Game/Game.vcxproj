@@ -94,6 +94,7 @@
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Novel\Background.cpp" />
     <ClCompile Include="Src\Novel\CharacterManager.cpp" />
+    <ClCompile Include="Src\Novel\ChoiceManager.cpp" />
     <ClCompile Include="Src\Novel\ScriptEngine.cpp" />
     <ClCompile Include="Src\Novel\ScriptLine.cpp" />
     <ClCompile Include="Src\Scene\NovelScene.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Src\Core\Vector.h" />
     <ClInclude Include="Src\Novel\Background.h" />
     <ClInclude Include="Src\Novel\CharacterManager.h" />
+    <ClInclude Include="Src\Novel\ChoiceManager.h" />
     <ClInclude Include="Src\Novel\DialogueLine.h" />
     <ClInclude Include="Src\Novel\ScriptEngine.h" />
     <ClInclude Include="Src\Novel\ScriptLine.h" />

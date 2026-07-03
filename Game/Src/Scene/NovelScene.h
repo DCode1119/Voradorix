@@ -3,10 +3,14 @@
 #include "Core/Vector.h"
 #include "Novel/Background.h"
 #include "Novel/CharacterManager.h"
-#include "Novel/DialogueLine.h"
+#include "Novel/ChoiceManager.h"
 #include "Novel/ScriptEngine.h"
 #include "Scene/Scene.h"
 #include "Ui/DialogueBox.h"
+
+struct FVrdxString;
+struct FVrdxDialogueLine;
+struct FVrdxChoiceOption;
 
 class CVrdxNovelScene
 	: public CVrdxScene
@@ -29,6 +33,7 @@ public:
 	void HideCharacter(const FVrdxString& Character);
 	void SetCharacterPose(const FVrdxString& Character, const FVrdxString& Pose);
 	void SetDialogue(const FVrdxDialogueLine& DialogueLine);
+	void SetChoices(const TVrdxVector<FVrdxChoiceOption>& ChoiceOptions);
 
 	void JumpToLabel(const FVrdxString& TargetLabelName);
 	void WaitForSeconds(const float Seconds);
@@ -36,13 +41,11 @@ public:
 private:
 	void EndScenario();
 
-
-	bool bWaitingInput = false;
-
 	CVrdxBackground Background;
 	CVrdxCharacterManager CharacterManager;
 	CVrdxDialogueBox DialogueBox;
 	CVrdxScriptEngine ScriptEngine;
+	CVrdxChoiceManager ChoiceManager;
 
 	float RemainingWaitSeconds = 0.f;
 };

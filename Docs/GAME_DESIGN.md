@@ -86,9 +86,11 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 @dialogue "speaker" "text"  — 대사 출력 (스피커명 + 텍스트)
 ```
 
-**후속 단계에서 추가 예정**:
+5단계에서 `@choice` 선택지 분기가 추가 완료되었다.
+
+**5단계에서 구현 완료**:
 ```
-@choice "text" → label   — 선택지 (5단계)
+@choice "text" → label   — 선택지 분기
 @bgm / @se               — 오디오 (추후)
 @fadeout / @fadein / @shake — 연출 효과 (8단계)
 @if / @set               — 조건 분기 (추후)
@@ -189,9 +191,11 @@ Game/Game/
 - 테스트 스크립트: `Assets/Scripts/TestScript.txt` (@label/@jump 분기 포함 25라인)
 - 세부 명세: `Docs/5-ScriptEngine.md`
 
-### 5단계 — 선택지 시스템
-- `ChoiceManager.h/cpp` — 선택지 버튼 표시, 선택 대기
+### 5단계 — 선택지 시스템 (완료)
+- `ChoiceManager.h/cpp` — 선택지 버튼 표시, hover/keyboard/click 입력, 즉시 분기
 - ScriptEngine의 `@choice` 명령과 연동하여 분기
+- `@choice "text" "label" ...` — 한 줄에 (텍스트, 레이블) 쌍을 나열하는 방식
+- 세부 문서: `Docs/6-ChoiceSystem.md`
 
 ### 6단계 — 세이브/로드
 - `SaveManager.h/cpp` — JSON 저장/불러오기

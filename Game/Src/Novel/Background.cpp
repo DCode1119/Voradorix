@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstdint>
+
 #include <SFML/Graphics/Color.hpp>
 
 //Will be moved to configuration module.
