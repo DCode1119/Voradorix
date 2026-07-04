@@ -9,7 +9,7 @@ C++17, Visual Studio 2022 x64 환경에서 SFML 3.1.0을 사용하여 구축하�
 
 씬 기반 아키텍처, 텍스트 출력, 스크립트/분기 확장 구조를 지원합니다.
 
-현재 1~5단계 구현이 완료되었고, 6~8단계는 예정 상태입니다.
+현재 1~5단계 구현이 완료되었고, 6단계는 진행 중, 7~9단계는 예정 상태입니다.
 
 ## 기술 스택
 
@@ -35,7 +35,7 @@ Game/
 │       ├── Core/             # Application, Common, Vector, String
 │       ├── Scene/            # Scene, SceneManager, TestScene, NovelScene
 │       ├── Novel/            # 노벨 재생 로직
-│       ├── Ui/               # BaseWidget, DialogueBox
+│       ├── Ui/               # WidgetBase, DialogueBox, ChoiceWidget
 │       └── Save/             # (예정) SaveManager
 ├── Docs/                     # 설계/작업 기록 문서
 ├── graphify-out/             # 그래프 분석 산출물
@@ -51,9 +51,10 @@ Game/
 - [x] **3단계 — 배경 및 캐릭터**: CVrdxBackground (페이드 전환) + CVrdxCharacterManager (슬롯/페이드/텍스처 캐싱) 구현 완료
 - [x] **4단계 — ScriptEngine**: 스크립트 로드/파싱/실행, @label/@jump 분기 완료
 - [x] **5단계 — 선택지 시스템**: 선택지 UI/입력/분기 구현 완료
-- [ ] 6단계 — 세이브/로드
-- [ ] 7단계 — 메뉴 구성
-- [ ] 8단계 — 연출 효과
+- [ ] 6단계 — UI Foundation
+- [ ] 7단계 — 세이브/로드
+- [ ] 8단계 — 메뉴 구성
+- [ ] 9단계 — 연출 효과
 
 ## 네이밍 규칙
 
@@ -78,7 +79,7 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 ## 현재 상태
 
 - 1~5단계 빌드/테스트 확인 완료
-- 6~8단계는 아직 예정
+- 6단계는 진행 중, 7~9단계는 아직 예정
 - 작업 기록과 프로젝트 인덱스 문서는 `Docs/`를 참고
 
 ## 라이선스

@@ -1,7 +1,7 @@
 ---
-title: "6단계: SaveLoad"
+title: "7단계: SaveLoad"
 project: Voradorix
-phase: 6
+phase: 7
 status: 명세 작성 완료
 tags:
   - voradorix
@@ -10,7 +10,7 @@ tags:
   - spec
   - cpp
 ---
-# Voradorix — 6단계: Save/Load 기능 명세
+# Voradorix — 7단계: Save/Load 기능 명세
 
 > **대상**: 저장/불러오기 데이터 구조 + SaveManager + SaveLoadScene + 씬 상태 복원  
 > **프로젝트**: Voradorix  
@@ -22,7 +22,7 @@ tags:
 
 ## 1. 범위
 
-6단계는 **세이브/로드**를 담당한다.
+7단계는 **세이브/로드**를 담당한다.
 
 - 저장 슬롯 목록 관리
 - 현재 노벨 진행 상태 직렬화

@@ -1,7 +1,8 @@
 ---
-title: "UI Foundation"
+title: "6단계: UI Foundation"
 project: Voradorix
-status: 명세 작성 완료
+phase: 6
+status: 구현 진행 중
 tags:
   - voradorix
   - ui
@@ -9,7 +10,7 @@ tags:
   - foundation
   - spec
 ---
-# Voradorix — UI Foundation 기능 명세
+# Voradorix — 6단계: UI Foundation 기능 명세
 
 > **대상**: `CVrdxWidgetBase` 확장 + Box/TextLabel/Button/Container 같은 재사용 UI 컴포넌트  
 > **프로젝트**: Voradorix  
@@ -24,7 +25,7 @@ tags:
 현재 UI는 `CVrdxWidgetBase`를 중심으로 한 위젯 트리로 정리되었고, `DialogueBox`와 `ChoiceWidget`가 그 위에 올라가 있다.
 이 구조는 노벨 재생 단계에서는 동작하지만, 타이틀 화면/설정/저장화면처럼 **UI 비중이 큰 화면**을 추가할 때 위젯 공통 계층이 더 필요하다.
 
-따라서 6단계(Save/Load)와 7단계(메뉴 구성) 이전에, 공통 UI 기초 계층을 먼저 정리한다.
+따라서 현재는 UI Foundation을 진행 중인 단계로 두고, 7단계(Save/Load)와 8단계(메뉴 구성) 이전에 공통 UI 기초 계층을 먼저 정리한다.
 
 ---
 

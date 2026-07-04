@@ -101,7 +101,7 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 - JSON 기반 (SFML + nlohmann/json 또는 직접 파싱)
 - 저장 항목: 현재 씬 상태, 플래그 값, 히스토리, 표시중인 캐릭터/배경
 
-### 2.5 UI Foundation (다음 작업 우선순위)
+### 2.5 UI Foundation (진행 중)
 
 - `Ui/WidgetBase.h` — 공통 위젯 인터페이스 유지/정리
 - `Ui/Box.h/cpp` — 배경/패널 위젯
@@ -109,7 +109,7 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 - `Ui/Button.h/cpp` — Hover/Click/Keyboard 입력 위젯
 - `Ui/WidgetContainer.h/cpp` — 계층형 배치/이벤트 전달
 - 적용 대상: `DialogueBox`, `ChoiceWidget`, `TitleScene`, `ConfigScene`, `SaveLoadScene`
-- 세부 문서: `Docs/UIFoundation.md`
+- 세부 문서: `Docs/6-UIFoundation.md`
 
 ---
 
@@ -128,7 +128,7 @@ Game/Game/
 │   │   ├── SceneManager.h/cpp
 │   │   ├── NovelScene.h/cpp  # 노벨 씬 (Background + CharacterManager + ScriptEngine 통합)
 │   │   ├── TestScene.h/cpp
-│   │   └── (TitleScene, ConfigScene — 7단계 예정)
+│   │   └── (TitleScene, ConfigScene — 8단계 예정)
 │   ├── Novel/
 │   │   ├── ScriptEngine.h/cpp
 │   │   ├── ScriptLine.h/cpp  # 명령어별 파싱/Construct/Dispatch, 팩토리 테이블
@@ -136,7 +136,7 @@ Game/Game/
 │   │   ├── Background.h/cpp
 │   │   ├── DialogueLine.h
 │   │   ├── ChoiceWidget.h/cpp     # 5단계 구현
-│   │   └── EffectManager.h/cpp    # 8단계 예정
+│   │   └── EffectManager.h/cpp    # 9단계 예정
 │   ├── Ui/
 │   │   ├── WidgetBase.h/cpp
 │   │   ├── DialogueBox.h/cpp
@@ -190,7 +190,7 @@ Game/Game/
 - `CharacterManager.h/cpp` — 캐릭터 스프라이트 표시/위치/표정 전환
   - left/center/right 3슬롯
   - 표정 변경 시 페이드
-  - 세부 명세: `Docs/4-BackgroundCharacter.md`
+  - 세부 명세: `Docs/3-BackgroundCharacter.md`
 
 ### 4단계 — ScriptEngine (완료)
 - `ScriptEngine.h/cpp` — 스크립트 파일 로드, 파싱, 명령 실행
@@ -201,25 +201,30 @@ Game/Game/
 - NovelScene — `ScriptEngine` 멤버 소유, `OnEnter()`에서 초기화
 - 지원 명령어: `@bg`, `@show`, `@hide`, `@pose`, `@wait`, `@label`, `@jump`, `@dialogue`
 - 테스트 스크립트: `Assets/Scripts/TestScript.txt` (@label/@jump 분기 포함 25라인)
-- 세부 명세: `Docs/5-ScriptEngine.md`
+- 세부 명세: `Docs/4-ScriptEngine.md`
 
 ### 5단계 — 선택지 시스템 (완료)
 - `ChoiceWidget.h/cpp` — 선택지 버튼 표시, hover/keyboard/click 입력, 즉시 분기
 - ScriptEngine의 `@choice` 명령과 연동하여 분기
 - `@choice "text" "label" ...` — 한 줄에 (텍스트, 레이블) 쌍을 나열하는 방식
-- 세부 문서: `Docs/6-ChoiceSystem.md`
+- 세부 문서: `Docs/5-ChoiceSystem.md`
 
-### 6단계 — 세이브/로드
+### 6단계 — UI Foundation (진행 중)
+- `WidgetBase.h/cpp` — 공통 위젯 트리/이벤트/렌더 계층
+- `DialogueBox.h/cpp`, `ChoiceWidget.h/cpp` — 위젯 기반 UI 정리
+- 세부 문서: `Docs/6-UIFoundation.md`
+
+### 7단계 — 세이브/로드
 - `SaveManager.h/cpp` — JSON 저장/불러오기
 - SaveLoadScene에서 UI로 표시
 - 세부 문서: `Docs/7-SaveLoad.md`
 
-### 7단계 — 메뉴 구성
+### 8단계 — 메뉴 구성
 - `TitleScene.h/cpp` — 타이틀 화면 (새 게임/로드/설정/종료)
 - `ConfigScene.h/cpp` — 볼륨 조절, 전역 설정
 - `UI/Button.h/cpp`, `UI/Menu.h/cpp` — 재사용 UI 컴포넌트
 
-### 8단계 — 연출 효과
+### 9단계 — 연출 효과
 - `EffectManager.h/cpp` — 페이드인/아웃, 화면 셰이크, 컬러 오버레이
 - 타이머 기반 연출 큐
 

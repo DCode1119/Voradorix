@@ -1,7 +1,6 @@
 ---
 title: "유니코드 문자열 클래스"
 project: Voradorix
-phase: 2
 status: 완료
 tags:
   - voradorix
