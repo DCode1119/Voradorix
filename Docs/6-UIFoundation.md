@@ -102,7 +102,7 @@ public:
 
 ## 5. 기본 컴포넌트
 
-### 5.1 ImageWidget (Box)
+### 5.1 CVrdxBoxWidget (ImageWidget)
 
 이미지/텍스처를 선택적으로 그릴 수 있는 위젯.
 
@@ -184,7 +184,7 @@ public:
 | 단계 | 작업 | 상태 |
 |------|------|------|
 | 1 | `CVrdxWidgetBase` 정리 | ✅ 완료 |
-| 2 | `ImageWidget` / `TextLabel` 작성 | 📝 예정 |
+| 2 | `CVrdxBoxWidget` / `TextLabel` 작성 | 📝 예정 |
 | 3 | `Button` 작성 | 📝 예정 |
 | 4 | `WidgetContainer` 작성 | 📝 예정 |
 | 5 | `DialogueBox` 위젯 정리 | ✅ 완료 |

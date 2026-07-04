@@ -51,6 +51,7 @@ public:
 
 	bool ContainsInLocal(const sf::Vector2f& Local) const;
 	bool Hides(const CVrdxWidgetBase* Target) const;
+	const TVrdxVector<TVrdxSharedPtr<CVrdxWidgetBase>>& GetChildren() const { return Children; }
 
 protected:
 	TVrdxWeakPtr<CVrdxWidgetBase> Parent;

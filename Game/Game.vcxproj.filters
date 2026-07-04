@@ -65,6 +65,9 @@
     <ClCompile Include="Src\Novel\ScriptLine.cpp">
       <Filter>소스 파일\Novel</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Ui\BoxWidget.cpp">
+      <Filter>소스 파일\Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene\Scene.h">
@@ -114,6 +117,9 @@
     </ClInclude>
     <ClInclude Include="Src\Novel\ScriptLine.h">
       <Filter>소스 파일\Novel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Ui\BoxWidget.h">
+      <Filter>소스 파일\Ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

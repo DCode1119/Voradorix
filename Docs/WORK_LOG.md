@@ -158,6 +158,7 @@ tags:
 ### 5단계 — ChoiceSystem 구현 완료
 
 - `Src/Ui/ChoiceWidget.h/cpp` — 선택지 UI, hover, keyboard, click, 즉시 분기 처리 구현
+- `Src/Ui/BoxWidget.h/cpp` — 이미지/텍스처 출력 가능한 위젯 구현, Shape 기반 geometry 동기화
 - `Src/Novel/ScriptLine.h/cpp` — `FVrdxChoiceScriptLine` 및 `@choice` 파싱/실행 연결
 - `Src/Scene/NovelScene.h/cpp` — ChoiceWidget 소유 및 입력/렌더 연동, `CanAdvance()` 연동
 - `Assets/Scripts/TestScript.txt` — 선택지 분기 검증용 샘플 스크립트 추가
@@ -232,7 +233,7 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 ### UI 컴포넌트 작업 메모
 
 - **현재 작업 단계**: `UI Foundation` 진행 중
-- **핵심 목표**: `WidgetBase` 확장 + `ImageWidget` / `TextLabel` / `Button` / `WidgetContainer` 공통 계층화
+- **핵심 목표**: `WidgetBase` 확장 + `BoxWidget` / `TextLabel` / `Button` / `WidgetContainer` 공통 계층화
 - **적용 후보**: `DialogueBox`, `ChoiceWidget`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
 - **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 UI와 로직 분리
 - **명세 문서**: `Docs/6-UIFoundation.md`
