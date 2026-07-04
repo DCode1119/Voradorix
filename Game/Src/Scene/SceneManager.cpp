@@ -48,7 +48,7 @@ void CVrdxSceneManager::Update(const float DeltaTick)
 	}
 }
 
-void CVrdxSceneManager::Draw(sf::RenderWindow& Window)
+void CVrdxSceneManager::Draw(sf::RenderWindow& Window) const
 {
 	if (!SceneStack.IsEmpty())
 	{

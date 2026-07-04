@@ -8,8 +8,20 @@ int main()
         return -1;
     }
 
-    CVrdxApplication Application;
-    Application.Run();
+    sf::RectangleShape Panel;
+    Panel.setSize({1280, 720});
+    Panel.setPosition({0, 0});
+    Panel.setFillColor(sf::Color::Transparent);
 
+    if (TVrdxSharedPtr<CVrdxApplication> Application = CVrdxWidgetBase::CreateWidget<CVrdxApplication>(TVrdxWeakPtr<CVrdxWidgetBase>{}, Panel))
+    {
+		Application->Run();
+		CVrdxWidgetBase::DestroyWidget(Application);
+    }
+    else
+    {
+        //Critical error
+    }
+    
     return 0;
 }

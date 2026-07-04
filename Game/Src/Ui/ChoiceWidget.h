@@ -10,6 +10,7 @@
 #include "Core/Common.h"
 #include "Core/String.h"
 #include "Core/Vector.h"
+#include "Ui/WidgetBase.h"
 
 class CVrdxNovelScene;
 
@@ -19,29 +20,35 @@ struct FVrdxChoiceOption
 	FVrdxString TargetLabel;
 };
 
-class CVrdxChoiceManager
+class CVrdxChoiceWidget : public CVrdxWidgetBase
 {
 private:
 	enum class EVrdxChoiceState { Hidden, Waiting, };
 
 public:
-	CVrdxChoiceManager();
-	~CVrdxChoiceManager() VRDX_DEFAULT;
+	CVrdxChoiceWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
+
+	//CVrdxChoiceWidget();
+	//~CVrdxChoiceWidget() VRDX_DEFAULT;
 
 	void SetNovelScene(TVrdxSharedPtr<CVrdxNovelScene> NovelScene);
 	void SetChoices(const TVrdxVector<FVrdxChoiceOption>& Choices);
 	void Clear();
 
-	void HandleEvent(const sf::Event& Event);
 	void Update(const float DeltaTick);
 	void Draw(sf::RenderWindow& Window) const;
 
 	bool IsWaiting() const;
 
+	virtual void OnMouseMove(const sf::Vector2f& LocalPosition) override;
+	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
+	virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) override;
+
 private:
 	void MoveSelection(int32_t Delta);
 	void ConfirmSelection();
 	int32_t GetHoveredButtonIndex(const sf::Vector2i& MousePosition) const;
+	int32_t GetHoveredButtonIndex(const sf::Vector2f& MousePosition) const;
 
 	TVrdxVector<FVrdxChoiceOption> ChoiceOptions;
 	int32_t SelectedIndex = 0;
@@ -51,7 +58,6 @@ private:
 	sf::Font Font;
 	bool bFontLoaded = false;
 
-	sf::RectangleShape Panel;
 	TVrdxVector<sf::RectangleShape> Buttons;
 	TVrdxVector<sf::Text> ButtonTexts;
 

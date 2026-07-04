@@ -12,9 +12,9 @@ tags:
 ---
 # Voradorix — 2단계: NovelScene + DialogueBox 구현 명세
 
-> **대상**: CVrdxNovelScene (본문 재생 씬) + CVrdxBaseWidget (UI 위젯 베이스) + CDialogueBox (하단 대사창 위젯)  
+> **대상**: `CVrdxNovelScene` (본문 재생 씬) + `CVrdxWidgetBase` (UI 위젯 베이스) + `CVrdxDialogueBox` (하단 대사창 위젯)  
 > **프로젝트**: Voradorix  
-> **관련 파일**: `Src/Scene/NovelScene.h/cpp`, `Src/Ui/BaseWidget.h`, `Src/Ui/DialogueBox.h/cpp`, `Src/Novel/Background.h/cpp`, `Src/Novel/CharacterManager.h/cpp`, `Src/Novel/ScriptEngine.h/cpp`, `Src/Novel/ScriptLine.h/cpp`  
+> **관련 파일**: `Src/Scene/NovelScene.h/cpp`, `Src/Ui/WidgetBase.h`, `Src/Ui/DialogueBox.h/cpp`, `Src/Ui/ChoiceWidget.h/cpp`, `Src/Novel/Background.h/cpp`, `Src/Novel/CharacterManager.h/cpp`, `Src/Novel/ScriptEngine.h/cpp`, `Src/Novel/ScriptLine.h/cpp`  
 > **의존성**: SFML 3.1.0 (`sf::Text`, `sf::Font`, `sf::RectangleShape`, `sf::Clock`), `Core/String.h`  
 > **완료 조건**: NovelScene이 ScriptEngine을 통해 스크립트 파일을 읽어 배경/캐릭터/대사 명령을 순차 실행, 3계층(BG→캐릭터→UI) 렌더링
 
@@ -24,9 +24,9 @@ tags:
 
 | # | 파일 | 설명 | 상태 |
 |---|------|------|------|
-| 1 | `Src/Ui/BaseWidget.h` | CVrdxBaseWidget 선언 (위젯 베이스 클래스) | ✅ 작성됨 |
-| 2 | `Src/Ui/DialogueBox.h` | CDialogueBox 선언 | ✅ 작성됨 |
-| 3 | `Src/Ui/DialogueBox.cpp` | CDialogueBox 구현 | ✅ 작성됨 |
+| 1 | `Src/Ui/WidgetBase.h` | `CVrdxWidgetBase` 선언 (위젯 베이스 클래스) | ✅ 작성됨 |
+| 2 | `Src/Ui/DialogueBox.h` | `CVrdxDialogueBox` 선언 | ✅ 작성됨 |
+| 3 | `Src/Ui/DialogueBox.cpp` | `CVrdxDialogueBox` 구현 | ✅ 작성됨 |
 | 4 | `Src/Scene/NovelScene.h` | CVrdxNovelScene 선언 | ✅ 작성됨 |
 | 5 | `Src/Scene/NovelScene.cpp` | CVrdxNovelScene 구현 | ✅ 작성됨 |
 | 6 | `Src/Novel/ScriptEngine.h/cpp` | ScriptEngine (4단계 추가) | ✅ 작성됨 |
@@ -40,8 +40,8 @@ tags:
 
 | 구분 | 규칙 | 예시 |
 |------|------|------|
-| 클래스 | `C` + `Vrdx` 접두어 | `CVrdxNovelScene`, `CDialogueBox`, `CVrdxBaseWidget` |
-| 파일명 | PascalCase, 디렉토리명과 일치 | `NovelScene.h`, `DialogueBox.cpp`, `BaseWidget.h` |
+| 클래스 | `C` + `Vrdx` 접두어 | `CVrdxNovelScene`, `CVrdxDialogueBox`, `CVrdxWidgetBase` |
+| 파일명 | PascalCase, 디렉토리명과 일치 | `NovelScene.h`, `DialogueBox.cpp`, `WidgetBase.h` |
 | 구조체 | `F` + `Vrdx` | `FDialogueLine` |
 | 폴더 | `Novel/`, `Ui/` | (Src 아래) |
 
@@ -65,27 +65,29 @@ struct FVrdxDialogueLine
 
 ---
 
-## 4. CVrdxBaseWidget — UI 위젯 베이스 클래스
+## 4. CVrdxWidgetBase — UI 위젯 베이스 클래스
 
-**파일**: `Src/Ui/BaseWidget.h` (header-only, .cpp 불필요)
+**파일**: `Src/Ui/WidgetBase.h` / `Src/Ui/WidgetBase.cpp`
 
 ### 4.1 역할
 
-모든 UI 위젯이 상속받는 추상 베이스 클래스.
-Scene과 동일한 생명주기 메서드(`HandleEvent`, `Update`, `Draw`)를 정의하여
-일관된 인터페이스를 제공한다.
+모든 UI 위젯이 상속받는 공통 베이스 클래스.
+위젯 트리의 부모/자식 관계, 좌표 변환, 이벤트 전달, 렌더 순서를 담당한다.
 
 ### 4.2 클래스 설계
 
 ```cpp
-class CVrdxBaseWidget
+class CVrdxWidgetBase
 {
 public:
-    virtual ~CVrdxBaseWidget() VRDX_DEFAULT;
+    virtual ~CVrdxWidgetBase() VRDX_DEFAULT;
 
-    virtual void HandleEvent(const sf::Event& Event) VRDX_PURE_VIRTUAL;
-    virtual void Update(const float DeltaTick) VRDX_PURE_VIRTUAL;
-    virtual void Draw(sf::RenderWindow& Window) const VRDX_PURE_VIRTUAL;
+    virtual bool HandleEvent(const sf::Event& Event);
+    virtual void Update(const float DeltaTick);
+    virtual void Draw(sf::RenderWindow& Window) const;
+
+    virtual void OnPostCreate() {}
+    virtual void OnPreDestroy() {}
 };
 ```
 
@@ -93,26 +95,21 @@ public:
 
 | 메서드 | 설명 |
 |--------|------|
-| `HandleEvent(const sf::Event&)` | 입력 이벤트 처리 (키보드/마우스) |
-| `Update(const float DeltaTick)` | 매 프레임 상태 갱신 |
-| `Draw(sf::RenderWindow&)` | 렌더링 |
+| `HandleEvent(const sf::Event&)` | 입력 이벤트를 자식 위젯부터 순서대로 전달 |
+| `Update(const float DeltaTick)` | 매 프레임 자식 위젯 갱신 |
+| `Draw(sf::RenderWindow&)` | 렌더링 및 가림 상태 처리 |
 
 ---
 
-## 5. CDialogueBox — 대사창 위젯
+## 5. CVrdxDialogueBox — 대사창 위젯
 
 **파일**: `Src/Ui/DialogueBox.h` / `Src/Ui/DialogueBox.cpp`
 
 ### 5.1 역할
 
-화면 하단에 위치한 대사 출력 UI. `CVrdxBaseWidget`을 상속받아
+화면 하단에 위치한 대사 출력 UI. `CVrdxWidgetBase`를 상속받아
 Scene으로부터 독립적인 위젯으로 동작하며, 자체적으로 입력 처리,
 타이핑 애니메이션, 렌더링을 수행한다.
-
-### 4.1 역할
-
-화면 하단에 위치한 대사 출력 UI. NovelScene으로부터 독립적인 위젯으로,
-자체적으로 입력 처리, 타이핑 애니메이션, 렌더링을 수행한다.
 
 ### 4.2 위치 및 크기 (1280×720 기준)
 
@@ -124,19 +121,21 @@ Scene으로부터 독립적인 위젯으로 동작하며, 자체적으로 입력
 
 이후 실제 폰트 크기와 레이아웃에 따라 조정 가능.
 
-### 5.3 클래스 설계
+### 5.2 클래스 설계
 
 ```cpp
-class CDialogueBox : public CVrdxBaseWidget
+class CVrdxDialogueBox : public CVrdxWidgetBase
 {
 public:
-    CDialogueBox();
-    virtual ~CDialogueBox() VRDX_DEFAULT;
+    CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
+    virtual ~CVrdxDialogueBox() VRDX_DEFAULT;
 
-    // CVrdxBaseWidget 인터페이스
-    virtual void HandleEvent(const sf::Event& Event) VRDX_OVERRIDE;
+    // CVrdxWidgetBase 인터페이스
     virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
     virtual void Draw(sf::RenderWindow& Window) const VRDX_OVERRIDE;
+
+    virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) VRDX_OVERRIDE;
+    virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) VRDX_OVERRIDE;
 
     // 대사 설정
     void SetSpeaker(const FVrdxString& Name);
@@ -145,13 +144,14 @@ public:
     // 상태
     bool IsTyping() const;      // 타이핑 진행 중?
     bool IsFinished() const;    // 현재 대사 출력 완료?
+    bool IsWaiting() const;
 
 private:
     void StartTyping();
     void FinishTyping();        // 즉시 전체 표시
+    void AdvanceProcess();
 
     // 위젯
-    sf::RectangleShape Panel;       // 대사창 배경
     sf::Text           SpeakerText; // 발화자명
     sf::Text           LineText;    // 대사 내용
 
@@ -233,12 +233,11 @@ private:
 
 ### 6.1 역할
 
-`CDialogueBox`, `CVrdxBackground`, `CVrdxCharacterManager`, `CVrdxScriptEngine`를 통합 소유하는 Scene.
-ScriptEngine이 스크립트 파일을 해석하여 배경/캐릭터/대사 명령을 순차 실행하고,
-NovelScene은 입력 전달과 갱신/렌더 순서를 제어한다.
+`CVrdxBackground`, `CVrdxCharacterManager`, `CVrdxScriptEngine`를 통합 소유하는 Scene.
+스크립트 실행과 배경/캐릭터 상태 전환을 담당하고, `CVrdxDialogueBox`와 `CVrdxChoiceWidget`은 루트 위젯의 자식으로 생성된다.
 
-렌더 순서: **배경 → 캐릭터 → 대사창** (3계층)
-갱신 순서: **ScriptEngine → 배경 → 캐릭터 → 대사창**
+렌더 순서: **배경 → 캐릭터 → 위젯 루트(DialogueBox / ChoiceWidget)**
+갱신 순서: **ScriptEngine → 배경 → 캐릭터**
 
 ### 6.2 소유권 구조
 
@@ -250,11 +249,13 @@ CVrdxNovelScene
  │    └── TVrdxWeakPtr<CVrdxNovelScene> (→ shared_from_this())
  ├── CVrdxBackground (멤버)
  ├── CVrdxCharacterManager (멤버)
- └── CDialogueBox (멤버)
+  ├── TVrdxSharedPtr<CVrdxDialogueBox> (루트 자식 위젯)
+  └── TVrdxSharedPtr<CVrdxChoiceWidget> (루트 자식 위젯)
 ```
 
 - `enable_shared_from_this` 상속: ScriptEngine이 `weak_ptr`로 NovelScene을 참조할 수 있도록 함
 - `OnEnter()`에서 `ScriptEngine.SetNovelScene(shared_from_this())` 호출
+- 생성자에서 루트 위젯의 자식으로 `DialogueBox` / `ChoiceWidget`를 생성
 - SceneManager는 `TVrdxSharedPtr<CVrdxNovelScene>`로 소유
 
 ### 6.3 클래스 설계
@@ -272,7 +273,7 @@ public:
     void OnExit() VRDX_OVERRIDE;
     void HandleEvent(const sf::Event&) VRDX_OVERRIDE;
     void Update(const float DeltaTick) VRDX_OVERRIDE;
-    void Draw(sf::RenderWindow&) VRDX_OVERRIDE;
+    void Draw(sf::RenderWindow&) const VRDX_OVERRIDE;
 
     // ScriptEngine → NovelScene 호출 (ScriptLine Dispatch 통해 간접 호출)
     bool CanAdvance() const;
@@ -287,11 +288,10 @@ public:
 private:
     void EndScenario();
 
-    bool bWaitingInput = false;
-
     CVrdxBackground Background;
     CVrdxCharacterManager CharacterManager;
-    CVrdxDialogueBox DialogueBox;
+    TVrdxSharedPtr<CVrdxDialogueBox> DialogueBox;
+    TVrdxSharedPtr<CVrdxChoiceWidget> ChoiceWidget;
     CVrdxScriptEngine ScriptEngine;
 
     float RemainingWaitSeconds = 0.f;
@@ -300,7 +300,7 @@ private:
 
 ### 6.4 생성자
 
-- 비어 있음. 초기화는 모두 `OnEnter()`에서 수행.
+- 생성자에서 위젯 생성, `OnEnter()`에서 ScriptEngine 연결.
 
 ### 6.5 `OnEnter()`
 
@@ -316,7 +316,8 @@ void CVrdxNovelScene::OnEnter()
 ```
 
 1. `ScriptEngine.SetNovelScene(shared_from_this())` — ScriptEngine에 `weak_ptr` 전달
-2. `ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt")` — 스크립트 파일 로드
+2. `ChoiceWidget->SetNovelScene(shared_from_this())` — 선택지 위젯이 분기용 씬 참조 보유
+3. `ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt")` — 스크립트 파일 로드
 
 > **주의**: `shared_from_this()`는 생성자에서 호출 불가. 반드시 `OnEnter()`(SceneManager가 Push 후 호출)에서 호출.
 
@@ -325,23 +326,10 @@ void CVrdxNovelScene::OnEnter()
 ```cpp
 void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
 {
-    // Enter/Space/클릭 확인
-    if (확인 입력)
-    {
-        if (DialogueBox.IsTyping())
-        {
-            DialogueBox.FinishTyping();  // 타이핑 중 → 전체 표시
-        }
-        else
-        {
-            bWaitingInput = false;       // 입력 완료 → ScriptEngine 진행 허용
-        }
-    }
 }
 ```
 
-- 타이핑 중 → `FinishTyping()`으로 즉시 전체 표시
-- 타이핑 완료 → `bWaitingInput = false` 설정 (ScriptEngine의 `CanAdvance()` 조건 해제)
+- 현재 이벤트 처리는 루트 위젯 트리에서 담당한다.
 
 ### 6.7 `Update(const float DeltaTick)`
 
@@ -351,31 +339,28 @@ void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
       └─ ParseLine() → ScriptLine::Dispatch() → NovelScene 메서드 호출
 2. Background.Update(DeltaTick)
 3. CharacterManager.Update(DeltaTick)
-4. DialogueBox.Update(DeltaTick)
-5. RemainingWaitSeconds 감소 (0 이하로는 안 내려감)
-6. bWaitingInput = DialogueBox.IsFinished()
+4. RemainingWaitSeconds 감소 (0 이하로는 안 내려감)
 ```
 
 **갱신 순서가 중요한 이유**:
 - ScriptEngine이 먼저 실행되어 @bg/@show/@hide/@dialogue 등을 Dispatch
 - Background/CharacterManager가 페이드 전환 상태 갱신
-- DialogueBox가 타이핑 갱신
-- 마지막에 `bWaitingInput`을 DialogueBox 상태에 따라 설정
+- UI 위젯은 루트 위젯 트리의 `Update()`에서 별도로 갱신
 
 #### `CanAdvance()` 조건
 
 ```cpp
 bool CVrdxNovelScene::CanAdvance() const
 {
-    return !DialogueBox.IsTyping()
-        && !(RemainingWaitSeconds > 0)
-        && !bWaitingInput;
+    return !ChoiceWidget->IsWaiting()
+        && !DialogueBox->IsWaiting()
+        && !(RemainingWaitSeconds > 0);
 }
 ```
 
-- DialogueBox가 타이핑 중이면 대기
+- DialogueBox가 타이핑/대기 중이면 대기
 - `@wait` 시간이 남아있으면 대기
-- 사용자 입력(bWaitingInput)을 기다리면 대기
+- 선택지가 표시 중이면 대기
 - 셋 다 해제되어야 ScriptEngine이 다음 줄로 진행
 
 ### 6.8 `Draw(sf::RenderWindow& Window)`
@@ -395,7 +380,7 @@ bool CVrdxNovelScene::CanAdvance() const
 | `ShowCharacter(Char, Pos)` | `@show "Char" "Pos"` | `CharacterManager.ShowCharacter(Char, Pos)` |
 | `HideCharacter(Char)` | `@hide "Char"` | `CharacterManager.HideCharacter(Char)` |
 | `SetCharacterPose(Char, Pose)` | `@pose "Char" "Pose"` | `CharacterManager.SetCharacterPose(Char, Pose)` |
-| `SetDialogue(DialogueLine)` | `@dialogue "S" "T"` | `DialogueBox.SetSpeaker()` + `SetLine()` (→ 자동 타이핑 시작) |
+| `SetDialogue(DialogueLine)` | `@dialogue "S" "T"` | `DialogueBox->SetSpeaker()` + `SetLine()` (→ 자동 타이핑 시작) |
 | `WaitForSeconds(Sec)` | `@wait "Sec"` | `RemainingWaitSeconds = Sec` |
 | `JumpToLabel(Target)` | `@jump "Target"` | `ScriptEngine.JumpToLabel(Target)` |
 
@@ -404,14 +389,14 @@ bool CVrdxNovelScene::CanAdvance() const
 ```cpp
 void CVrdxNovelScene::SetDialogue(const FVrdxDialogueLine& DialogueLine)
 {
-    DialogueBox.SetSpeaker(DialogueLine.Speaker);
-    DialogueBox.SetLine(DialogueLine.Text);
+    DialogueBox->SetSpeaker(DialogueLine.Speaker);
+    DialogueBox->SetLine(DialogueLine.Text);
     // SetLine() 내부에서 StartTyping() 호출 → IsTyping() 즉시 true
 }
 ```
 
 - `@dialogue` Dispatch는 `true` 반환 (즉시 진행 가능)
-- 하지만 `SetLine()`이 `StartTyping()`을 호출하므로 `IsTyping()`이 true가 됨
+- 하지만 `SetLine()`이 `StartTyping()`을 호출하므로 `DialogueBox->IsWaiting()`이 true가 됨
 - → `CanAdvance()`가 false를 반환하여 ScriptEngine 루프 중단
 - → 사용자 입력 대기 상태로 전환
 
@@ -464,7 +449,7 @@ void CVrdxNovelScene::EndScenario()
 | 1차 목표 | 시스템 폰트 또는 프로젝트 내 TTF 포함 |
 
 1단계에서는 프로젝트 내부에 한글 TTF를 포함하고,
-CDialogueBox 생성자에서 이를 로드한다.
+`CVrdxDialogueBox` 생성자에서 이를 로드한다.
 추후 AssetManager로 이관.
 
 ---
@@ -502,7 +487,9 @@ NovelScene.h
 ├── Scene/Scene.h
 │     └── Core/Common.h
 ├── Ui/DialogueBox.h
-│     └── Ui/BaseWidget.h
+│     └── Ui/WidgetBase.h
+├── Ui/ChoiceWidget.h
+│     └── Ui/WidgetBase.h
 ├── Novel/Background.h
 ├── Novel/CharacterManager.h
 ├── Novel/DialogueLine.h
@@ -532,12 +519,12 @@ ScriptLine.cpp
 
 ---
 
-## 9. DialogueBox 독립성 규칙
+## 9. 위젯 독립성 규칙
 
-`CDialogueBox`는 `CVrdxScene`을 상속하지 않으며,
+`CVrdxDialogueBox`와 `CVrdxChoiceWidget`는 `CVrdxScene`을 상속하지 않으며,
 Scene 계층에 대한 어떤 참조도 가지지 않는다.
 
-`CDialogueBox`는 `CVrdxBaseWidget`을 상속받지만, Scene 계층에 대한 참조는 가지지 않는다.
+`CVrdxDialogueBox`와 `CVrdxChoiceWidget`는 `CVrdxWidgetBase`를 상속받지만, Scene 계층에 대한 참조는 가지지 않는다.
 
 | 포함 금지 | 이유 |
 |-----------|------|
@@ -555,7 +542,9 @@ Scene 계층에 대한 어떤 참조도 가지지 않는다.
 
 | 파일 | 설명 | 단계 |
 |------|------|:----:|
+| `Src\Ui\WidgetBase.cpp` | 위젯 트리/이벤트/렌더 기반 구현 | 2 |
 | `Src\Ui\DialogueBox.cpp` | 대사창 구현 | 2 |
+| `Src\Ui\ChoiceWidget.cpp` | 선택지 위젯 구현 | 5 |
 | `Src\Scene\NovelScene.cpp` | 노벨 씬 구현 | 2 (4단계 수정) |
 | `Src\Novel\Background.cpp` | 배경 전환 구현 | 3 |
 | `Src\Novel\CharacterManager.cpp` | 캐릭터 관리 구현 | 3 |
@@ -566,8 +555,9 @@ Scene 계층에 대한 어떤 참조도 가지지 않는다.
 
 | 파일 | 설명 | 단계 |
 |------|------|:----:|
-| `Src\Ui\BaseWidget.h` | 위젯 베이스 클래스 | 2 |
+| `Src\Ui\WidgetBase.h` | 위젯 베이스 클래스 | 2 |
 | `Src\Ui\DialogueBox.h` | 대사창 선언 | 2 |
+| `Src\Ui\ChoiceWidget.h` | 선택지 위젯 선언 | 5 |
 | `Src\Scene\NovelScene.h` | 노벨 씬 선언 | 2 (4단계 수정) |
 | `Src\Novel\Background.h` | 배경 전환 선언 | 3 |
 | `Src\Novel\CharacterManager.h` | 캐릭터 관리 선언 | 3 |
@@ -589,11 +579,12 @@ Scene 계층에 대한 어떤 참조도 가지지 않는다.
 ## 12. 검증 방법
 
 1. **빌드**: Visual Studio 2022 x64 Debug, Clean Build 성공
-2. **실행**: 1280×720 창 열림 (타이틀 "Voradorix"), 배경 → 캐릭터 → 대사창 순서로 표시
+2. **실행**: 1280×720 창 열림 (타이틀 "Voradorix"), 배경 → 캐릭터 → 위젯 루트 순서로 표시
 3. **스크립트 진행**:
    - `Assets/Scripts/TestScript.txt`를 ScriptEngine이 로드
    - `@bg` → 배경 전환, `@show` → 캐릭터 등장, `@dialogue` → 대사 타이핑 출력
-   - Enter/Space/클릭 → 타이핑 중이면 전체 표시, 완료면 다음 명령 진행
+    - Enter/Space/클릭 → 타이핑 중이면 전체 표시, 완료면 다음 명령 진행
+    - 선택지 표시 시 위젯 트리에서 입력 처리
 4. **분기 테스트**:
    - `@jump`가 레이블로 정확히 이동하는지 확인 (A → B → Finish 순환)
    - `@wait` 동안 진행이 멈추는지 확인
@@ -607,16 +598,16 @@ Scene 계층에 대한 어떤 참조도 가지지 않는다.
 
 | 단계 | 작업 | 상태 |
 |------|------|:----:|
-| 1 | `Ui/BaseWidget.h` — CVrdxBaseWidget 선언 | ✅ 완료 |
-| 2 | `Ui/DialogueBox.h` — 클래스 선언 (CVrdxBaseWidget 상속) | ✅ 완료 |
-| 3 | `Ui/DialogueBox.cpp` — 생성자 (폰트 로드, 패널/텍스트 초기화) | ✅ 완료 |
+| 1 | `Ui/WidgetBase.h` — CVrdxWidgetBase 선언 | ✅ 완료 |
+| 2 | `Ui/DialogueBox.h` — 클래스 선언 (CVrdxWidgetBase 상속) | ✅ 완료 |
+| 3 | `Ui/DialogueBox.cpp` — 생성자 (폰트 로드, 텍스트 초기화) | ✅ 완료 |
 | 4 | `Ui/DialogueBox.cpp` — SetSpeaker, SetLine, StartTyping, FinishTyping | ✅ 완료 |
 | 5 | `Ui/DialogueBox.cpp` — Update (타이핑 타이머) | ✅ 완료 |
-| 6 | `Ui/DialogueBox.cpp` — HandleEvent (클릭/키 → FinishTyping) | ✅ 완료 |
-| 7 | `Ui/DialogueBox.cpp` — Draw (패널 + 이름 + 대사) | ✅ 완료 |
-| 8 | `Scene/NovelScene.h` — 클래스 선언 (Background, CharacterManager, DialogueBox 소유) | ✅ 완료 |
+| 6 | `Ui/DialogueBox.cpp` — OnMouse/OnKeyboard → AdvanceProcess() | ✅ 완료 |
+| 7 | `Ui/DialogueBox.cpp` — Draw (베이스 위젯 + 이름 + 대사) | ✅ 완료 |
+| 8 | `Scene/NovelScene.h` — 클래스 선언 (Background, CharacterManager, DialogueBox/ChoiceWidget 소유) | ✅ 완료 |
 | 9 | `Scene/NovelScene.cpp` — 생성자 (초기화) | ✅ 완료 |
-| 10 | `Scene/NovelScene.cpp` — Update/Draw (3계층 렌더링) | ✅ 완료 |
+| 10 | `Scene/NovelScene.cpp` — Update/Draw (배경/캐릭터 + 위젯 트리) | ✅ 완료 |
 | 11 | `Game.vcxproj` + `.filters` 파일 등록 | ✅ 완료 |
 | 12 | 빌드 확인 및 실행 테스트 | ✅ 완료 |
 

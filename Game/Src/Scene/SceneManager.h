@@ -27,7 +27,7 @@ public:
 	void HandleEvent(const sf::Event& Event);
 	void Update(const float DeltaTick);
 
-	void Draw(sf::RenderWindow& Window);
+	void Draw(sf::RenderWindow& Window) const;
 
 	VRDX_NO_DISCARD bool IsEmpty() const;
 	VRDX_NO_DISCARD int32_t GetCount() const;

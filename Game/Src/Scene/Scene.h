@@ -14,7 +14,7 @@ public:
 	virtual void OnExit() VRDX_PURE_VIRTUAL;
 	virtual void HandleEvent(const sf::Event&) VRDX_PURE_VIRTUAL;
 	virtual void Update(const float DeltaTick) VRDX_PURE_VIRTUAL;
-	virtual void Draw(sf::RenderWindow&) VRDX_PURE_VIRTUAL;
+	virtual void Draw(sf::RenderWindow&) const VRDX_PURE_VIRTUAL;
 
 	bool WantsExit() const { return bWantExit; }
 

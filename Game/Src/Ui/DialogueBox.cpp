@@ -5,19 +5,17 @@
 
 #include "Core/Vector.h"
 
-CVrdxDialogueBox::CVrdxDialogueBox()
-	: SpeakerText(Font)
+CVrdxDialogueBox::CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
+	: CVrdxWidgetBase(ParentWidget, InShape)
+	, SpeakerText(Font)
 	, LineText(Font)
 	, VisibleCount(0)
 	, TypeTimer(0.f)
 	, TypeInterval(0.05f)
 	, bFontLoaded(false)
+	, bWaiting(false)
 {
 	bFontLoaded = Font.openFromFile("Assets/Fonts/malgun.ttf");
-
-	Panel.setSize(sf::Vector2f(1200.f, 200.f));
-	Panel.setPosition(sf::Vector2f(40.f, 500.f));
-	Panel.setFillColor(sf::Color(20, 20, 20, 220));
 
 	if (bFontLoaded)
 	{
@@ -31,49 +29,10 @@ CVrdxDialogueBox::CVrdxDialogueBox()
 	}
 }
 
-void CVrdxDialogueBox::HandleEvent(const sf::Event& Event)
-{
-	static TVrdxVector<sf::Keyboard::Scan> ScanKeys =
-	{
-		sf::Keyboard::Scan::Enter,
-		sf::Keyboard::Scan::Space,
-	};
-
-	bool bFinishTyping = false;
-	if (const auto* KeyPressed = Event.getIf<sf::Event::KeyPressed>())
-	{
-		if (ScanKeys.Contains(KeyPressed->scancode))
-		{
-			bFinishTyping = true;
-		}
-	}
-
-	else if (const auto* MousePressed = Event.getIf<sf::Event::MouseButtonPressed>())
-	{
-		if (MousePressed->button == sf::Mouse::Button::Left)
-		{
-			bFinishTyping = true;
-		}
-	}
-
-	if (bFinishTyping)
-	{
-
-
-		if (IsTyping())
-		{
-			// Complete typing, wait for user input.
-			FinishTyping();
-		}
-		else
-		{
-			bWaiting = false;
-		}
-	}
-}
-
 void CVrdxDialogueBox::Update(const float DeltaTick)
 {
+	CVrdxWidgetBase::Update(DeltaTick);
+
 	if (!IsTyping())
 	{
 		return;
@@ -92,12 +51,31 @@ void CVrdxDialogueBox::Update(const float DeltaTick)
 
 void CVrdxDialogueBox::Draw(sf::RenderWindow& Window) const
 {
-	Window.draw(Panel);
+	CVrdxWidgetBase::Draw(Window);
 
 	if (bFontLoaded)
 	{
 		Window.draw(SpeakerText);
 		Window.draw(LineText);
+	}
+}
+
+void CVrdxDialogueBox::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
+{
+	AdvanceProcess();
+}
+
+void CVrdxDialogueBox::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
+{
+	static TVrdxVector<sf::Keyboard::Scan> ScanKeys =
+	{
+		sf::Keyboard::Scan::Enter,
+		sf::Keyboard::Scan::Space,
+	};
+
+	if (ScanKeys.Contains(ScanCode))
+	{
+		AdvanceProcess();
 	}
 }
 
@@ -152,4 +130,22 @@ void CVrdxDialogueBox::FinishTyping()
 	{
 		LineText.setString(CurrentText.ToSfString());
 	}
+}
+
+void CVrdxDialogueBox::AdvanceProcess()
+{
+	if (!IsWaiting())
+	{
+		return;
+	}
+
+	if (IsTyping())
+	{
+		FinishTyping();
+	}
+	else
+	{
+		bWaiting = false;
+	}
+
 }

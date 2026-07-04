@@ -13,7 +13,7 @@ tags:
 
 > **대상**: 선택지 UI/입력 처리 + ScriptEngine 분기 연동 + NovelScene 흐름 제어  
 > **프로젝트**: Voradorix  
-> **관련 파일**: `Src/Novel/ChoiceManager.h/cpp`, `Src/Novel/ScriptLine.h/cpp`, `Src/Scene/NovelScene.h/cpp`, `Assets/Scripts/TestScript.txt`  
+> **관련 파일**: `Src/Ui/ChoiceWidget.h/cpp`, `Src/Novel/ScriptLine.h/cpp`, `Src/Scene/NovelScene.h/cpp`, `Assets/Scripts/TestScript.txt`  
 > **의존성**: `Core/String.h`, `Core/Vector.h`, SFML 3.1.0 (`sf::Text`, `sf::Font`, `sf::RectangleShape`, `sf::Event`)  
 > **완료 조건**: `@choice`가 나오면 선택지 패널이 표시되고, 사용자가 선택한 항목의 레이블로 즉시 분기된다.
 
@@ -36,12 +36,12 @@ tags:
 
 | # | 파일 | 설명 | 상태 |
 |---|------|------|------|
-| 1 | `Src/Novel/ChoiceManager.h` | `CVrdxChoiceManager` 선언 | ✅ 완료 |
-| 2 | `Src/Novel/ChoiceManager.cpp` | `CVrdxChoiceManager` 구현 | ✅ 완료 |
+| 1 | `Src/Ui/ChoiceWidget.h` | `CVrdxChoiceWidget` 선언 | ✅ 완료 |
+| 2 | `Src/Ui/ChoiceWidget.cpp` | `CVrdxChoiceWidget` 구현 | ✅ 완료 |
 | 3 | `Src/Novel/ScriptLine.h` | `FVrdxChoiceScriptLine` 추가 | ✅ 완료 |
 | 4 | `Src/Novel/ScriptLine.cpp` | `@choice` 파싱/Construct/Dispatch 추가 | ✅ 완료 |
-| 5 | `Src/Scene/NovelScene.h/cpp` | ChoiceManager 소유 및 입력/렌더 통합 | ✅ 완료 |
-| 6 | `Game.vcxproj` + `.filters` | ChoiceManager 등록 | ✅ 완료 |
+| 5 | `Src/Scene/NovelScene.h/cpp` | ChoiceWidget 소유 및 흐름 연동 | ✅ 완료 |
+| 6 | `Game.vcxproj` + `.filters` | ChoiceWidget 등록 | ✅ 완료 |
 | 7 | `Assets/Scripts/TestScript.txt` | 선택지 검증용 샘플 스크립트 | ✅ 완료 |
 
 ---
@@ -66,7 +66,7 @@ tags:
 
 ### 3.2 지원 범위
 
-- `@choice` → `ChoiceManager`가 대기 상태로 진입
+- `@choice` → `ChoiceWidget`가 대기 상태로 진입
 - 선택 완료 → `NovelScene::JumpToLabel()` 즉시 호출
 
 ---
@@ -102,7 +102,7 @@ enum class EVrdxChoiceState
 
 ---
 
-## 5. CVrdxChoiceManager — 선택지 UI 담당
+## 5. CVrdxChoiceWidget — 선택지 UI 담당
 
 ### 5.1 역할
 
@@ -111,21 +111,23 @@ enum class EVrdxChoiceState
 ### 5.2 클래스 개요
 
 ```cpp
-class CVrdxChoiceManager
+class CVrdxChoiceWidget
 {
 public:
-    CVrdxChoiceManager();
-    ~CVrdxChoiceManager() VRDX_DEFAULT;
+    CVrdxChoiceWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 
     void SetNovelScene(TVrdxSharedPtr<CVrdxNovelScene> NovelScene);
     void SetChoices(const TVrdxVector<FVrdxChoiceOption>& Choices);
     void Clear();
 
-    void HandleEvent(const sf::Event& Event);
     void Update(const float DeltaTick);
     void Draw(sf::RenderWindow& Window) const;
 
     bool IsWaiting() const;
+
+    virtual void OnMouseMove(const sf::Vector2f& LocalPosition) override;
+    virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
+    virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) override;
 
 private:
     void MoveSelection(int32_t Delta);
@@ -139,7 +141,6 @@ private:
     sf::Font Font;
     bool bFontLoaded = false;
 
-    sf::RectangleShape Panel;
     TVrdxVector<sf::RectangleShape> Buttons;
     TVrdxVector<sf::Text> ButtonTexts;
 
@@ -205,7 +206,7 @@ bool FVrdxChoiceScriptLine::Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene)
 ```
 
 - `false` 반환: ScriptEngine의 연속 진행을 중단
-- 실제 분기는 `ChoiceManager::ConfirmSelection()`에서 즉시 처리
+- 실제 분기는 `ChoiceWidget::ConfirmSelection()`에서 즉시 처리
 
 ---
 
@@ -214,23 +215,22 @@ bool FVrdxChoiceScriptLine::Dispatch(TVrdxSharedPtr<CVrdxNovelScene> Scene)
 ### 7.1 추가 멤버
 
 ```cpp
-CVrdxChoiceManager ChoiceManager;
+TVrdxSharedPtr<CVrdxChoiceWidget> ChoiceWidget;
 ```
 
 ### 7.2 흐름
 
 1. `@choice` Dispatch → `NovelScene::SetChoices()`
-2. `ChoiceManager.SetChoices()` → `Waiting` 상태 진입
+2. `ChoiceWidget.SetChoices()` → `Waiting` 상태 진입
 3. `CanAdvance()`가 false가 되어 ScriptEngine 진행 정지
-4. 사용자가 선택하면 `ChoiceManager::ConfirmSelection()`이 즉시 `NovelScene::JumpToLabel()` 호출
-5. `ChoiceManager.Clear()` 후 다음 프레임부터 ScriptEngine 재개
+4. 사용자가 선택하면 `ChoiceWidget::ConfirmSelection()`이 즉시 `NovelScene::JumpToLabel()` 호출
+5. `ChoiceWidget.Clear()` 후 다음 프레임부터 ScriptEngine 재개
 
 ### 7.3 렌더 순서
 
 1. Background
 2. CharacterManager
-3. DialogueBox
-4. ChoiceManager
+3. 위젯 루트(Applications)에서 DialogueBox / ChoiceWidget 렌더
 
 ---
 
@@ -240,11 +240,11 @@ CVrdxChoiceManager ChoiceManager;
 ScriptEngine.Update()
   → @choice 발견
   → NovelScene.SetChoices()
-  → ChoiceManager.Waiting
+  → ChoiceWidget.Waiting
   → 사용자 입력
-  → ChoiceManager.ConfirmSelection()
+  → ChoiceWidget.ConfirmSelection()
   → NovelScene.JumpToLabel(target)
-  → ChoiceManager.Clear()
+  → ChoiceWidget.Clear()
   → ScriptEngine 재개
 ```
 
@@ -253,7 +253,7 @@ ScriptEngine.Update()
 ```cpp
 return !DialogueBox.IsTyping()
     && !(RemainingWaitSeconds > 0)
-    && !ChoiceManager.IsWaiting();
+    && !ChoiceWidget.IsWaiting();
 ```
 
 ---
@@ -297,4 +297,4 @@ return !DialogueBox.IsTyping()
 - 마우스/키보드 선택 입력 완료
 - hover 기반 선택 갱신 완료
 - 즉시 분기 점프 완료
-- `NovelScene` 렌더/업데이트 통합 완료
+- `NovelScene` 흐름 제어 + 위젯 기반 선택지 렌더 완료

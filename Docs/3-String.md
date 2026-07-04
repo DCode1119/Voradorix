@@ -190,7 +190,7 @@ public:
 
 ```cpp
 // 타이핑 애니메이션 — Left() 사용
-void CDialogueBox::Update(const float DeltaTick)
+void CVrdxDialogueBox::Update(const float DeltaTick)
 {
     if (!bIsTyping) return;
 

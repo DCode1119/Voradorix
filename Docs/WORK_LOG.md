@@ -65,8 +65,8 @@ tags:
 - `Game.vcxproj`: `$(ProjectDir)Src;` include path 추가 → `#include "Core/Common.h"` 형태 사용 가능
 - 소스 파일 include 경로 단축: `../Core/Common.h` → `Core/Common.h` 적용 완료
 - `Docs/2-NovelScene.md` — 2단계 명세 작성
-  - `CVrdxBaseWidget` (Ui/BaseWidget.h) — UI 위젯 베이스 클래스
-  - `CDialogueBox` (Ui/DialogueBox.h/cpp) — CVrdxBaseWidget 상속, 하단 대사창
+  - `CVrdxWidgetBase` (Ui/WidgetBase.h) — UI 위젯 베이스 클래스
+  - `CVrdxDialogueBox` (Ui/DialogueBox.h/cpp) — CVrdxWidgetBase 상속, 하단 대사창
   - `CNovelScene` (Novel/NovelScene.h/cpp) — 대사 목록 순회, DialogueBox 소유
   - DialogueBox는 Scene 시스템에 대한 의존성 없음 (순수 위젯)
 - `Docs/3-String.md` — 유니코드 문자열 클래스 명세 작성
@@ -144,16 +144,16 @@ tags:
 
 - `Docs/6-ChoiceSystem.md` — 선택지 UI/분기 시스템 명세 작성
 - `Docs/Voradorix.md` — 5단계 항목을 명세 작성 완료 상태로 갱신
-- `Docs/GAME_DESIGN.md` — `@choice` 파라미터 규칙과 ChoiceManager 흐름 반영
+- `Docs/GAME_DESIGN.md` — `@choice` 파라미터 규칙과 ChoiceWidget 흐름 반영
 - `Docs/5-ScriptEngine.md` — `@choice` 후속 명세 링크 추가
 
 ## 2026-07-04
 
 ### 5단계 — ChoiceSystem 구현 완료
 
-- `Src/Novel/ChoiceManager.h/cpp` — 선택지 UI, hover, keyboard, click, 즉시 분기 처리 구현
+- `Src/Ui/ChoiceWidget.h/cpp` — 선택지 UI, hover, keyboard, click, 즉시 분기 처리 구현
 - `Src/Novel/ScriptLine.h/cpp` — `FVrdxChoiceScriptLine` 및 `@choice` 파싱/실행 연결
-- `Src/Scene/NovelScene.h/cpp` — ChoiceManager 소유 및 입력/렌더 통합, `CanAdvance()` 연동
+- `Src/Scene/NovelScene.h/cpp` — ChoiceWidget 소유 및 입력/렌더 연동, `CanAdvance()` 연동
 - `Assets/Scripts/TestScript.txt` — 선택지 분기 검증용 샘플 스크립트 추가
 
 ### 문서 갱신
@@ -162,6 +162,9 @@ tags:
 - `Docs/Voradorix.md` — 5단계 완료 상태로 갱신
 - `Docs/GAME_DESIGN.md` — 5단계/`@choice` 구현 완료 반영
 - `Docs/5-ScriptEngine.md` — `@choice` 후속 항목을 구현 완료로 정리
+- `Docs/7-SaveLoad.md` — 6단계 Save/Load 기능명세 작성
+- `Docs/GAME_DESIGN.md` — 6단계 세부 문서 링크 추가
+- `Docs/Voradorix.md` — 6단계 항목에 Save/Load 명세 링크 추가
 
 ---
 
@@ -174,7 +177,7 @@ Game/Game/Src/
 ├── Core/          # Application, Common, Vector, String
 ├── Scene/         # Scene 인터페이스, SceneManager, 각 씬
 ├── Novel/         # NovelScene, ScriptEngine, CharacterManager
-├── Ui/            # BaseWidget, DialogueBox, Button, TextBox, Menu
+├── Ui/            # WidgetBase, DialogueBox, ChoiceWidget, Button, TextBox, Menu
 └── Save/          # SaveManager (JSON 기반 세이브/로드)
 
 Game/Game/Assets/
@@ -192,10 +195,10 @@ Game/Game/Assets/
 | 단계 | 내용 | 핵심 파일 |
 |------|------|-----------|
 | **1단계** | Scene 인터페이스 + SceneManager 도입, main.cpp 리팩터 | `Scene.h`, `SceneManager.h/cpp`, `Application.h/cpp` |
-| **2단계** | NovelScene + BaseWidget + DialogueBox + FVrdxString | `NovelScene.h/cpp`, `BaseWidget.h`, `DialogueBox.h/cpp`, `String.h/cpp` |
+| **2단계** | NovelScene + WidgetBase + DialogueBox + FVrdxString | `NovelScene.h/cpp`, `WidgetBase.h`, `DialogueBox.h/cpp`, `String.h/cpp` |
 | **3단계** | Background 전환 + CharacterManager (좌/중/우 슬롯, 페이드, 텍스처 캐싱) | `Background.h/cpp`, `CharacterManager.h/cpp` |
 | **4단계** | ScriptEngine — 텍스트 스크립트 파서/실행기 | `ScriptEngine.h/cpp` |
-| **5단계** | ChoiceManager — 선택지 UI 및 분기 처리 | `ChoiceManager.h/cpp` |
+| **5단계** | ChoiceWidget — 선택지 UI 및 분기 처리 | `ChoiceWidget.h/cpp` |
 | **6단계** | SaveManager — 세이브/로드 | `SaveManager.h/cpp` |
 | **7단계** | TitleScene, ConfigScene — 메뉴 구성 | `TitleScene.h/cpp`, `ConfigScene.h/cpp` |
 | **8단계** | EffectManager — 페이드, 셰이크 등 연출 효과 | `EffectManager.h/cpp` |
@@ -221,7 +224,8 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 
 ### 향후 UI 컴포넌트 작업 메모
 
-- **당장은 기존 ChoiceSystem 설계 유지**: `ChoiceManager` 중심으로 5단계를 우선 진행
-- **이후 분리 검토 대상**: `BaseWidget` 확장, `Box` / `Button` / `TextLabel` 같은 재사용 UI 컴포넌트
-- **적용 후보**: `DialogueBox`, `ChoicePanel`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
-- **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 중복 UI 로직 축소
+- **다음 작업 우선순위**: `UI Foundation` 선행
+- **핵심 목표**: `WidgetBase` 확장 + `Box` / `TextLabel` / `Button` / `WidgetContainer` 공통 계층화
+- **적용 후보**: `DialogueBox`, `ChoiceWidget`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
+- **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 UI와 로직 분리
+- **명세 문서**: `Docs/UIFoundation.md`

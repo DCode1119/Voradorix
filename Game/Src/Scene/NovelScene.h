@@ -3,14 +3,14 @@
 #include "Core/Vector.h"
 #include "Novel/Background.h"
 #include "Novel/CharacterManager.h"
-#include "Novel/ChoiceManager.h"
 #include "Novel/ScriptEngine.h"
 #include "Scene/Scene.h"
-#include "Ui/DialogueBox.h"
 
 struct FVrdxString;
 struct FVrdxDialogueLine;
 struct FVrdxChoiceOption;
+class CVrdxChoiceWidget;
+class CVrdxDialogueBox;
 
 class CVrdxNovelScene
 	: public CVrdxScene
@@ -18,13 +18,13 @@ class CVrdxNovelScene
 {
 public:
 	CVrdxNovelScene();
-	~CVrdxNovelScene() VRDX_DEFAULT;
+	~CVrdxNovelScene();
 
 	virtual void OnEnter() VRDX_OVERRIDE;
 	virtual void OnExit() VRDX_OVERRIDE;
 	virtual void HandleEvent(const sf::Event&) VRDX_OVERRIDE;
 	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
-	virtual void Draw(sf::RenderWindow&) VRDX_OVERRIDE;
+	virtual void Draw(sf::RenderWindow&) const VRDX_OVERRIDE;
 
 	bool CanAdvance() const;
 
@@ -43,9 +43,10 @@ private:
 
 	CVrdxBackground Background;
 	CVrdxCharacterManager CharacterManager;
-	CVrdxDialogueBox DialogueBox;
+	TVrdxSharedPtr<CVrdxDialogueBox> DialogueBox;
 	CVrdxScriptEngine ScriptEngine;
-	CVrdxChoiceManager ChoiceManager;
+	//CVrdxChoiceWidget ChoiceManager;
+	TVrdxSharedPtr<CVrdxChoiceWidget> ChoiceWidget;
 
 	float RemainingWaitSeconds = 0.f;
 };

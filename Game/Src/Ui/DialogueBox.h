@@ -7,16 +7,18 @@
 #include "Core/String.h"
 #include "Ui/WidgetBase.h"
 
-class CVrdxDialogueBox : public CVrdxBaseWidget
+class CVrdxDialogueBox : public CVrdxWidgetBase
 {
 public:
-	CVrdxDialogueBox();
+	CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 	virtual ~CVrdxDialogueBox() VRDX_DEFAULT;
 
 	// CVrdxBaseWidget 인터페이스
-	virtual void HandleEvent(const sf::Event& Event) VRDX_OVERRIDE;
 	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
 	virtual void Draw(sf::RenderWindow& Window) const VRDX_OVERRIDE;
+
+	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) VRDX_OVERRIDE;
+	virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) VRDX_OVERRIDE;
 
 	// 대사 설정
 	void SetSpeaker(const FVrdxString& Name);
@@ -28,14 +30,15 @@ public:
 	bool IsWaiting() const;
 	void FinishTyping();        // 즉시 전체 표시
 
+	void AdvanceProcess();
+
 private:
 	void StartTyping();
 
 	// 위젯
 	sf::Font           Font;            // 폰트
 	bool               bFontLoaded;     // 폰트 로드 성공 여부
-	bool bWaiting = false;
-	sf::RectangleShape Panel;           // 대사창 배경
+	bool bWaiting;
 	sf::Text           SpeakerText;     // 발화자명 (Font 참조 필요)
 	sf::Text           LineText;        // 대사 내용 (Font 참조 필요)
 
@@ -46,5 +49,5 @@ private:
 	float              TypeInterval; // 글자 간 시간 간격 (초)
 
 	// 데이터
-	FVrdxString            SpeakerName;  // 현재 발화자
+	FVrdxString        SpeakerName;  // 현재 발화자
 };

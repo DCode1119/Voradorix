@@ -3,18 +3,35 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include "Core/Application.h"
 #include "Core/String.h"
-#include "Novel/ChoiceManager.h"
 #include "Novel/DialogueLine.h"
+#include "Ui/ChoiceWidget.h"
+#include "Ui/DialogueBox.h"
 
 CVrdxNovelScene::CVrdxNovelScene()
+{
+	sf::RectangleShape Panel;
+	Panel.setSize(sf::Vector2f(1200.f, 200.f));
+	Panel.setPosition(sf::Vector2f(40.f, 500.f));
+	Panel.setFillColor(sf::Color(20, 20, 20, 220));
+	DialogueBox = CVrdxWidgetBase::CreateWidget<CVrdxDialogueBox>(CVrdxApplication::GetRootWidget(), Panel);
+
+	Panel.setSize(sf::Vector2f(1200.f, 200.f));
+	Panel.setPosition(sf::Vector2f(40.f, 500.f));
+	Panel.setFillColor(sf::Color(20, 20, 20, 220));
+	ChoiceWidget = CVrdxWidgetBase::CreateWidget<CVrdxChoiceWidget>(CVrdxApplication::GetRootWidget(), Panel);
+	ChoiceWidget->Clear();
+}
+
+CVrdxNovelScene::~CVrdxNovelScene()
 {
 }
 
 void CVrdxNovelScene::OnEnter()
 {
 	ScriptEngine.SetNovelScene(shared_from_this());
-	ChoiceManager.SetNovelScene(shared_from_this());
+	ChoiceWidget->SetNovelScene(shared_from_this());
 	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
 	{
 		return;
@@ -27,17 +44,7 @@ void CVrdxNovelScene::OnExit()
 
 void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
 {
-	// Dialogue typing state
-	if (const bool bIsWaiting = DialogueBox.IsWaiting())
-	{
-		DialogueBox.HandleEvent(Event);
-	}
 
-	// Choice wait state
-	if (const bool bIsWaiting = ChoiceManager.IsWaiting())
-	{
-		ChoiceManager.HandleEvent(Event);
-	}
 }
 
 void CVrdxNovelScene::Update(const float DeltaTick)
@@ -45,8 +52,6 @@ void CVrdxNovelScene::Update(const float DeltaTick)
 	ScriptEngine.Update(DeltaTick);
 	Background.Update(DeltaTick);
 	CharacterManager.Update(DeltaTick);
-	DialogueBox.Update(DeltaTick);
-	ChoiceManager.Update(DeltaTick);
 
 	if (RemainingWaitSeconds > 0.f)
 	{
@@ -54,19 +59,15 @@ void CVrdxNovelScene::Update(const float DeltaTick)
 	}
 }
 
-void CVrdxNovelScene::Draw(sf::RenderWindow& Window)
+void CVrdxNovelScene::Draw(sf::RenderWindow& Window) const
 {
-	Window.clear(sf::Color::Black);
-
 	Background.Draw(Window);
 	CharacterManager.Draw(Window);
-	DialogueBox.Draw(Window);
-	ChoiceManager.Draw(Window);
 }
 
 bool CVrdxNovelScene::CanAdvance() const
 {
-	return !ChoiceManager.IsWaiting() && !DialogueBox.IsWaiting() && !(RemainingWaitSeconds > 0);
+	return !ChoiceWidget->IsWaiting() && !DialogueBox->IsWaiting() && !(RemainingWaitSeconds > 0);
 }
 
 void CVrdxNovelScene::SetBackground(const FVrdxString& BackgroundName)
@@ -91,13 +92,13 @@ void CVrdxNovelScene::SetCharacterPose(const FVrdxString& Character, const FVrdx
 
 void CVrdxNovelScene::SetDialogue(const FVrdxDialogueLine& DialogueLine)
 {
-	DialogueBox.SetSpeaker(DialogueLine.Speaker);
-	DialogueBox.SetLine(DialogueLine.Text);
+	DialogueBox->SetSpeaker(DialogueLine.Speaker);
+	DialogueBox->SetLine(DialogueLine.Text);
 }
 
 void CVrdxNovelScene::SetChoices(const TVrdxVector<FVrdxChoiceOption>& ChoiceOptions)
 {
-	ChoiceManager.SetChoices(ChoiceOptions);
+	ChoiceWidget->SetChoices(ChoiceOptions);
 }
 
 void CVrdxNovelScene::JumpToLabel(const FVrdxString& TargetLabelName)

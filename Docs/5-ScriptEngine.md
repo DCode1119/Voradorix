@@ -244,14 +244,14 @@ private:
 ```
 ScriptEngine::CanAdvance()
   └→ NovelScene::CanAdvance()
-        ├─ !DialogueBox.IsTyping()      — 타이핑 중이면 대기
-        ├─ !(RemainingWaitSeconds > 0)  — @wait 시간이 남았으면 대기
-        └─ !bWaitingInput               — 사용자 입력 대기 중이면 대기
+        ├─ !DialogueBox.IsWaiting()      — 대사 UI가 입력 대기 중이면 대기
+        ├─ !ChoiceWidget.IsWaiting()     — 선택지 UI가 대기 중이면 대기
+        └─ !(RemainingWaitSeconds > 0)  — @wait 시간이 남았으면 대기
 ```
 
-- `@dialogue` Dispatch: `SetLine()`이 `StartTyping()` 호출 → IsTyping() 즉시 true → CanAdvance false
+- `@dialogue` Dispatch: `SetLine()`이 `StartTyping()` 호출 → IsWaiting() 즉시 true → CanAdvance false
 - `@wait` Dispatch: `RemainingWaitSeconds = Seconds` → CanAdvance false
-- 사용자 입력(Enter/Space/Click): `bWaitingInput = false` → CanAdvance true
+- 사용자 입력(Enter/Space/Click): `DialogueBox.AdvanceProcess()` / `ChoiceWidget.ConfirmSelection()`로 상태 해제
 
 ### 8.3 명령 처리 상세
 
@@ -264,12 +264,12 @@ ScriptEngine::CanAdvance()
 | `@wait` | `true` | `RemainingWaitSeconds > 0`으로 차단 | Update에서 감소, 0 도달 시 해제 |
 | `@label` | `true` | 없음 (계속 진행) | no-op (LoadScript에서 이미 맵 구축) |
 | `@jump` | `true` | 없음 (계속 진행) | CurrentScriptLine 재설정 → 다음 줄부터 실행 |
-| `@dialogue` | `true` | `IsTyping() == true`로 차단 | SetLine → StartTyping, 입력 시 FinishTyping |
+| `@dialogue` | `true` | `IsWaiting() == true`로 차단 | SetLine → StartTyping, 입력 시 FinishTyping |
 
-### 8.4 확인 입력 (NovelScene.HandleEvent)
+### 8.4 확인 입력 (위젯 트리)
 
-- 타이핑 중(`DialogueBox.IsTyping()`) → `DialogueBox.FinishTyping()` (전체 표시, CanAdvance는 아직 false)
-- 타이핑 완료(`DialogueBox.IsFinished()`) → `bWaitingInput = false` (CanAdvance 해제)
+- 타이핑 중(`DialogueBox.IsWaiting()`) → `DialogueBox.AdvanceProcess()` (전체 표시)
+- 선택지 표시 중(`ChoiceWidget.IsWaiting()`) → `ChoiceWidget.ConfirmSelection()`
 
 ### 8.5 @jump 세부 동작
 
@@ -321,7 +321,8 @@ SceneManager (TVrdxSharedPtr<CVrdxScene>)
         │     └── WeakNovelScene (weak_ptr, set via shared_from_this())
         ├── Background (값 멤버)
         ├── CharacterManager (값 멤버)
-        └── DialogueBox (값 멤버)
+  ├── DialogueBox (shared_ptr 자식 위젯)
+  └── ChoiceWidget (shared_ptr 자식 위젯)
 ```
 
 ### 9.3 갱신 순서 (NovelScene::Update)
@@ -331,9 +332,7 @@ SceneManager (TVrdxSharedPtr<CVrdxScene>)
     └─ while CanAdvance() && ParseLine()
 ② Background.Update(DeltaTick)
 ③ CharacterManager.Update(DeltaTick)
-④ DialogueBox.Update(DeltaTick)
-⑤ RemainingWaitSeconds 감소
-⑥ bWaitingInput = DialogueBox.IsFinished()
+④ RemainingWaitSeconds 감소
 ```
 
 ### 9.4 렌더 순서 (NovelScene::Draw)
@@ -342,14 +341,12 @@ SceneManager (TVrdxSharedPtr<CVrdxScene>)
 ① Window.clear(Color::Black)
 ② Background.Draw(Window)
 ③ CharacterManager.Draw(Window)
-④ DialogueBox.Draw(Window)
+④ 위젯 루트에서 DialogueBox / ChoiceWidget Draw
 ```
 
 ### 9.5 입력 처리 (NovelScene::HandleEvent)
 
-- Enter/Space/Left Click 감지
-- 타이핑 중 → `DialogueBox.FinishTyping()`
-- 타이핑 완료 → `bWaitingInput = false` (ScriptEngine 진행 허용)
+- 입력은 위젯 트리에서 처리되며, `NovelScene`은 별도 입력 플래그를 두지 않는다.
 
 ---
 

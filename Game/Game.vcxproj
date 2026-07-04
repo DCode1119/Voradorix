@@ -56,7 +56,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_DYNAMIC;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Src;$(SolutionDir)Extern\SFML-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -75,7 +75,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_DYNAMIC;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)Src;$(SolutionDir)Extern\SFML-3.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -94,13 +94,13 @@
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Novel\Background.cpp" />
     <ClCompile Include="Src\Novel\CharacterManager.cpp" />
-    <ClCompile Include="Src\Novel\ChoiceManager.cpp" />
     <ClCompile Include="Src\Novel\ScriptEngine.cpp" />
     <ClCompile Include="Src\Novel\ScriptLine.cpp" />
     <ClCompile Include="Src\Scene\NovelScene.cpp" />
     <ClCompile Include="Src\Scene\Scene.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TestScene.cpp" />
+    <ClCompile Include="Src\Ui\ChoiceWidget.cpp" />
     <ClCompile Include="Src\Ui\DialogueBox.cpp" />
     <ClCompile Include="Src\Ui\WidgetBase.cpp" />
   </ItemGroup>
@@ -111,7 +111,6 @@
     <ClInclude Include="Src\Core\Vector.h" />
     <ClInclude Include="Src\Novel\Background.h" />
     <ClInclude Include="Src\Novel\CharacterManager.h" />
-    <ClInclude Include="Src\Novel\ChoiceManager.h" />
     <ClInclude Include="Src\Novel\DialogueLine.h" />
     <ClInclude Include="Src\Novel\ScriptEngine.h" />
     <ClInclude Include="Src\Novel\ScriptLine.h" />
@@ -119,6 +118,7 @@
     <ClInclude Include="Src\Scene\Scene.h" />
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TestScene.h" />
+    <ClInclude Include="Src\Ui\ChoiceWidget.h" />
     <ClInclude Include="Src\Ui\DialogueBox.h" />
     <ClInclude Include="Src\Ui\WidgetBase.h" />
   </ItemGroup>

@@ -4,7 +4,7 @@
 #include "Core/String.h"
 #include "Core/Vector.h"
 #include "Novel/CharacterManager.h"
-#include "ChoiceManager.h"
+#include "Ui/ChoiceWidget.h"
 
 class CVrdxNovelScene;
 

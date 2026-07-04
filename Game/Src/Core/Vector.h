@@ -40,10 +40,23 @@ public:
 	// --- 추가 / 제거 / 검색 ---
 	void      Add(const ElementType& Value) { Container.push_back(Value); }
 	void      Add(ElementType&& Value) { Container.push_back(std::move(Value)); }
-	void      RemoveAt(int32_t Index) { Container.erase(Container.begin() + Index); }
 	void      Pop() { Container.pop_back(); }
 	void      Clear() { Container.clear(); }
-	bool      Contains(const ElementType& Value) const { return std::find(Container.begin(), Container.end(), Value) != Container.end(); }
+	typename std::vector<ElementType>::const_iterator Find(const ElementType& Value) const { return std::find(Container.begin(), Container.end(), Value); }
+	bool      Contains(const ElementType& Value) const { return Find(Value) != Container.end(); }
+
+	void  Remove(const ElementType& Value)
+	{
+		auto Iterator = Find(Value);
+		if (Iterator != Container.cend())
+		{
+			Remove(Iterator);
+		}
+	}
+
+	void      Remove(typename std::vector<ElementType>::const_iterator Iterator) { Container.erase(Iterator); }
+	void      RemoveAt(int32_t Index) { Container.erase(Container.begin() + Index); }
+
 
 	// --- 용량 ---
 	void      Reserve(int32_t Capacity) { Container.reserve(Capacity); }

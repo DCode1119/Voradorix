@@ -30,7 +30,7 @@ void CVrdxTestScene::Update(const float DeltaTick)
 
 }
 
-void CVrdxTestScene::Draw(sf::RenderWindow& Window)
+void CVrdxTestScene::Draw(sf::RenderWindow& Window) const
 {
 	sf::Vector2u WindowSize = Window.getSize();
 	

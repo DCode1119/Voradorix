@@ -3,19 +3,24 @@
 #include "Scene/NovelScene.h"
 #include "Scene/TestScene.h"
 
-CVrdxApplication::CVrdxApplication()
+TVrdxSharedPtr<CVrdxWidgetBase> CVrdxApplication::Instance;
+
+CVrdxApplication::CVrdxApplication(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
+	: CVrdxWidgetBase(ParentWidget, InShape)
 {
-	Window.create(sf::VideoMode({ 1280, 720 }), "Voradorix");
+	Window.create(sf::VideoMode(sf::Vector2u(InShape.getSize())), "Voradorix");
 	Window.setVerticalSyncEnabled(true);
 	Window.setFramerateLimit(60);
-	bIsRunning = true;
-	//SceneManager.Push(MakeVrdxUnique<CVrdxTestScene>());
-	SceneManager.Push(MakeVrdxShared<CVrdxNovelScene>());
 }
 
 CVrdxApplication::~CVrdxApplication()
 {
+	
+}
 
+TVrdxWeakPtr<CVrdxWidgetBase> CVrdxApplication::GetRootWidget()
+{
+	return Instance;
 }
 
 void CVrdxApplication::Run()
@@ -25,12 +30,27 @@ void CVrdxApplication::Run()
 		float DeltaTick = Clock.restart().asSeconds();
 		HandleEvents();
 		Update(DeltaTick);
-		Draw();
+		Draw(Window);
 
 		if (SceneManager.IsEmpty())
 		{
 			bIsRunning = false;
 		}
+	}
+}
+
+void CVrdxApplication::OnPostCreate()
+{
+	Instance = shared_from_this();
+	SceneManager.Push(MakeVrdxShared<CVrdxNovelScene>());
+	bIsRunning = true;
+}
+
+void CVrdxApplication::OnPreDestroy()
+{
+	while (!SceneManager.IsEmpty())
+	{
+		SceneManager.Pop();
 	}
 }
 
@@ -45,17 +65,20 @@ void CVrdxApplication::HandleEvents()
 		}
 
 		SceneManager.HandleEvent(Event);
+		CVrdxWidgetBase::HandleEvent(Event);
 	}
 }
 
 void CVrdxApplication::Update(const float DeltaTick)
 {
 	SceneManager.Update(DeltaTick);
+	CVrdxWidgetBase::Update(DeltaTick);
 }
 
-void CVrdxApplication::Draw()
+void CVrdxApplication::Draw(sf::RenderWindow& RenderWindow) const
 {
-	Window.clear(sf::Color::Black);
-	SceneManager.Draw(Window);
-	Window.display();
+	RenderWindow.clear(sf::Color::Black);
+	SceneManager.Draw(RenderWindow);
+	CVrdxWidgetBase::Draw(RenderWindow);
+	RenderWindow.display();
 }

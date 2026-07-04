@@ -101,6 +101,16 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 - JSON 기반 (SFML + nlohmann/json 또는 직접 파싱)
 - 저장 항목: 현재 씬 상태, 플래그 값, 히스토리, 표시중인 캐릭터/배경
 
+### 2.5 UI Foundation (다음 작업 우선순위)
+
+- `Ui/WidgetBase.h` — 공통 위젯 인터페이스 유지/정리
+- `Ui/Box.h/cpp` — 배경/패널 위젯
+- `Ui/TextLabel.h/cpp` — 텍스트 표시 위젯
+- `Ui/Button.h/cpp` — Hover/Click/Keyboard 입력 위젯
+- `Ui/WidgetContainer.h/cpp` — 계층형 배치/이벤트 전달
+- 적용 대상: `DialogueBox`, `ChoiceWidget`, `TitleScene`, `ConfigScene`, `SaveLoadScene`
+- 세부 문서: `Docs/UIFoundation.md`
+
 ---
 
 ## 3. 디렉토리 구조
@@ -125,11 +135,12 @@ Game/Game/
 │   │   ├── CharacterManager.h/cpp
 │   │   ├── Background.h/cpp
 │   │   ├── DialogueLine.h
-│   │   ├── ChoiceManager.h/cpp    # 5단계 예정
+│   │   ├── ChoiceWidget.h/cpp     # 5단계 구현
 │   │   └── EffectManager.h/cpp    # 8단계 예정
 │   ├── Ui/
-│   │   ├── BaseWidget.h
+│   │   ├── WidgetBase.h/cpp
 │   │   ├── DialogueBox.h/cpp
+│   │   ├── ChoiceWidget.h/cpp
 │   │   ├── Button.h/cpp
 │   │   ├── TextBox.h/cpp
 │   │   └── Menu.h/cpp
@@ -162,8 +173,9 @@ Game/Game/
 - `Core/String.h/cpp` — `FVrdxString` 유니코드 문자열 클래스 (UTF-32 기반)
   - UTF-8 입출력, SFML `sf::String` 변환, 코드 포인트 단위 `Left(N)`/`Substr`
   - DialogueBox 타이핑 애니메이션의 기반 타입
-- `Ui/BaseWidget.h` — `CVrdxBaseWidget` (UI 위젯 공통 인터페이스)
-- `Ui/DialogueBox.h/cpp` — 하단 대사창 (CVrdxBaseWidget 상속)
+- `Ui/WidgetBase.h` — `CVrdxWidgetBase` (UI 위젯 공통 인터페이스)
+- `Ui/DialogueBox.h/cpp` — 하단 대사창 (`CVrdxWidgetBase` 상속)
+- `Ui/ChoiceWidget.h/cpp` — 선택지 UI (`CVrdxWidgetBase` 상속)
   - 타이핑 출력 + 클릭 시 전체 표시
   - 캐릭터명 표시 영역
   - Scene 시스템 의존성 없음 (순수 위젯)
@@ -192,7 +204,7 @@ Game/Game/
 - 세부 명세: `Docs/5-ScriptEngine.md`
 
 ### 5단계 — 선택지 시스템 (완료)
-- `ChoiceManager.h/cpp` — 선택지 버튼 표시, hover/keyboard/click 입력, 즉시 분기
+- `ChoiceWidget.h/cpp` — 선택지 버튼 표시, hover/keyboard/click 입력, 즉시 분기
 - ScriptEngine의 `@choice` 명령과 연동하여 분기
 - `@choice "text" "label" ...` — 한 줄에 (텍스트, 레이블) 쌍을 나열하는 방식
 - 세부 문서: `Docs/6-ChoiceSystem.md`
@@ -200,6 +212,7 @@ Game/Game/
 ### 6단계 — 세이브/로드
 - `SaveManager.h/cpp` — JSON 저장/불러오기
 - SaveLoadScene에서 UI로 표시
+- 세부 문서: `Docs/7-SaveLoad.md`
 
 ### 7단계 — 메뉴 구성
 - `TitleScene.h/cpp` — 타이틀 화면 (새 게임/로드/설정/종료)

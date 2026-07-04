@@ -29,8 +29,8 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - [x] **2단계 — NovelScene + DialogueBox + String 기반** (구현 및 검증 완료)
   - [[3-String.md]] — `FVrdxString` 유니코드 문자열 (UTF-32, UTF-8 입출력, SFML 연동)
-  - `Ui/BaseWidget.h` — `CVrdxBaseWidget` 위젯 베이스 클래스
-  - `Ui/DialogueBox.h/cpp` — `CDialogueBox` (타이핑 애니메이션, Speaker/Line 분리)
+  - `Ui/WidgetBase.h` — `CVrdxWidgetBase` 위젯 베이스 클래스
+  - `Ui/DialogueBox.h/cpp` — `CVrdxDialogueBox` (타이핑 애니메이션, Speaker/Line 분리)
   - `Scene/NovelScene.h/cpp` — `CVrdxNovelScene` (Background + CharacterManager + DialogueBox + ScriptEngine 통합)
   - `Assets/Fonts/malgun.ttf` — Malgun Gothic 폰트
 
@@ -46,13 +46,18 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
   - `Assets/Scripts/TestScript.txt` — @label/@jump 분기 포함 테스트 스크립트
 - [x] **5단계 — 선택지 시스템** (구현 완료)
   - [[6-ChoiceSystem.md]] — 선택지 UI/분기 시스템 구현 문서
-  - `ChoiceManager.h/cpp` — 선택지 패널/버튼/입력 처리/즉시 분기
+  - `ChoiceWidget.h/cpp` — 선택지 패널/버튼/입력 처리/즉시 분기
   - `ScriptLine.h/cpp` — `@choice` 파싱 및 분기용 라인 추가
-  - `NovelScene.h/cpp` — ChoiceManager 소유 및 ScriptEngine 분기 연동
+  - `NovelScene.h/cpp` — ChoiceWidget 소유 및 ScriptEngine 분기 연동
   - `Assets/Scripts/TestScript.txt` — 선택지 검증용 샘플 스크립트
 - [ ] **6단계 — 세이브/로드** (예정)
+  - [[7-SaveLoad.md]] — 세이브/로드 기능 명세
 - [ ] **7단계 — 메뉴 구성** (예정)
 - [ ] **8단계 — 연출 효과** (예정)
+
+## 추가 문서
+
+- [[UIFoundation.md]] — 공통 UI 위젯/컨테이너 계층 명세
 
 ## 네이밍 규칙
 
