@@ -12,7 +12,7 @@ tags:
 ---
 # Voradorix — 6단계: UI Foundation 기능 명세
 
-> **대상**: `CVrdxWidgetBase` 확장 + Box/TextLabel/Button/Container 같은 재사용 UI 컴포넌트  
+> **대상**: `CVrdxWidgetBase` 확장 + ImageWidget/TextLabel/Button/Container 같은 재사용 UI 컴포넌트  
 > **프로젝트**: Voradorix  
 > **관련 파일**: `Src/Ui/WidgetBase.h`, `Src/Ui/*.h/cpp`, `Src/Scene/*Scene.h/cpp`  
 > **의존성**: `Core/String.h`, `Core/Vector.h`, SFML 3.1.0 (`sf::Event`, `sf::RenderWindow`, `sf::RectangleShape`, `sf::Text`)  
@@ -34,7 +34,7 @@ tags:
 - 공통 위젯 생명주기 정의
 - 계층형 UI 컨테이너
 - Hover / Leave / Click / Keyboard 입력 전달
-- 재사용 가능한 Box / TextLabel / Button 컴포넌트
+- 재사용 가능한 ImageWidget / TextLabel / Button 컴포넌트
 - 기존 `DialogueBox`, `ChoiceWidget`을 위젯 기반으로 정리
 
 이번 단계에서는 다음을 다루지 않는다.
@@ -102,14 +102,16 @@ public:
 
 ## 5. 기본 컴포넌트
 
-### 5.1 Box
+### 5.1 ImageWidget (Box)
 
-배경/테두리/패널을 표현하는 비상호작용 위젯.
+이미지/텍스처를 선택적으로 그릴 수 있는 위젯.
 
-- 배경색
-- 테두리색
-- 테두리 두께
-- 둥근 모서리는 후속 단계에서 검토
+- 텍스처를 지정하지 않으면 `CVrdxWidgetBase`와 동일하게 동작
+- 텍스처/스프라이트를 지정하면 해당 이미지를 위젯 영역에 출력
+
+- 이미지/텍스처
+- 출력 비율/정렬
+- 필요 시 배경색 보조 출력
 
 ### 5.2 TextLabel
 
@@ -182,7 +184,7 @@ public:
 | 단계 | 작업 | 상태 |
 |------|------|------|
 | 1 | `CVrdxWidgetBase` 정리 | ✅ 완료 |
-| 2 | `Box` / `TextLabel` 작성 | 📝 예정 |
+| 2 | `ImageWidget` / `TextLabel` 작성 | 📝 예정 |
 | 3 | `Button` 작성 | 📝 예정 |
 | 4 | `WidgetContainer` 작성 | 📝 예정 |
 | 5 | `DialogueBox` 위젯 정리 | ✅ 완료 |

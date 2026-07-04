@@ -232,7 +232,7 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 ### UI 컴포넌트 작업 메모
 
 - **현재 작업 단계**: `UI Foundation` 진행 중
-- **핵심 목표**: `WidgetBase` 확장 + `Box` / `TextLabel` / `Button` / `WidgetContainer` 공통 계층화
+- **핵심 목표**: `WidgetBase` 확장 + `ImageWidget` / `TextLabel` / `Button` / `WidgetContainer` 공통 계층화
 - **적용 후보**: `DialogueBox`, `ChoiceWidget`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
 - **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 UI와 로직 분리
 - **명세 문서**: `Docs/6-UIFoundation.md`

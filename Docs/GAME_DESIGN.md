@@ -104,7 +104,7 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 ### 2.5 UI Foundation (진행 중)
 
 - `Ui/WidgetBase.h` — 공통 위젯 인터페이스 유지/정리
-- `Ui/Box.h/cpp` — 배경/패널 위젯
+- `Ui/ImageWidget.h/cpp` — 이미지/텍스처 출력 위젯 (미지정 시 BaseWidget과 동일)
 - `Ui/TextLabel.h/cpp` — 텍스트 표시 위젯
 - `Ui/Button.h/cpp` — Hover/Click/Keyboard 입력 위젯
 - `Ui/WidgetContainer.h/cpp` — 계층형 배치/이벤트 전달
@@ -174,6 +174,7 @@ Game/Game/
   - UTF-8 입출력, SFML `sf::String` 변환, 코드 포인트 단위 `Left(N)`/`Substr`
   - DialogueBox 타이핑 애니메이션의 기반 타입
 - `Ui/WidgetBase.h` — `CVrdxWidgetBase` (UI 위젯 공통 인터페이스)
+- `Ui/ImageWidget.h/cpp` — 이미지/텍스처 출력 위젯 (`CVrdxWidgetBase` 상속)
 - `Ui/DialogueBox.h/cpp` — 하단 대사창 (`CVrdxWidgetBase` 상속)
 - `Ui/ChoiceWidget.h/cpp` — 선택지 UI (`CVrdxWidgetBase` 상속)
   - 타이핑 출력 + 클릭 시 전체 표시
@@ -211,7 +212,7 @@ Game/Game/
 
 ### 6단계 — UI Foundation (진행 중)
 - `WidgetBase.h/cpp` — 공통 위젯 트리/이벤트/렌더 계층
-- `DialogueBox.h/cpp`, `ChoiceWidget.h/cpp` — 위젯 기반 UI 정리
+- `ImageWidget.h/cpp`, `DialogueBox.h/cpp`, `ChoiceWidget.h/cpp` — 위젯 기반 UI 정리
 - 세부 문서: `Docs/6-UIFoundation.md`
 
 ### 7단계 — 세이브/로드
