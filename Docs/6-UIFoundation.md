@@ -118,7 +118,7 @@ public:
 
 ### 5.3 Button
 
-클릭 가능한 상호작용 위젯. 현재는 `Normal` / `Pressed` / `Text` 자식 위젯을 조합해 상태를 표시하는 구조로 구현 중이다.
+클릭 가능한 상호작용 위젯. 현재는 `Normal` / `Pressed` / `Text` 자식 위젯을 조합해 상태를 표시하는 구조로 구현 완료 상태다.
 
 - Hover 상태
 - Pressed 상태
@@ -132,6 +132,13 @@ public:
 - `SetText()` — 버튼 텍스트 설정
 - `SetColors()` / `SetLineColors()` — 정상/눌림 상태 색상 설정
 - `SetCapture()` 기반으로 누르는 동안 상태 유지
+
+추후 폴리싱 항목:
+
+- Hover 상태
+- Focus 상태
+- Keyboard Activate 상태
+- 텍스트 정렬/서식
 
 ---
 
@@ -185,7 +192,7 @@ public:
 |------|------|------|
 | 1 | `CVrdxWidgetBase` 정리 | ✅ 완료 |
 | 2 | `CVrdxBoxWidget` / `TextLabel` 작성 | ✅ 완료 |
-| 3 | `Button` 작성 | 🔄 진행 중 |
+| 3 | `Button` 작성 | ✅ 완료 |
 | 4 | `DialogueBox` 위젯 정리 | ✅ 완료 |
 | 5 | `ChoiceWidget` 위젯 정리 | ✅ 완료 |
 | 6 | `TitleScene` / `ConfigScene` / `SaveLoadScene` 적용 | 📝 예정 |

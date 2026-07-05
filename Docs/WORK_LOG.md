@@ -248,7 +248,8 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 
 ### Button 작업 메모
 
-- `CVrdxButton` 추가 중
+- `CVrdxButton` 핵심 구현 완료
 - `Normal` / `Pressed` / `Text` 자식 위젯으로 상태를 분리
 - `SetIgnoreEvent()`로 시각 전용 자식의 이벤트 소비를 차단
 - `SetCapture()`로 누름 상태와 마우스 릴리스 판정을 처리
+- 추후 폴리싱: Hover / Focus / Keyboard Activate / 텍스트 서식
