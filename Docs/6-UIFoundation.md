@@ -81,6 +81,8 @@ public:
 - `Parent` / `Children` (위젯 트리 관계 관리)
 - `Shape`(상대 좌표)
 - `SetVisibility()` / `GetVisibility()`
+- `SetIgnoreEvent()` / `bIgnoreEvent` (자식 표시 전용 위젯 입력 차단)
+- `SetCapture()` / `bIsCapturing` (마우스 캡처 상태)
 - `IsDrawable()` / `bCanBeDrawn` (완전 가림 시 Draw 생략)
 - `MapToGlobal()` / `MapToLocal()`
 - `Hides()`
@@ -116,13 +118,20 @@ public:
 
 ### 5.3 Button
 
-클릭 가능한 상호작용 위젯.
+클릭 가능한 상호작용 위젯. 현재는 `Normal` / `Pressed` / `Text` 자식 위젯을 조합해 상태를 표시하는 구조로 구현 중이다.
 
 - Hover 상태
 - Pressed 상태
 - Focus 상태
 - Keyboard Activate 상태
 - 텍스트 라벨 포함 가능
+
+현재 구현 상태:
+
+- `SetCallback()` — 클릭 시 실행할 콜백 등록
+- `SetText()` — 버튼 텍스트 설정
+- `SetColors()` / `SetLineColors()` — 정상/눌림 상태 색상 설정
+- `SetCapture()` 기반으로 누르는 동안 상태 유지
 
 ---
 
@@ -176,7 +185,7 @@ public:
 |------|------|------|
 | 1 | `CVrdxWidgetBase` 정리 | ✅ 완료 |
 | 2 | `CVrdxBoxWidget` / `TextLabel` 작성 | ✅ 완료 |
-| 3 | `Button` 작성 | 📝 예정 |
+| 3 | `Button` 작성 | 🔄 진행 중 |
 | 4 | `DialogueBox` 위젯 정리 | ✅ 완료 |
 | 5 | `ChoiceWidget` 위젯 정리 | ✅ 완료 |
 | 6 | `TitleScene` / `ConfigScene` / `SaveLoadScene` 적용 | 📝 예정 |

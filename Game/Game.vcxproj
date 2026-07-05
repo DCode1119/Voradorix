@@ -101,6 +101,7 @@
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TestScene.cpp" />
     <ClCompile Include="Src\Ui\BoxWidget.cpp" />
+    <ClCompile Include="Src\Ui\Button.cpp" />
     <ClCompile Include="Src\Ui\ChoiceWidget.cpp" />
     <ClCompile Include="Src\Ui\DialogueBox.cpp" />
     <ClCompile Include="Src\Ui\TextLabel.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TestScene.h" />
     <ClInclude Include="Src\Ui\BoxWidget.h" />
+    <ClInclude Include="Src\Ui\Button.h" />
     <ClInclude Include="Src\Ui\ChoiceWidget.h" />
     <ClInclude Include="Src\Ui\DialogueBox.h" />
     <ClInclude Include="Src\Ui\TextLabel.h" />

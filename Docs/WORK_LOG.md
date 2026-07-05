@@ -245,3 +245,10 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 - `CVrdxTextLabel` 추가 완료
 - `CVrdxBoxWidget` 기반으로 `sf::Text`를 함께 렌더링
 - 폰트는 현재 `Assets/Fonts/malgun.ttf`를 직접 로드하며, 추후 Asset Manager로 분리 예정
+
+### Button 작업 메모
+
+- `CVrdxButton` 추가 중
+- `Normal` / `Pressed` / `Text` 자식 위젯으로 상태를 분리
+- `SetIgnoreEvent()`로 시각 전용 자식의 이벤트 소비를 차단
+- `SetCapture()`로 누름 상태와 마우스 릴리스 판정을 처리

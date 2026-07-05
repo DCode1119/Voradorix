@@ -36,7 +36,7 @@ CVrdxWidgetBase::CVrdxWidgetBase(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidge
 
 bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 {
-	if (!bIsVisible)
+	if (!bIsVisible || bIgnoreEvent)
 	{
 		return false;
 	}
@@ -60,13 +60,12 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 		OnKeyboardReleased(Event->scancode);
 		return true;
 	}
-
 	
 	if (const auto* Event = InEvent.getIf<sf::Event::MouseButtonPressed>())
 	{
 		// Mouse events should be contained in shape of this widget.
 		sf::Vector2f LocalPosition = MapToLocal(sf::Vector2f(Event->position));
-		if (!ContainsInLocal(LocalPosition))
+		if (!bIsCapturing && !ContainsInLocal(LocalPosition))
 		{
 			return false;
 		}
@@ -91,7 +90,7 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 	{
 		// Mouse events should be contained in shape of this widget.
 		sf::Vector2f LocalPosition = MapToLocal(sf::Vector2f(Event->position));
-		if (!ContainsInLocal(LocalPosition))
+		if (!bIsCapturing && !ContainsInLocal(LocalPosition))
 		{
 			return false;
 		}
@@ -116,7 +115,7 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 	{
 		// Mouse events should be contained in shape of this widget.
 		sf::Vector2f LocalPosition = MapToLocal(sf::Vector2f(Event->position));
-		if (!ContainsInLocal(LocalPosition))
+		if (!bIsCapturing && !ContainsInLocal(LocalPosition))
 		{
 			return false;
 		}
@@ -146,7 +145,7 @@ void CVrdxWidgetBase::Update(const float DeltaTick)
 	{
 		for (const auto Sibling : ParentWidget->Children)
 		{
-			if (Sibling->Hides(this))
+			if (Sibling->GetVisibility() && Sibling->Hides(this))
 			{
 				bCanBeDrawn = false;
 				return;
@@ -157,7 +156,7 @@ void CVrdxWidgetBase::Update(const float DeltaTick)
 	bool bDrawThis = true;
 	for (const auto Child : Children)
 	{
-		if (Child->Hides(this))
+		if (Child->GetVisibility() && Child->Hides(this))
 		{
 			bCanBeDrawn = false;
 			return;

@@ -56,8 +56,12 @@ public:
 	const TVrdxVector<TVrdxSharedPtr<CVrdxWidgetBase>>& GetChildren() const { return Children; }
 
 	bool IsDrawable() const;
+	sf::RectangleShape& GetShape() { return Shape; }
+	void SetIgnoreEvent(const bool bIgnore) { bIgnoreEvent = bIgnore; }
 
 protected:
+	void SetCapture(const bool bCapture) { bIsCapturing = bCapture; }
+
 	TVrdxWeakPtr<CVrdxWidgetBase> Parent;
 	TVrdxVector<TVrdxSharedPtr<CVrdxWidgetBase>> Children;
 
@@ -71,6 +75,8 @@ private:
 	
 	bool bIsVisible = true;
 	bool bCanBeDrawn = true;
+	bool bIsCapturing = false;
+	bool bIgnoreEvent = false;
 
 	sf::FloatRect CachedGeometry;
 };
