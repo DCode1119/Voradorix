@@ -55,6 +55,8 @@ public:
 	bool Hides(const CVrdxWidgetBase* Target) const;
 	const TVrdxVector<TVrdxSharedPtr<CVrdxWidgetBase>>& GetChildren() const { return Children; }
 
+	bool IsDrawable() const;
+
 protected:
 	TVrdxWeakPtr<CVrdxWidgetBase> Parent;
 	TVrdxVector<TVrdxSharedPtr<CVrdxWidgetBase>> Children;
@@ -68,6 +70,7 @@ private:
 	bool Equals(const sf::FloatRect& A, const sf::FloatRect& B) const;
 	
 	bool bIsVisible = true;
+	bool bCanBeDrawn = true;
 
 	sf::FloatRect CachedGeometry;
 };

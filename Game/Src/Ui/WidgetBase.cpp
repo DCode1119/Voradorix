@@ -141,14 +141,6 @@ void CVrdxWidgetBase::Update(const float DeltaTick)
 	{
 		Child->Update(DeltaTick);
 	}
-}
-
-void CVrdxWidgetBase::Draw(sf::RenderWindow& Window) const
-{
-	if (!bIsVisible)
-	{
-		return;
-	}
 
 	if (auto ParentWidget = Parent.lock())
 	{
@@ -156,6 +148,7 @@ void CVrdxWidgetBase::Draw(sf::RenderWindow& Window) const
 		{
 			if (Sibling->Hides(this))
 			{
+				bCanBeDrawn = false;
 				return;
 			}
 		}
@@ -166,15 +159,22 @@ void CVrdxWidgetBase::Draw(sf::RenderWindow& Window) const
 	{
 		if (Child->Hides(this))
 		{
-			bDrawThis = false;
-			break;
+			bCanBeDrawn = false;
+			return;
 		}
 	}
 
-	if (bDrawThis)
+	bCanBeDrawn = true;
+}
+
+void CVrdxWidgetBase::Draw(sf::RenderWindow& Window) const
+{
+	if (!IsDrawable())
 	{
-		Window.draw(Shape);
+		return;
 	}
+
+	Window.draw(Shape);
 
 	for (auto& Child : Children)
 	{
@@ -234,6 +234,11 @@ bool CVrdxWidgetBase::Hides(const CVrdxWidgetBase* Target) const
 
 	return MyRect.contains(TargetRect.position)
 		&& MyRect.contains(TargetRect.position + TargetRect.size);
+}
+
+bool CVrdxWidgetBase::IsDrawable() const
+{
+	return bCanBeDrawn && bIsVisible;
 }
 
 void CVrdxWidgetBase::RegisterChildWidget(TVrdxSharedPtr<CVrdxWidgetBase> ChildWidget)

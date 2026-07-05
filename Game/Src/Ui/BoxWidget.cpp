@@ -50,42 +50,17 @@ void CVrdxBoxWidget::Draw(sf::RenderWindow& Window) const
 		return;
 	}
 
-	if (!GetVisibility())
+	if (!IsDrawable())
 	{
 		return;
 	}
 
-	if (auto ParentWidget = Parent.lock())
-	{
-		for (const auto Sibling : ParentWidget->GetChildren())
-		{
-			if (Sibling->Hides(this))
-			{
-				return;
-			}
-		}
-	}
-
-	bool bDrawThis = true;
-	for (const auto Child : Children)
-	{
-		if (Child->Hides(this))
-		{
-			bDrawThis = false;
-			break;
-		}
-	}
-
-	if (bDrawThis)
-	{
-		Window.draw(Sprite);
-	}
+	Window.draw(Sprite);
 
 	for (auto& Child : Children)
 	{
 		Child->Draw(Window);
 	}
-	//#endif
 }
 
 sf::Texture CVrdxBoxWidget::CreateTransparentTexture()

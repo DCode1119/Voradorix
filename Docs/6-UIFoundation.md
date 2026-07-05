@@ -81,6 +81,7 @@ public:
 - `Parent` / `Children` (위젯 트리 관계 관리)
 - `Shape`(상대 좌표)
 - `SetVisibility()` / `GetVisibility()`
+- `IsDrawable()` / `bCanBeDrawn` (완전 가림 시 Draw 생략)
 - `MapToGlobal()` / `MapToLocal()`
 - `Hides()`
 

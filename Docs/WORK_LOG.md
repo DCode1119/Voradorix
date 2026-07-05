@@ -235,6 +235,7 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 - **현재 작업 단계**: `UI Foundation` 진행 중
 - **핵심 목표**: `WidgetBase`(위젯 트리 컨테이너 포함) 확장 + `BoxWidget` / `TextLabel` / `Button` 공통 계층화
 - **정리 사항**: 위젯 트리 컨테이너 역할은 `WidgetBase` 기능에 포함하며, 별도 컨테이너 클래스는 두지 않음
+- **정리 사항**: 완전 가림 상태는 `bCanBeDrawn`으로 판정해 불필요한 Draw call을 줄임
 - **적용 후보**: `DialogueBox`, `ChoiceWidget`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
 - **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 UI와 로직 분리
 - **명세 문서**: `Docs/6-UIFoundation.md`

@@ -24,7 +24,10 @@ void CVrdxTextLabel::Draw(sf::RenderWindow& Window) const
 {
 	CVrdxBoxWidget::Draw(Window);
 
-	Window.draw(Text);
+	if (IsDrawable())
+	{
+		Window.draw(Text);
+	}
 }
 
 void CVrdxTextLabel::SetText(const FVrdxString& String)
