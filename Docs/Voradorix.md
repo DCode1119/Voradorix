@@ -53,6 +53,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 - [ ] **6단계 — UI Foundation** (진행 중)
   - [[6-UIFoundation.md]] — 공통 UI 위젯/컨테이너 계층 명세
   - `Ui/WidgetBase.h/cpp` — 공통 위젯 트리/입력/렌더 계층
+  - `Ui/BoxWidget.h/cpp`, `Ui/TextLabel.h/cpp` — 기본 UI 위젯 구현
   - `Ui/DialogueBox.h/cpp`, `Ui/ChoiceWidget.h/cpp` — 위젯 기반 UI 정리
 - [ ] **7단계 — 세이브/로드** (예정)
   - [[7-SaveLoad.md]] — 세이브/로드 기능 명세

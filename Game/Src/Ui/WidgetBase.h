@@ -32,6 +32,8 @@ public:
 	virtual void OnPostCreate() {}
 	virtual void OnPreDestroy() {}
 
+	virtual void OnResized() {}
+
 	// Will be called HandleEvent
 	virtual void OnMouseMove(const sf::Vector2f& LocalPosition) {}
 	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) {}
@@ -63,8 +65,11 @@ protected:
 private:
 	void RegisterChildWidget(TVrdxSharedPtr<CVrdxWidgetBase> ChildWidget);
 	void UnregisterChildWidget(TVrdxSharedPtr<CVrdxWidgetBase> ChildWidget);
+	bool Equals(const sf::FloatRect& A, const sf::FloatRect& B) const;
 	
 	bool bIsVisible = true;
+
+	sf::FloatRect CachedGeometry;
 };
 
 template<typename TVrdxWidget> requires std::derived_from<TVrdxWidget, CVrdxWidgetBase>

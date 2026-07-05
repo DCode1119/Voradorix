@@ -59,7 +59,7 @@ tags:
 
 ### 4.1 `CVrdxWidgetBase`
 
-모든 UI 위젯의 공통 베이스.
+모든 UI 위젯의 공통 베이스이자 위젯 트리 컨테이너 역할을 담당한다.
 
 ```cpp
 class CVrdxWidgetBase
@@ -78,7 +78,7 @@ public:
 
 실제 구현 상태:
 
-- `Parent` / `Children`
+- `Parent` / `Children` (위젯 트리 관계 관리)
 - `Shape`(상대 좌표)
 - `SetVisibility()` / `GetVisibility()`
 - `MapToGlobal()` / `MapToLocal()`
@@ -86,17 +86,6 @@ public:
 
 위젯 생성/해제는 `CreateWidget()` / `DestroyWidget()`로 관리하며,
 생성 직후 `OnPostCreate()`, 해제 직전 `OnPreDestroy()`를 호출한다.
-
-### 4.2 `CVrdxWidgetContainer`
-
-현재는 별도 클래스보다 `CVrdxWidgetBase` 자체가 컨테이너 역할을 겸한다.
-
-주요 책임:
-
-- 자식 추가/삭제
-- 이벤트 전달 순서 제어
-- Draw 순서 제어
-- Hover/Focus 대상 관리
 
 ---
 
@@ -115,13 +104,14 @@ public:
 
 ### 5.2 TextLabel
 
-텍스트만 표시하는 위젯.
+텍스트를 표시하는 위젯. 현재는 `CVrdxBoxWidget`를 기반으로 `sf::Text`를 추가한 형태로 구현되어 있다.
 
-- 문자열
-- 글꼴
-- 크기
-- 색상
-- 정렬(좌/중앙/우)
+- `SetText()`
+- `SetFont()`
+- `SetFontSize()`
+- `SetFontColor()`
+
+현재는 `Assets/Fonts/malgun.ttf`를 직접 로드하며, 이후 Font Asset Manager로 분리할 예정이다.
 
 ### 5.3 Button
 
@@ -184,12 +174,11 @@ public:
 | 단계 | 작업 | 상태 |
 |------|------|------|
 | 1 | `CVrdxWidgetBase` 정리 | ✅ 완료 |
-| 2 | `CVrdxBoxWidget` / `TextLabel` 작성 | 📝 예정 |
+| 2 | `CVrdxBoxWidget` / `TextLabel` 작성 | ✅ 완료 |
 | 3 | `Button` 작성 | 📝 예정 |
-| 4 | `WidgetContainer` 작성 | 📝 예정 |
-| 5 | `DialogueBox` 위젯 정리 | ✅ 완료 |
-| 6 | `ChoiceWidget` 위젯 정리 | ✅ 완료 |
-| 7 | `TitleScene` / `ConfigScene` / `SaveLoadScene` 적용 | 📝 예정 |
+| 4 | `DialogueBox` 위젯 정리 | ✅ 완료 |
+| 5 | `ChoiceWidget` 위젯 정리 | ✅ 완료 |
+| 6 | `TitleScene` / `ConfigScene` / `SaveLoadScene` 적용 | 📝 예정 |
 
 ---
 

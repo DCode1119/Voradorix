@@ -12,11 +12,10 @@ public:
 	void SetTexture(TVrdxSharedPtr<sf::Texture> InTexture);
 	void ClearTexture();
 
-	virtual void Update(float DeltaTick) override;
+	virtual void OnResized() override;
 	virtual void Draw(sf::RenderWindow& Window) const override;
 
 private:
-	bool Equals(const sf::FloatRect& A, const sf::FloatRect& B) const;
 	sf::Texture CreateTransparentTexture();
 	void UpdateSpriteGeometry();
 
@@ -24,6 +23,4 @@ private:
 	sf::Sprite Sprite;
 	TVrdxSharedPtr<sf::Texture> Texture;
 	TVrdxSharedPtr<sf::Texture> TransparentTexture;
-
-	sf::FloatRect CachedGeometry;
 };

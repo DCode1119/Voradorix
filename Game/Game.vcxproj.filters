@@ -68,6 +68,9 @@
     <ClCompile Include="Src\Ui\BoxWidget.cpp">
       <Filter>소스 파일\Ui</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Ui\TextLabel.cpp">
+      <Filter>소스 파일\Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene\Scene.h">
@@ -119,6 +122,9 @@
       <Filter>소스 파일\Novel</Filter>
     </ClInclude>
     <ClInclude Include="Src\Ui\BoxWidget.h">
+      <Filter>소스 파일\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Ui\TextLabel.h">
       <Filter>소스 파일\Ui</Filter>
     </ClInclude>
   </ItemGroup>

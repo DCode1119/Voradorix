@@ -233,7 +233,14 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 ### UI 컴포넌트 작업 메모
 
 - **현재 작업 단계**: `UI Foundation` 진행 중
-- **핵심 목표**: `WidgetBase` 확장 + `BoxWidget` / `TextLabel` / `Button` / `WidgetContainer` 공통 계층화
+- **핵심 목표**: `WidgetBase`(위젯 트리 컨테이너 포함) 확장 + `BoxWidget` / `TextLabel` / `Button` 공통 계층화
+- **정리 사항**: 위젯 트리 컨테이너 역할은 `WidgetBase` 기능에 포함하며, 별도 컨테이너 클래스는 두지 않음
 - **적용 후보**: `DialogueBox`, `ChoiceWidget`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
 - **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 UI와 로직 분리
 - **명세 문서**: `Docs/6-UIFoundation.md`
+
+### TextLabel 작업 메모
+
+- `CVrdxTextLabel` 추가 완료
+- `CVrdxBoxWidget` 기반으로 `sf::Text`를 함께 렌더링
+- 폰트는 현재 `Assets/Fonts/malgun.ttf`를 직접 로드하며, 추후 Asset Manager로 분리 예정

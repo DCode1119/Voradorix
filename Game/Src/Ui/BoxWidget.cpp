@@ -12,7 +12,7 @@ CVrdxBoxWidget::CVrdxBoxWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget,
 	, Sprite(*Texture)
 	, bTextureSet {false}
 {
-	CachedGeometry = MapToGlobal(sf::FloatRect({0,0}, Shape.getSize()));
+	
 }
 
 void CVrdxBoxWidget::SetTexture(TVrdxSharedPtr<sf::Texture> InTexture)
@@ -37,18 +37,9 @@ void CVrdxBoxWidget::ClearTexture()
 	bTextureSet = false;
 }
 
-void CVrdxBoxWidget::Update(float DeltaTick)
+void CVrdxBoxWidget::OnResized()
 {
-	CVrdxWidgetBase::Update(DeltaTick);
-
-	const auto Geometry = MapToGlobal(sf::FloatRect({0,0}, Shape.getSize()));
-	if (Equals(CachedGeometry, Geometry))
-	{
-		return;
-	}
-
 	UpdateSpriteGeometry();
-	CachedGeometry = Geometry;
 }
 
 void CVrdxBoxWidget::Draw(sf::RenderWindow& Window) const
@@ -95,15 +86,6 @@ void CVrdxBoxWidget::Draw(sf::RenderWindow& Window) const
 		Child->Draw(Window);
 	}
 	//#endif
-}
-
-bool CVrdxBoxWidget::Equals(const sf::FloatRect& A, const sf::FloatRect& B) const
-{
-	constexpr float epsilon = 0.001f;
-	return (std::abs(A.position.x - B.position.x) < epsilon)
-		&& (std::abs(A.position.y - B.position.y) < epsilon)
-		&& (std::abs(A.size.x - B.size.x) < epsilon)
-		&& (std::abs(A.size.y - B.size.y) < epsilon);
 }
 
 sf::Texture CVrdxBoxWidget::CreateTransparentTexture()

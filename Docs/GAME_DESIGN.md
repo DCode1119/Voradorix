@@ -103,11 +103,10 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 
 ### 2.5 UI Foundation (진행 중)
 
-- `Ui/WidgetBase.h` — 공통 위젯 인터페이스 유지/정리
+- `Ui/WidgetBase.h` — 공통 위젯 인터페이스 및 위젯 트리 컨테이너 역할
 - `Ui/BoxWidget.h/cpp` — 이미지/텍스처 출력 위젯 (미지정 시 BaseWidget과 동일)
-- `Ui/TextLabel.h/cpp` — 텍스트 표시 위젯
+- `Ui/TextLabel.h/cpp` — 텍스트 표시 위젯 (BoxWidget 기반, sf::Text 래퍼)
 - `Ui/Button.h/cpp` — Hover/Click/Keyboard 입력 위젯
-- `Ui/WidgetContainer.h/cpp` — 계층형 배치/이벤트 전달
 - 적용 대상: `DialogueBox`, `ChoiceWidget`, `TitleScene`, `ConfigScene`, `SaveLoadScene`
 - 세부 문서: `Docs/6-UIFoundation.md`
 

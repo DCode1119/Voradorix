@@ -31,7 +31,7 @@ CVrdxWidgetBase::CVrdxWidgetBase(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidge
 	: Shape(InShape)
 	, Parent(ParentWidget)
 {
-
+	CachedGeometry = MapToGlobal(sf::FloatRect({ 0,0 }, Shape.getSize()));
 }
 
 bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
@@ -130,6 +130,13 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 
 void CVrdxWidgetBase::Update(const float DeltaTick)
 {
+	const auto Geometry = MapToGlobal(sf::FloatRect({ 0,0 }, Shape.getSize()));
+	if (!Equals(CachedGeometry, Geometry))
+	{
+		OnResized();
+		CachedGeometry = Geometry;
+	}
+
 	for (auto& Child : Children)
 	{
 		Child->Update(DeltaTick);
@@ -244,4 +251,13 @@ void CVrdxWidgetBase::UnregisterChildWidget(TVrdxSharedPtr<CVrdxWidgetBase> Chil
 		Children.Remove(ChildWidget);
 		ChildWidget->Parent.reset();
 	}
+}
+
+bool CVrdxWidgetBase::Equals(const sf::FloatRect& A, const sf::FloatRect& B) const
+{
+	constexpr float epsilon = 0.001f;
+	return (std::abs(A.position.x - B.position.x) < epsilon)
+		&& (std::abs(A.position.y - B.position.y) < epsilon)
+		&& (std::abs(A.size.x - B.size.x) < epsilon)
+		&& (std::abs(A.size.y - B.size.y) < epsilon);
 }
