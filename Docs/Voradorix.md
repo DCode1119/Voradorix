@@ -64,6 +64,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 ## 추가 문서
 
 - [[6-UIFoundation.md]] — 공통 UI 위젯/컨테이너 계층 명세
+- [[BACKLOG.md]] — 단계별 보류/폴리싱 항목 관리
 
 ## 네이밍 규칙
 
@@ -77,3 +78,4 @@ Unreal Engine 스타일: `C`/`T`/`E`/`I`/`F` 접두어 + `Vrdx` 프로젝트 접
 - [[GAME_DESIGN.md]] — 전체 설계
 - [[NAMING.md]] — 네이밍 규칙 상세
 - [[WORK_LOG.md]] — 작업 기록
+- [[BACKLOG.md]] — 백로그

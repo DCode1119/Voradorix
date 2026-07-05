@@ -38,6 +38,7 @@ Game/
 │       ├── Ui/               # WidgetBase, DialogueBox, ChoiceWidget
 │       └── Save/             # (예정) SaveManager
 ├── Docs/                     # 설계/작업 기록 문서
+│   └── BACKLOG.md            # 보류/폴리싱 항목
 ├── graphify-out/             # 그래프 분석 산출물
 ├── Assets/                   # 폰트 및 리소스
 ├── .gitignore
