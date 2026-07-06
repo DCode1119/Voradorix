@@ -203,19 +203,54 @@ tags:
   - const 버전: `const FVrdxCharacterSlot*` 반환
   - non-const 버전: const_cast를 통한 위임 패턴
 
+### 8단계 — Scene 시스템 → Widget Tree 구조 변경
+
+**파일 이동:**
+- `Ui/DialogueBox.h/cpp` → `Novel/`
+- `Ui/ChoiceWidget.h/cpp` → `Novel/`
+- `Core/Application.h/cpp` → `Ui/`
+- `Scene/NovelScene.h/cpp` → `Novel/`
+
+**삭제:**
+- `Scene/Scene.h/cpp`, `Scene/SceneManager.h/cpp`, `Scene/TestScene.h/cpp` — 전체 삭제
+
+**WidgetBase 상속 전환:**
+- `CVrdxNovelScene` — `CVrdxScene` 대신 `CVrdxWidgetBase` 상속
+- `CVrdxBackground` — `CVrdxWidgetBase` 상속 (이름 유지)
+- `CVrdxCharacterManager` — `CVrdxWidgetBase` 상속 (이름 유지)
+- `CVrdxApplication` — `CVrdxWidgetBase` 상속, SceneManager 제거, Save/Load 직접 처리 (Children 순회)
+
+**WidgetBase 보강:**
+- `BringToFront()` 추가 — 자신을 형제 중 최상단 Z-Order로 이동
+
+**Application 구조 변경:**
+- `Run()` 루프: `Update()` → `Draw()` (WidgetBase 트리 자동 전파)
+- `Save()/Load()`: Children 순회 + `dynamic_pointer_cast<CVrdxNovelScene>`으로 탐색 후 직렬화
+
+**Main.cpp:**
+- `CreateWidget<CVrdxApplication>(nullptr, Panel)` 방식으로 전환
+
+**프로젝트 파일:**
+- `Game.vcxproj` — 모든 경로 Novel/Ui로 갱신
+- `Game.vcxproj.filters` — 경로/필터 갱신, Scene 필터 및 잔여 참조 제거
+
+**신규 문서:**
+- `Docs/8-StructureReform.md` — 구조 변경 명세 및 진행 상태
+- `Docs/PROJECT_STRUCTURE.md` — opencode/Git 구조 설명
+
 ---
 
-## 비주얼 노벨 엔진 — 구현 계획 (9단계)
+## 비주얼 노벨 엔진 — 구현 계획 (10단계)
 
 ### 디렉토리 구조
 
 ```
 Game/Game/Src/
-├── Core/          # Application, Common, Vector, String
-├── Scene/         # Scene 인터페이스, SceneManager, 각 씬
-├── Novel/         # NovelScene, ScriptEngine, CharacterManager
-├── Ui/            # WidgetBase, DialogueBox, ChoiceWidget, Button, TextBox, Menu
-└── Save/          # SaveManager (JSON 기반 세이브/로드)
+├── Core/          # Common, Vector, String (유틸리티)
+├── Novel/         # NovelScene, Background, CharacterManager, DialogueBox,
+│                  # ChoiceWidget, ScriptEngine, ScriptLine, DialogueLine
+├── Ui/            # Application, WidgetBase, BoxWidget, Button, TextLabel
+└── Main.cpp
 
 Game/Game/Assets/
 ├── Scripts/       # 시나리오 텍스트 파일
@@ -237,9 +272,10 @@ Game/Game/Assets/
 | **4단계** | ScriptEngine — 텍스트 스크립트 파서/실행기 | `ScriptEngine.h/cpp` |
 | **5단계** | ChoiceWidget — 선택지 UI 및 분기 처리 | `ChoiceWidget.h/cpp` |
 | **6단계** | UI Foundation — 공통 위젯 계층 | `WidgetBase.h/cpp`, `DialogueBox.h/cpp`, `ChoiceWidget.h/cpp` |
-| **7단계** | Save/Load — NovelScene 직렬화/복원 | `SceneManager.h/cpp`, `NovelScene.h/cpp`, `CharacterManager.h/cpp` |
-| **8단계** | TitleScene, ConfigScene — 메뉴 구성 | `TitleScene.h/cpp`, `ConfigScene.h/cpp` |
-| **9단계** | EffectManager — 페이드, 셰이크 등 연출 효과 | `EffectManager.h/cpp` |
+| **7단계** | Save/Load — NovelScene 직렬화/복원 | `Application.h/cpp`, `NovelScene.h/cpp`, `CharacterManager.h/cpp` |
+| **8단계** | 구조 변경 — Widget Tree 기반 아키텍처 전환 | `WidgetBase.h/cpp`, `Application.h/cpp`, `NovelScene.h/cpp` |
+| **9단계** | TitleScene, SaveLoadScene — 메뉴 구성 | 예정 |
+| **10단계** | EffectManager — 페이드, 셰이크 등 연출 효과 | 예정 |
 
 ### 스크립트 포맷 (제안)
 

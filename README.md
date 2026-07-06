@@ -7,9 +7,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 C++17, Visual Studio 2022 x64 환경에서 SFML 3.1.0을 사용하여 구축하는
 비주얼 노벨(미연시) 스타일 게임 엔진입니다.
 
-씬 기반 아키텍처, 텍스트 출력, 스크립트/분기 확장 구조를 지원합니다.
-
-현재 1~6단계 핵심 구현이 완료되었고, 7~9단계는 예정 상태입니다.
+Widget Tree 기반 아키텍처, 텍스트 출력, 스크립트/분기/세이브로드 구조를 지원합니다.
 
 ## 기술 스택
 
@@ -24,23 +22,26 @@ C++17, Visual Studio 2022 x64 환경에서 SFML 3.1.0을 사용하여 구축하�
 ## 프로젝트 구조
 
 ```
-Game/
+Game/                          ← Git 저장소 루트
 ├── Game.sln                  # Visual Studio 솔루션
 ├── Game/
 │   ├── Game.vcxproj
 │   ├── Game.vcxproj.filters
-│   ├── Extern/SFML-3.1.0/
-│   └── Src/
-│       ├── Main.cpp
-│       ├── Core/             # Application, Common, Vector, String
-│       ├── Scene/            # Scene, SceneManager, TestScene, NovelScene
-│       ├── Novel/            # 노벨 재생 로직
-│       └── Ui/               # WidgetBase, DialogueBox, ChoiceWidget, Button
-├── Extern/                    # nlohmann/json (v3.12.0)
+│   ├── Src/
+│   │   ├── Main.cpp
+│   │   ├── Core/             # Common, Vector, String (유틸리티)
+│   │   ├── Novel/            # NovelScene, Background, CharacterManager,
+│   │   │                       DialogueBox, ChoiceWidget, ScriptEngine
+│   │   └── Ui/               # Application, WidgetBase, BoxWidget, Button,
+│   │                           TextLabel (공통 UI)
+│   ├── Assets/               # 폰트 및 리소스
+│   └── Saves/                # 세이브 파일 저장 디렉토리
+├── Extern/                    # SFML 3.1.0, nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서
-│   └── BACKLOG.md            # 보류/폴리싱 항목
-├── graphify-out/             # 그래프 분석 산출물
-├── Assets/                   # 폰트 및 리소스
+│   ├── 1-SceneSystem.md ~ 8-StructureReform.md
+│   ├── BACKLOG.md
+│   └── PROJECT_STRUCTURE.md  # opencode/Git 구조 설명
+├── graphify-out/             # 그래프 분석 산출물 (git 미관리)
 ├── .gitignore
 └── README.md
 ```
@@ -54,8 +55,10 @@ Game/
 - [x] **5단계 — 선택지 시스템**: 선택지 UI/입력/분기 구현 완료
 - [x] 6단계 — UI Foundation: 핵심 구현 완료, 세부 폴리싱 예정
 - [x] **7단계 — 세이브/로드**: NovelScene 상태 직렬화/복원 (JSON, nlohmann)
-- [ ] 8단계 — 메뉴 구성
-- [ ] 9단계 — 연출 효과
+- [x] **8단계 — 구조 변경**: Scene/SceneManager 폐기, Widget Tree 기반 아키텍처 전환 완료
+  - BringToFront(), 모든 컴포넌트 WidgetBase 상속, 파일 구조 정리
+- [ ] 9단계 — 메뉴 구성 (TitleScene, SaveLoadScene)
+- [ ] 10단계 — 연출 효과
 
 ## 네이밍 규칙
 
@@ -79,10 +82,10 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 
 ## 현재 상태
 
-- 1~5단계 빌드/테스트 확인 완료
-- 6단계 핵심 구현 완료, 7단계(Save/Load) 구현 완료
-- 8~9단계는 예정
-- 작업 기록과 프로젝트 인덱스 문서는 `Docs/`를 참고
+- 1~8단계 빌드/테스트 확인 완료
+- 7단계(Save/Load), 8단계(구조 변경 — Widget Tree 전환) 구현 완료
+- 9~10단계는 예정
+- 작업 기록과 설계 문서는 `Docs/`를 참고
 
 ## 라이선스
 
