@@ -1,5 +1,8 @@
-#include "Core/Application.h"
+// Copyright DCode. All Rights Reserved.
+
+// Project Headers
 #include "Novel/ScriptEngine.h"
+#include "Ui/Application.h"
 
 int main()
 {

@@ -1,13 +1,17 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// C++ Standard Library
 #include <memory>
 
+// Third-party Library
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
+// Project Headers
 #include "Core/Common.h"
 #include "Core/Vector.h"
 
@@ -58,6 +62,8 @@ public:
 	bool IsDrawable() const;
 	sf::RectangleShape& GetShape() { return Shape; }
 	void SetIgnoreEvent(const bool bIgnore) { bIgnoreEvent = bIgnore; }
+
+	void BringToFront();
 
 protected:
 	void SetCapture(const bool bCapture) { bIsCapturing = bCapture; }

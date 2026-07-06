@@ -1,5 +1,7 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// C++ Standard Library
 #include <algorithm>
 #include <initializer_list>
 #include <vector>

@@ -1,15 +1,21 @@
-﻿#pragma once
+﻿// Copyright DCode. All Rights Reserved.
+#pragma once
 
+// C++ Standard Library
 #include <string>
 #include <unordered_map>
+
+// Third-party Library
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+// Project Headers
 #include "Core/Common.h"
 #include "Core/String.h"
 #include "Core/Vector.h"
+#include "Ui/WidgetBase.h"
 
 enum class EVrdxCharacterPosition : uint8_t
 {
@@ -45,10 +51,10 @@ struct FVrdxCharacterSlotSaveData
 	FVrdxString CharacterPose;
 };
 
-class CVrdxCharacterManager
+class CVrdxCharacterManager : public CVrdxWidgetBase
 {
 public:
-	CVrdxCharacterManager();
+	CVrdxCharacterManager(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 	~CVrdxCharacterManager() VRDX_DEFAULT;
 
 	void ShowCharacter(const FVrdxString& CharacterName, EVrdxCharacterPosition Position, const FVrdxString& PoseName = "Normal");

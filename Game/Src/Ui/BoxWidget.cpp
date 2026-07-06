@@ -1,9 +1,13 @@
-﻿#include "Ui/BoxWidget.h"
+﻿// Copyright DCode. All Rights Reserved.
 
+#include "Ui/BoxWidget.h"
+
+// C++ Standard Library
 #include <cmath>
 
-#include <SFML/Graphics/Texture.hpp>
+// Third-party Library
 #include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 CVrdxBoxWidget::CVrdxBoxWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxWidgetBase(ParentWidget, InShape)

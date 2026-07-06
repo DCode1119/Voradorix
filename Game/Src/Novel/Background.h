@@ -1,18 +1,21 @@
-﻿#pragma once
+﻿// Copyright DCode. All Rights Reserved.
+#pragma once
 
+// Third-party Library
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+// Project Headers
 #include "Core/Common.h"
 #include "Core/String.h"
+#include "Ui/WidgetBase.h"
 
-class CVrdxBackground
+class CVrdxBackground : public CVrdxWidgetBase
 {
 public:
-	CVrdxBackground();
-	~CVrdxBackground() VRDX_DEFAULT;
+	CVrdxBackground(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 
 	void SetBackground(const FVrdxString& AssetName, float TransitionSeconds = 0.35f);
 	void Update(float DeltaTick);

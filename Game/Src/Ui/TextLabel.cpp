@@ -1,4 +1,6 @@
-﻿#include "Ui/TextLabel.h"
+﻿// Copyright DCode. All Rights Reserved.
+
+#include "Ui/TextLabel.h"
 
 CVrdxTextLabel::CVrdxTextLabel(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxBoxWidget(ParentWidget, InShape)

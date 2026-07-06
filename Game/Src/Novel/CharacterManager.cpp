@@ -1,8 +1,13 @@
-﻿#include "Novel/CharacterManager.h"
+﻿// Copyright DCode. All Rights Reserved.
 
+#include "Novel/CharacterManager.h"
+
+// C++ Standard Library
 #include <algorithm>
 #include <cstdint>
 #include <string>
+
+// Third-party Library
 #include <SFML/Graphics/Color.hpp>
 
 namespace
@@ -21,8 +26,9 @@ FVrdxCharacterSlot::FVrdxCharacterSlot(const EVrdxCharacterPosition InSlot, cons
 {
 }
 
-CVrdxCharacterManager::CVrdxCharacterManager()
-	: TransparentTexture(std::make_shared<sf::Texture>(CreateTransparentTexture()))
+CVrdxCharacterManager::CVrdxCharacterManager(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
+	: CVrdxWidgetBase(ParentWidget, InShape)
+	, TransparentTexture(std::make_shared<sf::Texture>(CreateTransparentTexture()))
 {
 	Slots.Reserve(3);
 	Slots.Add(FVrdxCharacterSlot(EVrdxCharacterPosition::Left, *TransparentTexture));
@@ -400,4 +406,3 @@ sf::Texture CVrdxCharacterManager::CreateTransparentTexture()
 	const sf::Image Image(sf::Vector2u(1u, 1u), sf::Color(0, 0, 0, 0));
 	return sf::Texture(Image);
 }
-

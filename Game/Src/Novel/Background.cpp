@@ -1,8 +1,12 @@
-﻿#include "Novel/Background.h"
+﻿// Copyright DCode. All Rights Reserved.
 
+#include "Novel/Background.h"
+
+// C++ Standard Library
 #include <algorithm>
 #include <cstdint>
 
+// Third-party Library
 #include <SFML/Graphics/Color.hpp>
 
 //Will be moved to configuration module.
@@ -12,8 +16,9 @@ namespace
 	constexpr float BackgroundHeight = 720.f;
 }
 
-CVrdxBackground::CVrdxBackground()
-	: TransparentTexture(CreateTransparentTexture())
+CVrdxBackground::CVrdxBackground(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
+	: CVrdxWidgetBase(ParentWidget, InShape)
+	, TransparentTexture(CreateTransparentTexture())
 	, CurrentSprite(TransparentTexture)
 	, NextSprite(TransparentTexture)
 	, TransitionTime(0.f)
@@ -21,6 +26,7 @@ CVrdxBackground::CVrdxBackground()
 	, bHasCurrent(false)
 	, bIsTransitioning(false)
 {
+	Shape.setFillColor(sf::Color::Transparent);
 }
 
 void CVrdxBackground::SetBackground(const FVrdxString& AssetName, float TransitionSeconds /*= 0.35f*/)

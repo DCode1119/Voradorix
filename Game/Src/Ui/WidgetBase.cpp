@@ -1,5 +1,8 @@
-﻿#include "WidgetBase.h"
+﻿// Copyright DCode. All Rights Reserved.
 
+#include "Ui/WidgetBase.h"
+
+// C++ Standard Library
 #include <algorithm>
 #include <ranges>
 
@@ -238,6 +241,24 @@ bool CVrdxWidgetBase::Hides(const CVrdxWidgetBase* Target) const
 bool CVrdxWidgetBase::IsDrawable() const
 {
 	return bCanBeDrawn && bIsVisible;
+}
+
+void CVrdxWidgetBase::BringToFront()
+{
+	if (auto ParentWidget = Parent.lock())
+	{
+		auto& Siblings = ParentWidget->Children;
+		auto ThisPointer = shared_from_this();
+
+		if (!Siblings.Contains(ThisPointer))
+		{
+			// Critical error — not a child of its own parent
+			return;
+		}
+
+		Siblings.Remove(ThisPointer);
+		Siblings.Add(ThisPointer);
+	}
 }
 
 void CVrdxWidgetBase::RegisterChildWidget(TVrdxSharedPtr<CVrdxWidgetBase> ChildWidget)

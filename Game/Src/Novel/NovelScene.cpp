@@ -1,69 +1,104 @@
-#include "NovelScene.h"
+// Copyright DCode. All Rights Reserved.
 
+#include "Novel/NovelScene.h"
+
+// Third-party Library
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "Core/Application.h"
+// Project Headers
 #include "Core/String.h"
+#include "Novel/Background.h"
+#include "Novel/CharacterManager.h"
+#include "Novel/ChoiceWidget.h"
+#include "Novel/DialogueBox.h"
 #include "Novel/DialogueLine.h"
-#include "Ui/ChoiceWidget.h"
-#include "Ui/DialogueBox.h"
+#include "Ui/Application.h"
 
-CVrdxNovelScene::CVrdxNovelScene()
+
+CVrdxNovelScene::CVrdxNovelScene(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
+	: CVrdxWidgetBase(ParentWidget, InShape)
 {
-	sf::RectangleShape Panel;
-	Panel.setSize(sf::Vector2f(1200.f, 200.f));
-	Panel.setPosition(sf::Vector2f(40.f, 500.f));
-	Panel.setFillColor(sf::Color(20, 20, 20, 220));
-	DialogueBox = CVrdxWidgetBase::CreateWidget<CVrdxDialogueBox>(CVrdxApplication::GetRootWidget(), Panel);
 
-	Panel.setSize(sf::Vector2f(1200.f, 200.f));
-	Panel.setPosition(sf::Vector2f(40.f, 500.f));
-	Panel.setFillColor(sf::Color(20, 20, 20, 220));
-	ChoiceWidget = CVrdxWidgetBase::CreateWidget<CVrdxChoiceWidget>(CVrdxApplication::GetRootWidget(), Panel);
-	ChoiceWidget->Clear();
 }
 
-CVrdxNovelScene::~CVrdxNovelScene()
+void CVrdxNovelScene::OnPostCreate()
 {
-}
+	TVrdxSharedPtr<CVrdxNovelScene> SharedThis = dynamic_pointer_cast<CVrdxNovelScene>(shared_from_this());
+	if (!SharedThis)
+	{
+		// Critical issue. logger will be inserted here in short future.
+		return;
+	}
 
-void CVrdxNovelScene::OnEnter()
-{
-	ScriptEngine.SetNovelScene(shared_from_this());
-	ChoiceWidget->SetNovelScene(shared_from_this());
+	ScriptEngine.SetNovelScene(SharedThis);
 	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
 	{
 		return;
 	}
+
+	sf::RectangleShape Panel;
+	Panel.setSize(sf::Vector2f(1200.f, 200.f));
+	Panel.setPosition(sf::Vector2f(40.f, 500.f));
+	Panel.setFillColor(sf::Color(20, 20, 20, 220));
+	DialogueBox = CVrdxWidgetBase::CreateWidget<CVrdxDialogueBox>(SharedThis, Panel);
+
+	Panel.setSize(sf::Vector2f(1200.f, 200.f));
+	Panel.setPosition(sf::Vector2f(40.f, 500.f));
+	Panel.setFillColor(sf::Color(20, 20, 20, 220));
+	ChoiceWidget = CVrdxWidgetBase::CreateWidget<CVrdxChoiceWidget>(SharedThis, Panel);
+	ChoiceWidget->SetNovelScene(SharedThis);
+	ChoiceWidget->Clear();
+
+	Panel.setSize({ 1280, 720 });
+	Panel.setPosition({ 0,0 });
+	Panel.setFillColor(sf::Color::Transparent);
+	Panel.setOutlineColor(sf::Color::Transparent);
+	CharacterManager= CVrdxWidgetBase::CreateWidget<CVrdxCharacterManager>(SharedThis, Panel);
+
+	Panel.setSize({ 1280, 720 });
+	Panel.setPosition({ 0,0 });
+	Panel.setFillColor(sf::Color::Transparent);
+	Panel.setOutlineColor(sf::Color::Transparent);
+	Background = CVrdxWidgetBase::CreateWidget<CVrdxBackground>(SharedThis, Panel);
+
+	//Order widgets to display.
+	const TVrdxSharedPtr<CVrdxWidgetBase> LayoutOrder[] =
+	{
+		Background,
+		CharacterManager,
+		DialogueBox,
+		ChoiceWidget,
+	};
+
+	for (auto Widget : LayoutOrder)
+	{
+		Widget->BringToFront();
+	}
 }
 
-void CVrdxNovelScene::OnExit()
-{
-}
 
-void CVrdxNovelScene::HandleEvent(const sf::Event& Event)
+void CVrdxNovelScene::OnPreDestroy()
 {
-
+	// Release all references
+	Background = nullptr;
+	ChoiceWidget = nullptr;
+	DialogueBox = nullptr;
 }
 
 void CVrdxNovelScene::Update(const float DeltaTick)
 {
 	ScriptEngine.Update(DeltaTick);
-	Background.Update(DeltaTick);
-	CharacterManager.Update(DeltaTick);
 
 	if (RemainingWaitSeconds > 0.f)
 	{
 		RemainingWaitSeconds = std::max(0.f, RemainingWaitSeconds - DeltaTick);
 	}
-}
 
-void CVrdxNovelScene::Draw(sf::RenderWindow& Window) const
-{
-	Background.Draw(Window);
-	CharacterManager.Draw(Window);
+
+	// Propagate update tick.
+	CVrdxWidgetBase::Update(DeltaTick);
 }
 
 bool CVrdxNovelScene::CanAdvance() const
@@ -73,22 +108,22 @@ bool CVrdxNovelScene::CanAdvance() const
 
 void CVrdxNovelScene::SetBackground(const FVrdxString& BackgroundName)
 {
-	Background.SetBackground(BackgroundName);
+	Background->SetBackground(BackgroundName);
 }
 
 void CVrdxNovelScene::ShowCharacter(const FVrdxString& Character, const EVrdxCharacterPosition Position)
 {
-	CharacterManager.ShowCharacter(Character, Position);
+	CharacterManager->ShowCharacter(Character, Position);
 }
 
 void CVrdxNovelScene::HideCharacter(const FVrdxString& Character)
 {
-	CharacterManager.HideCharacter(Character);
+	CharacterManager->HideCharacter(Character);
 }
 
 void CVrdxNovelScene::SetCharacterPose(const FVrdxString& Character, const FVrdxString& Pose)
 {
-	CharacterManager.SetCharacterPose(Character, Pose);
+	CharacterManager->SetCharacterPose(Character, Pose);
 }
 
 void CVrdxNovelScene::SetDialogue(const FVrdxDialogueLine& DialogueLine)
@@ -118,8 +153,8 @@ FVrdxNovelSceneSaveData CVrdxNovelScene::Save() const
 		{
 			.ScriptPath = ScriptEngine.GetScriptName(),
 			.CurrentLine = ScriptEngine.GetCurrentScriptLine() - 1,
-			.BackgroundName = Background.GetCurrentAssetName(),
-			.CharacterSlots = CharacterManager.GetSaveData(),
+			.BackgroundName = Background->GetCurrentAssetName(),
+			.CharacterSlots = CharacterManager->GetSaveData(),
 		};
 }
 
@@ -130,12 +165,12 @@ void CVrdxNovelScene::Load(const FVrdxNovelSceneSaveData& SaveData)
 		return;
 	}
 
-	CharacterManager.Reset();
-	Background.SetBackground(SaveData.BackgroundName);
+	CharacterManager->Reset();
+	Background->SetBackground(SaveData.BackgroundName);
 	for (const auto& CharacterSlot : SaveData.CharacterSlots)
 	{
-		CharacterManager.ShowCharacter(CharacterSlot.CharacterName, CharacterSlot.Position);
-		CharacterManager.SetCharacterPose(CharacterSlot.CharacterName, CharacterSlot.CharacterPose);
+		CharacterManager->ShowCharacter(CharacterSlot.CharacterName, CharacterSlot.Position);
+		CharacterManager->SetCharacterPose(CharacterSlot.CharacterName, CharacterSlot.CharacterPose);
 	}
 
 	ScriptEngine.JumpToLine(SaveData.CurrentLine);
@@ -143,7 +178,7 @@ void CVrdxNovelScene::Load(const FVrdxNovelSceneSaveData& SaveData)
 
 void CVrdxNovelScene::EndScenario()
 {
-	RequestExit();
+	//RequestExit();
 }
 
 FVrdxString FVrdxNovelSceneSaveData::ToJson() const

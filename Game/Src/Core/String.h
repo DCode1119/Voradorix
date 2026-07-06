@@ -1,9 +1,14 @@
-﻿#pragma once
+﻿// Copyright DCode. All Rights Reserved.
+#pragma once
 
+// C++ Standard Library
 #include <cstdint>
 #include <string>
+
+// Third-party Library
 #include <SFML/System/String.hpp>
 
+// Project Headers
 #include "Core/Common.h"
 
 struct FVrdxString

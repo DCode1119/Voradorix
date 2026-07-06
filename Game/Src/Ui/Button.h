@@ -1,11 +1,15 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// C++ Standard Library
 #include <functional>
 
+// Third-party Library
 #include <SFML/System/Vector2.hpp>
 
-#include "Ui/BoxWidget.h"
+// Project Headers
 #include "Core/String.h"
+#include "Ui/BoxWidget.h"
 
 class CVrdxBoxWidget;
 class CVrdxTextLabel;

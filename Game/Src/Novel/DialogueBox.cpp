@@ -1,8 +1,12 @@
-#include "Ui/DialogueBox.h"
+// Copyright DCode. All Rights Reserved.
 
+#include "Novel/DialogueBox.h"
+
+// Third-party Library
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 
+// Project Headers
 #include "Core/Vector.h"
 
 CVrdxDialogueBox::CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)

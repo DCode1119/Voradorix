@@ -1,9 +1,12 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// Third-party Library
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 
+// Project Headers
 #include "Core/String.h"
 #include "Ui/WidgetBase.h"
 

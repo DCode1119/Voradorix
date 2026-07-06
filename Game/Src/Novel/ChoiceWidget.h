@@ -1,5 +1,7 @@
-﻿#pragma once
+﻿// Copyright DCode. All Rights Reserved.
+#pragma once
 
+// Third-party Library
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -7,6 +9,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
+// Project Headers
 #include "Core/Common.h"
 #include "Core/String.h"
 #include "Core/Vector.h"

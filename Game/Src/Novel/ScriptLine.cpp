@@ -1,11 +1,15 @@
+// Copyright DCode. All Rights Reserved.
+
 #include "Novel/ScriptLine.h"
 
+// C++ Standard Library
 #include <regex>
 #include <string>
 #include <unordered_map>
 
+// Project Headers
 #include "Novel/DialogueLine.h"
-#include "Scene/NovelScene.h"
+#include "Novel/NovelScene.h"
 
 TVrdxSharedPtr<FVrdxScriptLine> FVrdxScriptLine::ParseScriptLine(const std::string& Line)
 {

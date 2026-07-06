@@ -1,6 +1,8 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
-#include "ScriptLine.h"
+// Project Headers
+#include "Novel/ScriptLine.h"
 
 class CVrdxNovelScene;
 

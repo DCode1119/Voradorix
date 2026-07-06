@@ -1,14 +1,19 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// Third-party Library
+#include <nlohmann/json.hpp>
+
+// Project Headers
 #include "Core/Vector.h"
-#include "Novel/Background.h"
-#include "Novel/CharacterManager.h"
 #include "Novel/ScriptEngine.h"
-#include "Scene/Scene.h"
 
 struct FVrdxString;
 struct FVrdxDialogueLine;
 struct FVrdxChoiceOption;
+
+class CVrdxBackground;
+class CVrdxCharacterManager;
 class CVrdxChoiceWidget;
 class CVrdxDialogueBox;
 
@@ -23,19 +28,14 @@ struct FVrdxNovelSceneSaveData
 	void FromJson(const FVrdxString& String);
 };
 
-class CVrdxNovelScene
-	: public CVrdxScene
-	, public std::enable_shared_from_this<CVrdxNovelScene>
+class CVrdxNovelScene : public CVrdxWidgetBase
 {
 public:
-	CVrdxNovelScene();
-	~CVrdxNovelScene();
+	CVrdxNovelScene(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 
-	virtual void OnEnter() VRDX_OVERRIDE;
-	virtual void OnExit() VRDX_OVERRIDE;
-	virtual void HandleEvent(const sf::Event&) VRDX_OVERRIDE;
+	virtual void OnPostCreate() override;
+	virtual void OnPreDestroy() override;
 	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
-	virtual void Draw(sf::RenderWindow&) const VRDX_OVERRIDE;
 
 	bool CanAdvance() const;
 
@@ -55,12 +55,12 @@ public:
 private:
 	void EndScenario();
 
-	CVrdxBackground Background;
-	CVrdxCharacterManager CharacterManager;
+	TVrdxSharedPtr<CVrdxBackground> Background;
+	TVrdxSharedPtr<CVrdxCharacterManager> CharacterManager;
 	TVrdxSharedPtr<CVrdxDialogueBox> DialogueBox;
-	CVrdxScriptEngine ScriptEngine;
-	//CVrdxChoiceWidget ChoiceManager;
 	TVrdxSharedPtr<CVrdxChoiceWidget> ChoiceWidget;
+
+	CVrdxScriptEngine ScriptEngine;
 
 	float RemainingWaitSeconds = 0.f;
 };

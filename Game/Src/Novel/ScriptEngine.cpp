@@ -1,10 +1,14 @@
-﻿#include "Novel/ScriptEngine.h"
+﻿// Copyright DCode. All Rights Reserved.
 
+#include "Novel/ScriptEngine.h"
+
+// C++ Standard Library
 #include <fstream>
-#include <string>
 #include <memory>
+#include <string>
 
-#include "Scene/NovelScene.h"
+// Project Headers
+#include "Novel/NovelScene.h"
 
 void CVrdxScriptEngine::SetNovelScene(TVrdxSharedPtr<CVrdxNovelScene> NovelScene)
 {

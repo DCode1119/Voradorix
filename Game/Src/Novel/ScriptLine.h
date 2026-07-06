@@ -1,10 +1,12 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// Project Headers
 #include "Core/Common.h"
 #include "Core/String.h"
 #include "Core/Vector.h"
 #include "Novel/CharacterManager.h"
-#include "Ui/ChoiceWidget.h"
+#include "Novel/ChoiceWidget.h"
 
 class CVrdxNovelScene;
 

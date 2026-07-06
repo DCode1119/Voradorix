@@ -1,8 +1,11 @@
+// Copyright DCode. All Rights Reserved.
 #pragma once
 
+// Third-party Library
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
+// Project Headers
 #include "Ui/WidgetBase.h"
 
 class CVrdxBoxWidget: public CVrdxWidgetBase

@@ -1,8 +1,12 @@
-﻿#include "Ui/ChoiceWidget.h"
+﻿// Copyright DCode. All Rights Reserved.
 
+#include "Novel/ChoiceWidget.h"
+
+// C++ Standard Library
 #include <unordered_map>
 
-#include "Scene/NovelScene.h"
+// Project Headers
+#include "Novel/NovelScene.h"
 
 CVrdxChoiceWidget::CVrdxChoiceWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxWidgetBase(ParentWidget, InShape)
