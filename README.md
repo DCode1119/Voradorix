@@ -60,6 +60,37 @@ Game/                          ← Git 저장소 루트
 - [ ] 9단계 — 메뉴 구성 (TitleScene, SaveLoadScene)
 - [ ] 10단계 — 연출 효과
 
+## 스크립트 문법
+
+스토리 스크립트는 `Assets/Scripts/` 디렉토리에 `.txt` 파일로 작성하며,
+`@` 명령어 기반으로 동작합니다. 명령어 인자는 큰따옴표(`"`)로 감쌉니다.
+
+| 명령어 | 설명 | 예시 |
+|--------|------|------|
+| `@bg` | 배경 이미지 전환 | `@bg "WhiteRoom"` |
+| `@show` | 캐릭터 표시 (위치: Left/Center/Right) | `@show "Laura" "Center" "Normal"` |
+| `@hide` | 캐릭터 숨김 | `@hide "Laura"` |
+| `@pose` | 캐릭터 표정 변경 | `@pose "Laura" "Angry"` |
+| `@wait` | 지정 시간(초) 동안 진행 정지 | `@wait "0.3"` |
+| `@label` | 분기점 레이블 정의 | `@label "Main"` |
+| `@jump` | 지정 레이블로 즉시 이동 | `@jump "Main"` |
+| `@dialogue` | 대사 출력 (화자 + 내용) | `@dialogue "Laura" "안녕하세요."` |
+| `@choice` | 선택지 표시 (옵션/레이블 쌍) | `@choice "Exit" "Finish" "Repeat" "Main"` |
+
+### 예시
+
+```
+@label "Main"
+@bg "WhiteRoom"
+@show "Laura" "Center" "Normal"
+@dialogue "Laura" "안녕하세요?"
+@hide "Laura"
+@choice "계속" "Next" "종료" "Finish"
+
+@label "Finish"
+@dialogue "Laura" "수고했어요."
+```
+
 ## 네이밍 규칙
 
 Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase를 사용합니다.
