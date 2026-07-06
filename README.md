@@ -55,10 +55,10 @@ Game/                          ← Git 저장소 루트
 - [x] **5단계 — 선택지 시스템**: 선택지 UI/입력/분기 구현 완료
 - [x] 6단계 — UI Foundation: 핵심 구현 완료, 세부 폴리싱 예정
 - [x] **7단계 — 세이브/로드**: NovelScene 상태 직렬화/복원 (JSON, nlohmann)
-- [x] **8단계 — 구조 변경**: Scene/SceneManager 폐기, Widget Tree 기반 아키텍처 전환 완료
+- [x] **구조 변경**: Scene/SceneManager 폐기, Widget Tree 기반 아키텍처 전환 완료
   - BringToFront(), 모든 컴포넌트 WidgetBase 상속, 파일 구조 정리
-- [ ] 9단계 — 메뉴 구성 (TitleScene, SaveLoadScene)
-- [ ] 10단계 — 연출 효과
+- [ ] **8단계 — 메뉴 구성** (TitleScene, SaveLoadScene)
+- [ ] 9단계 — 연출 효과
 
 ## 스크립트 문법
 
@@ -113,9 +113,9 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 
 ## 현재 상태
 
-- 1~8단계 빌드/테스트 확인 완료
-- 7단계(Save/Load), 8단계(구조 변경 — Widget Tree 전환) 구현 완료
-- 9~10단계는 예정
+- 1~7단계 + 구조 변경 빌드/테스트 확인 완료
+- 7단계(Save/Load), 구조 변경(Widget Tree 전환) 구현 완료
+- 8단계(메뉴 구성) 진행 중, 9단계(연출 효과)는 예정
 - 작업 기록과 설계 문서는 `Docs/`를 참고
 
 ## 라이선스

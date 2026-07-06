@@ -42,18 +42,18 @@ status: active
 - `Button` Focus 상태
 - `Button` Keyboard Activate 상태
 - `Button` 텍스트 정렬/서식
-- `TitleScene` / `ConfigScene` / `SaveLoadScene` 적용
+- `ConfigScene` 적용
 
 ## 7단계 — Save/Load
 
 - [x] `NovelScene` 상태 직렬화/복원
 - [x] `SaveManager` — SceneManager.Save()/Load()에 통합
-- [ ] `SaveLoadScene` — 저장/불러오기 UI 씬 (별도 작업 예정)
 
 ## 8단계 — Menu
 
-- `TitleScene`
-- `ConfigScene`
+- [ ] `TitleWindow` — New Game / Continue / Quit
+- [ ] `SaveLoadWindow` — 오버레이, 저장/불러오기 모드
+- [ ] `ConfigScene` — (추후)
 
 ## 9단계 — Effect
 

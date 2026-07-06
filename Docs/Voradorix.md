@@ -5,7 +5,7 @@ tags:
   - project
   - index
 status: active
-phase: 8 (Widget Tree 구조 변경 완료)
+phase: 8-Menu (메뉴 구성 진행 중)
 ---
 
 # Voradorix
@@ -16,7 +16,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - **기술**: C++17, SFML 3.1.0, Visual Studio 2022 x64
 - **GitHub**: https://github.com/DCode1119/Voradorix
-- **상태**: 8단계 구조 변경 완료 (Widget Tree 기반)
+- **상태**: 8단계 메뉴 구성 진행 중
 
 ## 구현 현황
 
@@ -58,19 +58,18 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
   - `Novel/CharacterManager.h/cpp` — `GetSaveData()` / `Reset()` 추가, `FVrdxCharacterSlotSaveData`
   - `Extern/nlohmann/json.hpp` — JSON 직렬화 (nlohmann/json v3.12.0)
   - `Saves/` — 저장 파일 디렉토리 (실행 경로 기준)
-- [x] **8단계 — 구조 변경** (Widget Tree 기반 아키텍처 전환 완료)
-  - [[8-StructureReform.md]] — 구조 변경 명세 및 진행 상태
+- [x] **구조 변경** (Widget Tree 기반 아키텍처 전환 완료, [[StructureReform.md]])
   - Scene/SceneManager/TestScene 전면 삭제
   - 모든 컴포넌트 `CVrdxWidgetBase` 상속으로 통일
   - `BringToFront()` 추가로 Z-Order 관리
   - 파일 구조 정리 (Novel 전용 / Ui 공통 분리)
-- [ ] **9단계 — 메뉴 구성** (예정, TitleScene / SaveLoadScene)
-- [ ] **10단계 — 연출 효과** (예정)
+- [ ] **8단계 — 메뉴 구성** (예정, TitleScene / SaveLoadScene)
+- [ ] **9단계 — 연출 효과** (예정)
 
 ## 추가 문서
 
 - [[6-UIFoundation.md]] — 공통 UI 위젯/컨테이너 계층 명세
-- [[8-StructureReform.md]] — Scene → Widget Tree 구조 변경 명세
+- [[StructureReform.md]] — Scene → Widget Tree 구조 변경 명세
 - [[PROJECT_STRUCTURE.md]] — opencode/Git 저장소 분리 구조
 - [[INCLUDE_CONVENTION.md]] — include 전처리문 규칙
 - [[BACKLOG.md]] — 단계별 보류/폴리싱 항목 관리
@@ -88,7 +87,8 @@ Unreal Engine 스타일: `C`/`T`/`E`/`I`/`F` 접두어 + `Vrdx` 프로젝트 접
 - [[5-ChoiceSystem.md]] — 5단계 선택지 시스템 명세
 - [[6-UIFoundation.md]] — 6단계 UI Foundation 명세
 - [[7-SaveLoad.md]] — 7단계 Save/Load 명세
-- [[8-StructureReform.md]] — 8단계 구조 변경 명세
+- [[8-Menu.md]] — 8단계 메뉴 구성 명세
+- [[StructureReform.md]] — 구조 변경 명세
 - [[String.md]] — FVrdxString 유니코드 문자열 명세
 - [[GAME_DESIGN.md]] — 전체 설계
 - [[NAMING.md]] — 네이밍 규칙 상세

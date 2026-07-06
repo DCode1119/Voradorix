@@ -235,7 +235,7 @@ tags:
 - `Game.vcxproj.filters` — 경로/필터 갱신, Scene 필터 및 잔여 참조 제거
 
 **신규 문서:**
-- `Docs/8-StructureReform.md` — 구조 변경 명세 및 진행 상태
+- `Docs/StructureReform.md` — 구조 변경 명세 및 진행 상태
 - `Docs/PROJECT_STRUCTURE.md` — opencode/Git 구조 설명
 
 ### 8단계 후속 — 이벤트 시스템 개선 및 Application 리팩터
