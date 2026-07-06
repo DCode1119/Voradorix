@@ -2,6 +2,7 @@
 
 // Project Headers
 #include "Novel/ScriptEngine.h"
+#include "Novel/NovelScene.h"
 #include "Ui/Application.h"
 
 int main()
@@ -11,20 +12,23 @@ int main()
         return -1;
     }
 
-    sf::RectangleShape Panel;
-    Panel.setSize({1280, 720});
-    Panel.setPosition({0, 0});
-    Panel.setFillColor(sf::Color::Transparent);
+    CVrdxApplication::VRDX_Initializer Initializer = [](TVrdxWeakPtr<CVrdxWidgetBase>& RootWidget)
+        {
+			sf::RectangleShape Shape(sf::Vector2f(1280, 720));
+			Shape.setFillColor(sf::Color::Transparent);
+			Shape.setOutlineColor(sf::Color::Transparent);
+			CVrdxWidgetBase::CreateWidget<CVrdxNovelScene>(RootWidget, Shape);
+        };
 
-    if (TVrdxSharedPtr<CVrdxApplication> Application = CVrdxWidgetBase::CreateWidget<CVrdxApplication>(TVrdxWeakPtr<CVrdxWidgetBase>{}, Panel))
-    {
-		Application->Run();
-		CVrdxWidgetBase::DestroyWidget(Application);
-    }
-    else
-    {
-        //Critical error
-    }
+    // Generate and initialize
+    TVrdxSharedPtr<CVrdxApplication> Application = MakeVrdxShared<CVrdxApplication>(sf::Vector2f(1280, 720));
+    Application->Initialize(VrdxMove(Initializer));
+
+    // Main loop
+	Application->Run();
+
+    // Destroy and exit
+	CVrdxWidgetBase::DestroyWidget(Application);
     
     return 0;
 }

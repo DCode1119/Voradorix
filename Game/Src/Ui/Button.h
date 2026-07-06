@@ -22,8 +22,8 @@ public:
 	virtual void OnPostCreate() override;
 	virtual void OnPreDestroy() override;
 	virtual void OnResized() override;
-	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
-	virtual void OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition) override;
+	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
+	virtual bool OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition) override;
 
 	void SetText(const FVrdxString& String);
 	void SetColors(const sf::Color& NormalColor, const sf::Color& PressedColor);

@@ -36,6 +36,7 @@ public:
 	virtual void OnPostCreate() override;
 	virtual void OnPreDestroy() override;
 	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
+	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode);
 
 	bool CanAdvance() const;
 
@@ -50,7 +51,9 @@ public:
 	void WaitForSeconds(const float Seconds);
 
 	FVrdxNovelSceneSaveData Save() const;
+	void Save(const FVrdxString& Filename) const;
 	void Load(const FVrdxNovelSceneSaveData& SaveData);
+	void Load(const FVrdxString& Filename);
 
 private:
 	void EndScenario();

@@ -20,8 +20,8 @@ public:
 	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
 	virtual void Draw(sf::RenderWindow& Window) const VRDX_OVERRIDE;
 
-	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) VRDX_OVERRIDE;
-	virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) VRDX_OVERRIDE;
+	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) VRDX_OVERRIDE;
+	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) VRDX_OVERRIDE;
 
 	// 대사 설정
 	void SetSpeaker(const FVrdxString& Name);

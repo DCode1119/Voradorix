@@ -238,6 +238,32 @@ tags:
 - `Docs/8-StructureReform.md` — 구조 변경 명세 및 진행 상태
 - `Docs/PROJECT_STRUCTURE.md` — opencode/Git 구조 설명
 
+### 8단계 후속 — 이벤트 시스템 개선 및 Application 리팩터
+
+**이벤트 훅 `void` → `bool` 반환 변경:**
+- `WidgetBase.h/cpp` — `OnMouseMove`, `OnMouseLeftButtonPressed/Released`, `OnMouseRightButtonPressed/Released`, `OnKeyboardPressed/Released` 모두 `bool` 반환으로 변경
+- `HandleEvent()`가 각 훅의 반환값을 그대로 전파 (true=소비, false=통과)
+- 마우스 이벤트에서 버튼 미매칭 시 false 반환 (이전에는 무조건 true)
+- `ChoiceWidget`, `DialogueBox`, `Button` — 각자의 이벤트 훅 `bool` 반환으로 일괄 변경
+
+**Application 재구성:**
+- `OnPostCreate()` 제거 → `Initialize(VRDX_Initializer&&)` 콜백 패턴 도입
+- `Save()/Load()` 메서드 제거 → NovelScene으로 이관
+- `Draw()` override 제거 (WidgetBase 기본 Draw 사용, clear/display는 Run 내부)
+- 편의 생성자 `CVrdxApplication(const sf::Vector2f& Size)` 추가
+- 생성자에 try/catch (Window 생성 실패 시 bIsRunning = false)
+- 중복 초기화 방지 `bInitialized` 플래그 추가
+- 이전 `#if 0` 처리된 Save/Load/Keyboard 핸들링 정리
+
+**NovelScene — Save/Load 직접 처리:**
+- `OnKeyboardPressed` override — Ctrl+S/Ctrl+L 감지
+- `Save(const FVrdxString& Filename)` — 파일 I/O 버전 (기존 `Save()` 호출 후 파일 쓰기)
+- `Load(const FVrdxString& Filename)` — 파일 I/O 버전 (파일 읽기 후 기존 `Load(SaveData)` 호출)
+
+**Main.cpp:**
+- `CreateWidget<CVrdxApplication>` → `MakeVrdxShared<CVrdxApplication>(sf::Vector2f(1280,720))` + `Initialize(Initializer)` 패턴
+- `NovelScene` 생성 람다를 `VRDX_Initializer` 콜백으로 전달
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (10단계)

@@ -128,27 +128,33 @@ bool CVrdxChoiceWidget::IsWaiting() const
 	return ChoiceState == EVrdxChoiceState::Waiting;
 }
 
-void CVrdxChoiceWidget::OnMouseMove(const sf::Vector2f& LocalPosition)
+bool CVrdxChoiceWidget::OnMouseMove(const sf::Vector2f& LocalPosition)
 {
 	int32_t Index = GetHoveredButtonIndex(MapToGlobal(LocalPosition));
 	if (Index < 0 || SelectedIndex == Index)
 	{
-		return;
+		return false;
 	}
 
 	SelectedIndex = Index;
 	bInvalidated = true;
+
+	// Pass the move event
+	return false;
 }
 
-void CVrdxChoiceWidget::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
+bool CVrdxChoiceWidget::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
 {
 	if (GetHoveredButtonIndex(MapToGlobal(LocalPosition)) != -1)
 	{
 		ConfirmSelection();
+		return true;
 	}
+
+	return false;
 }
 
-void CVrdxChoiceWidget::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
+bool CVrdxChoiceWidget::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
 {
 	enum class EInputCommmand { None, Previous, Next, Confirm, };
 	EInputCommmand InputCommand = EInputCommmand::None;
@@ -183,7 +189,12 @@ void CVrdxChoiceWidget::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
 	case EInputCommmand::Confirm:
 		ConfirmSelection();
 		break;
+
+	default:
+		return false;
 	}
+
+	return true;
 }
 
 void CVrdxChoiceWidget::MoveSelection(int32_t Delta)

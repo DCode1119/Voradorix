@@ -2,6 +2,13 @@
 
 #include "Novel/NovelScene.h"
 
+// C++ Standard Library
+//#include <algorithm>
+#include <filesystem>
+#include <fstream>
+//#include <ranges>
+#include <sstream>
+
 // Third-party Library
 #include <nlohmann/json.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -96,9 +103,25 @@ void CVrdxNovelScene::Update(const float DeltaTick)
 		RemainingWaitSeconds = std::max(0.f, RemainingWaitSeconds - DeltaTick);
 	}
 
-
 	// Propagate update tick.
 	CVrdxWidgetBase::Update(DeltaTick);
+}
+
+
+bool CVrdxNovelScene::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
+{
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl))
+	{
+		return false;
+	}
+
+	switch (ScanCode)
+	{
+	case sf::Keyboard::Scan::S: Save("Save0.dat"); return true; break;
+	case sf::Keyboard::Scan::L: Load("Save0.dat"); return true; break;
+	}
+
+	return false;
 }
 
 bool CVrdxNovelScene::CanAdvance() const
@@ -158,6 +181,22 @@ FVrdxNovelSceneSaveData CVrdxNovelScene::Save() const
 		};
 }
 
+
+void CVrdxNovelScene::Save(const FVrdxString& Filename) const
+{
+	TVrdxSharedPtr<const CVrdxNovelScene> NovelScene;
+	FVrdxNovelSceneSaveData SaveData = Save();
+	FVrdxString String = SaveData.ToJson();
+
+	//Write into "Saves/Save0.dat" from String.
+	std::filesystem::create_directories("Saves");
+	std::ofstream File("Saves" + Filename.ToUtf8());
+	if (File.is_open())
+	{
+		File << String.ToUtf8();
+	}
+}
+
 void CVrdxNovelScene::Load(const FVrdxNovelSceneSaveData& SaveData)
 {
 	if (!ScriptEngine.LoadScript(SaveData.ScriptPath))
@@ -174,6 +213,25 @@ void CVrdxNovelScene::Load(const FVrdxNovelSceneSaveData& SaveData)
 	}
 
 	ScriptEngine.JumpToLine(SaveData.CurrentLine);
+}
+
+
+void CVrdxNovelScene::Load(const FVrdxString& Filename)
+{
+	//Read from "Saves/Save0.dat" into String.
+	FVrdxString String;
+	std::ifstream File("Saves/Save0.dat");
+	if (File.is_open())
+	{
+		std::stringstream Buffer;
+		Buffer << File.rdbuf();
+		String = Buffer.str();
+
+		FVrdxNovelSceneSaveData SaveData;
+		SaveData.FromJson(String);
+
+		Load(SaveData);
+	}
 }
 
 void CVrdxNovelScene::EndScenario()

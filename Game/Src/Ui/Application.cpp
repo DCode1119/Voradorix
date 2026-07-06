@@ -2,48 +2,70 @@
 
 #include "Ui/Application.h"
 
-// C++ Standard Library
-#include <algorithm>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-
 // Project Headers
-#include "Novel/NovelScene.h"
+#include "Ui/WidgetBase.h"
 
 CVrdxApplication::CVrdxApplication(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxWidgetBase(ParentWidget, InShape)
-	, bCtrl(false)
 {
-	Window.create(sf::VideoMode(sf::Vector2u(InShape.getSize())), "Voradorix");
-	Window.setVerticalSyncEnabled(true);
-	Window.setFramerateLimit(60);
+	try
+	{
+		Window.create(sf::VideoMode(sf::Vector2u(InShape.getSize())), "Voradorix");
+		Window.setVerticalSyncEnabled(true);
+		Window.setFramerateLimit(60);
+	}
+	catch (std::exception&)
+	{
+		// Window creation failed; todo: make it notified.
+		bIsRunning = false;
+	}
+
+	// bCtrl = false;
 }
 
-CVrdxApplication::~CVrdxApplication()
+
+CVrdxApplication::CVrdxApplication(const sf::Vector2f& Size)
+	: CVrdxApplication(TVrdxWeakPtr<CVrdxWidgetBase>{}, sf::RectangleShape(Size))
 {
 
 }
 
 void CVrdxApplication::Run()
 {
+	if (!bInitialized)
+	{
+		// notify error
+		return;
+	}
+
 	while (bIsRunning && Window.isOpen())
 	{
+		Window.clear(sf::Color::Black);
+
 		float DeltaTick = Clock.restart().asSeconds();
 		HandleEvents();
 		Update(DeltaTick);
 		Draw(Window);
+
+		Window.display();
 	}
 }
 
-void CVrdxApplication::OnPostCreate()
+void CVrdxApplication::Initialize(VRDX_Initializer&& Callback)
 {
-	auto Panel = Shape;
-	Panel.setFillColor(sf::Color::Transparent);
-	Panel.setOutlineColor(sf::Color::Transparent);
-	CVrdxWidgetBase::CreateWidget<CVrdxNovelScene>(shared_from_this(), Panel);
+	if (bInitialized)
+	{
+		// Display double initialization and do nothing.
+		return;
+	}
 
-	bIsRunning = true;
+	if (Callback)
+	{
+		TVrdxWeakPtr<CVrdxWidgetBase> WeakThis = shared_from_this();
+		Callback(WeakThis);
+	}
+
+	bInitialized = true;
 }
 
 void CVrdxApplication::HandleEvents()
@@ -58,6 +80,7 @@ void CVrdxApplication::HandleEvents()
 
 		CVrdxWidgetBase::HandleEvent(Event);
 
+#if 0
 		if (const auto* Key = Event.getIf<sf::Event::KeyPressed>())
 		{
 			switch (Key->scancode)
@@ -75,74 +98,6 @@ void CVrdxApplication::HandleEvents()
 				bCtrl = false;
 			}
 		}
-	}
-}
-
-void CVrdxApplication::Draw(sf::RenderWindow& RenderWindow) const
-{
-	RenderWindow.clear(sf::Color::Black);
-	CVrdxWidgetBase::Draw(RenderWindow);
-	RenderWindow.display();
-}
-
-void CVrdxApplication::Save() const
-{
-	TVrdxSharedPtr<const CVrdxNovelScene> NovelScene;
-	for (const auto Child : Children)
-	{
-		NovelScene = dynamic_pointer_cast<const CVrdxNovelScene>(Child);
-		if (NovelScene)
-		{
-			break;
-		}
-	}
-
-	if (!NovelScene)
-	{
-		return;
-	}
-
-	FVrdxNovelSceneSaveData SaveData = NovelScene->Save();
-	FVrdxString String = SaveData.ToJson();
-
-	//Write into "Saves/Save0.dat" from String.
-	std::filesystem::create_directories("Saves");
-	std::ofstream File("Saves/Save0.dat");
-	if (File.is_open())
-	{
-		File << String.ToUtf8();
-	}
-}
-
-void CVrdxApplication::Load()
-{
-	TVrdxSharedPtr<CVrdxNovelScene> NovelScene;
-	for (auto Child : Children)
-	{
-		NovelScene = dynamic_pointer_cast<CVrdxNovelScene>(Child);
-		if (NovelScene)
-		{
-			break;
-		}
-	}
-
-	if (!NovelScene)
-	{
-		return;
-	}
-
-	//Read from "Saves/Save0.dat" into String.
-	FVrdxString String;
-	std::ifstream File("Saves/Save0.dat");
-	if (File.is_open())
-	{
-		std::stringstream Buffer;
-		Buffer << File.rdbuf();
-		String = Buffer.str();
-
-		FVrdxNovelSceneSaveData SaveData;
-		SaveData.FromJson(String);
-
-		NovelScene->Load(SaveData);
+#endif
 	}
 }

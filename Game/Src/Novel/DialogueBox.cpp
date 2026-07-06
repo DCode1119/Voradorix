@@ -64,12 +64,14 @@ void CVrdxDialogueBox::Draw(sf::RenderWindow& Window) const
 	}
 }
 
-void CVrdxDialogueBox::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
+bool CVrdxDialogueBox::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
 {
 	AdvanceProcess();
+
+	return true;
 }
 
-void CVrdxDialogueBox::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
+bool CVrdxDialogueBox::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
 {
 	static TVrdxVector<sf::Keyboard::Scan> ScanKeys =
 	{
@@ -80,7 +82,10 @@ void CVrdxDialogueBox::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
 	if (ScanKeys.Contains(ScanCode))
 	{
 		AdvanceProcess();
+		return true;
 	}
+
+	return false;
 }
 
 void CVrdxDialogueBox::SetSpeaker(const FVrdxString& Name)

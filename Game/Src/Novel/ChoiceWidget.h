@@ -43,9 +43,9 @@ public:
 
 	bool IsWaiting() const;
 
-	virtual void OnMouseMove(const sf::Vector2f& LocalPosition) override;
-	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
-	virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) override;
+	virtual bool OnMouseMove(const sf::Vector2f& LocalPosition) override;
+	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
+	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) override;
 
 private:
 	void MoveSelection(int32_t Delta);

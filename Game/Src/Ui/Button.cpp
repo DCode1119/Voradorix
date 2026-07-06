@@ -45,14 +45,16 @@ void CVrdxButton::OnResized()
 	Text->GetShape().setSize(Size);
 }
 
-void CVrdxButton::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
+bool CVrdxButton::OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition)
 {
 	SetCapture(true);
 	Normal->SetVisibility(false);
 	Pressed->SetVisibility(true);
+
+	return true;
 }
 
-void CVrdxButton::OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition)
+bool CVrdxButton::OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition)
 {
 	SetCapture(false);
 	Normal->SetVisibility(true);
@@ -62,6 +64,8 @@ void CVrdxButton::OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition)
 	{
 		Callback();
 	}
+
+	return true;
 }
 
 void CVrdxButton::SetText(const FVrdxString& String)

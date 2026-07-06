@@ -54,14 +54,12 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 
 	if (const auto* Event = InEvent.getIf<sf::Event::KeyPressed>())
 	{
-		OnKeyboardPressed(Event->scancode);
-		return true;
+		return OnKeyboardPressed(Event->scancode);
 	}
 
 	if (const auto* Event = InEvent.getIf<sf::Event::KeyReleased>())
 	{
-		OnKeyboardReleased(Event->scancode);
-		return true;
+		return OnKeyboardReleased(Event->scancode);
 	}
 	
 	if (const auto* Event = InEvent.getIf<sf::Event::MouseButtonPressed>())
@@ -75,18 +73,14 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 
 		if (Event->button == sf::Mouse::Button::Left)
 		{
-			OnMouseLeftButtonPressed(LocalPosition);
+			return OnMouseLeftButtonPressed(LocalPosition);
 		}
 		else if (Event->button == sf::Mouse::Button::Right)
 		{
-			OnMouseRightButtonPressed(LocalPosition);
-		}
-		else
-		{
-			return false;
+			return OnMouseRightButtonPressed(LocalPosition);
 		}
 
-		return true;
+		return false;
 	}
 
 	if (const auto* Event = InEvent.getIf<sf::Event::MouseButtonReleased>())
@@ -100,18 +94,14 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 
 		if (Event->button == sf::Mouse::Button::Left)
 		{
-			OnMouseLeftButtonReleased(LocalPosition);
+			return OnMouseLeftButtonReleased(LocalPosition);
 		}
 		else if (Event->button == sf::Mouse::Button::Right)
 		{
-			OnMouseRightButtonReleased(LocalPosition);
+			return OnMouseRightButtonReleased(LocalPosition);
 		}
-		else
-		{
-			return false;
-		}
-
-		return true;
+		
+		return false;
 	}
 
 	if (const auto Event = InEvent.getIf<sf::Event::MouseMoved>())
@@ -123,8 +113,7 @@ bool CVrdxWidgetBase::HandleEvent(const sf::Event& InEvent)
 			return false;
 		}
 
-		OnMouseMove(LocalPosition);
-		return true;
+		return OnMouseMove(LocalPosition);
 	}
 
 	return false;

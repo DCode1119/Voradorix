@@ -38,14 +38,14 @@ public:
 
 	virtual void OnResized() {}
 
-	// Will be called HandleEvent
-	virtual void OnMouseMove(const sf::Vector2f& LocalPosition) {}
-	virtual void OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) {}
-	virtual void OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition) {}
-	virtual void OnMouseRightButtonPressed(const sf::Vector2f& LocalPosition) {}
-	virtual void OnMouseRightButtonReleased(const sf::Vector2f& LocalPosition) {}
-	virtual void OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) {}
-	virtual void OnKeyboardReleased(const sf::Keyboard::Scancode ScanCode) {}
+	// Will be called HandleEvent. return true to consume the event.
+	virtual bool OnMouseMove(const sf::Vector2f& LocalPosition) { return false; }
+	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) { return false; }
+	virtual bool OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition) { return false; }
+	virtual bool OnMouseRightButtonPressed(const sf::Vector2f& LocalPosition) { return false; }
+	virtual bool OnMouseRightButtonReleased(const sf::Vector2f& LocalPosition) { return false; }
+	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) { return false; }
+	virtual bool OnKeyboardReleased(const sf::Keyboard::Scancode ScanCode) { return false; }
 
 	sf::Vector2f MapToGlobal(const sf::Vector2f& Local) const;
 	sf::FloatRect MapToGlobal(const sf::FloatRect& Local) const;
