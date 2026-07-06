@@ -35,7 +35,7 @@ public:
 
 	virtual void OnPostCreate() override;
 	virtual void OnPreDestroy() override;
-	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
+	virtual void Update(const float DeltaTick) override;
 	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode);
 
 	bool CanAdvance() const;

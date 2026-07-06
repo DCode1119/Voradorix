@@ -62,12 +62,12 @@ private:
 
 ### 동작
 
-| 액션 | 처리 |
-|-------|--------|
+| 액션           | 처리                                                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------- |
 | **New Game** | NovelScene이 없으면 `MakeVrdxShared<CVrdxNovelScene>(GetThisPtr(), ...)` 후 `BringToFront()`. 있으면 리셋 후 `BringToFront()`. |
-| **Continue** | `MakeVrdxShared<CVrdxSaveLoadWindow>(GetThisPtr(), ...)` → `SetMode(false)` — 로드 모드 오버레이 |
-| **Quit** | `CVrdxApplication::Quit()` 또는 `bIsRunning = false` |
-| **ESC** | (타이틀에서는 무시 또는 종료 확인) |
+| **Continue** | `MakeVrdxShared<CVrdxSaveLoadWindow>(GetThisPtr(), ...)` → `SetMode(false)` — 로드 모드 오버레이                            |
+| **Quit**     | `CVrdxApplication::Quit()` 또는 `bIsRunning = false`                                                                  |
+| **ESC**      | (타이틀에서는 무시 또는 종료 확인)                                                                                                |
 
 ### 렌더링 순서
 

@@ -32,7 +32,7 @@ public:
 	CVrdxChoiceWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 
 	//CVrdxChoiceWidget();
-	//~CVrdxChoiceWidget() VRDX_DEFAULT;
+	//~CVrdxChoiceWidget() = default;
 
 	void SetNovelScene(TVrdxSharedPtr<CVrdxNovelScene> NovelScene);
 	void SetChoices(const TVrdxVector<FVrdxChoiceOption>& Choices);

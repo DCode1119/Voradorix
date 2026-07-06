@@ -26,7 +26,7 @@ public:
 
 	CVrdxWidgetBase(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 
-	virtual ~CVrdxWidgetBase() VRDX_DEFAULT;
+	virtual ~CVrdxWidgetBase() = default;
 
 	virtual bool HandleEvent(const sf::Event& Event);
 	virtual void Update(const float DeltaTick);

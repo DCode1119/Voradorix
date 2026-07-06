@@ -55,7 +55,7 @@ class CVrdxCharacterManager : public CVrdxWidgetBase
 {
 public:
 	CVrdxCharacterManager(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
-	~CVrdxCharacterManager() VRDX_DEFAULT;
+	~CVrdxCharacterManager() = default;
 
 	void ShowCharacter(const FVrdxString& CharacterName, EVrdxCharacterPosition Position, const FVrdxString& PoseName = "Normal");
 	void SetCharacterPose(const FVrdxString& CharacterName, const FVrdxString& PoseName, float FadeSeconds = 0.25f);

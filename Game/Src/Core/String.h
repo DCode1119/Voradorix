@@ -24,23 +24,23 @@ public:
 	FVrdxString(const std::string& Utf8Str);
 	explicit FVrdxString(const sf::String& SfStr);
 
-	VRDX_NO_DISCARD std::string ToUtf8() const;
-	VRDX_NO_DISCARD const char* ToCStr() const;
+	[[nodiscard]] std::string ToUtf8() const;
+	[[nodiscard]] const char* ToCStr() const;
 
-	VRDX_NO_DISCARD sf::String ToSfString() const;
+	[[nodiscard]] sf::String ToSfString() const;
 
-	VRDX_NO_DISCARD size_t Length() const { return Buffer.size(); }
-	VRDX_NO_DISCARD bool IsEmpty() const { return Buffer.empty(); }
+	[[nodiscard]] size_t Length() const { return Buffer.size(); }
+	[[nodiscard]] bool IsEmpty() const { return Buffer.empty(); }
 
-	VRDX_NO_DISCARD FVrdxString Left(const size_t Count) const;
-	VRDX_NO_DISCARD FVrdxString Right(const size_t Offset) const;
-	VRDX_NO_DISCARD FVrdxString Substr(const size_t Offset, const size_t Count = npos) const;
+	[[nodiscard]] FVrdxString Left(const size_t Count) const;
+	[[nodiscard]] FVrdxString Right(const size_t Offset) const;
+	[[nodiscard]] FVrdxString Substr(const size_t Offset, const size_t Count = npos) const;
 
-	VRDX_NO_DISCARD char32_t operator[](const size_t Index) const;
-	VRDX_NO_DISCARD char32_t CodePointAt(const size_t Index) const;
+	[[nodiscard]] char32_t operator[](const size_t Index) const;
+	[[nodiscard]] char32_t CodePointAt(const size_t Index) const;
 
-	VRDX_NO_DISCARD char32_t Front() const;
-	VRDX_NO_DISCARD char32_t Back() const;
+	[[nodiscard]] char32_t Front() const;
+	[[nodiscard]] char32_t Back() const;
 
 	FVrdxString operator+(const FVrdxString& Other) const;
 	FVrdxString& operator+=(const FVrdxString& Other);

@@ -27,7 +27,7 @@ class CVrdxNovelScene;
 
 struct FVrdxScriptLine
 {
-	virtual ~FVrdxScriptLine() VRDX_DEFAULT;
+	virtual ~FVrdxScriptLine() = default;
 	static TVrdxSharedPtr<FVrdxScriptLine> ParseScriptLine(const std::string& Line);
 	static bool Test();
 	virtual bool Construct() { return false; }

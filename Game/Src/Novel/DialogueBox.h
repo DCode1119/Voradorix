@@ -14,14 +14,14 @@ class CVrdxDialogueBox : public CVrdxWidgetBase
 {
 public:
 	CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
-	virtual ~CVrdxDialogueBox() VRDX_DEFAULT;
+	virtual ~CVrdxDialogueBox() = default;
 
 	// CVrdxBaseWidget 인터페이스
-	virtual void Update(const float DeltaTick) VRDX_OVERRIDE;
-	virtual void Draw(sf::RenderWindow& Window) const VRDX_OVERRIDE;
+	virtual void Update(const float DeltaTick) override;
+	virtual void Draw(sf::RenderWindow& Window) const override;
 
-	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) VRDX_OVERRIDE;
-	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) VRDX_OVERRIDE;
+	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
+	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) override;
 
 	// 대사 설정
 	void SetSpeaker(const FVrdxString& Name);

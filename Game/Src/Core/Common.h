@@ -50,13 +50,3 @@ TVrdxSharedPtr<ElementType> MakeVrdxShared(ArgTypes&&... Args)
 {
 	return std::make_shared<ElementType>(std::forward<ArgTypes>(Args)...);
 }
-
-// ----------------------------------------------------------------------------
-// C++ Syntax Macros
-// ----------------------------------------------------------------------------
-#define VRDX_DEFAULT        = default
-#define VRDX_PURE_VIRTUAL   = 0
-#define VRDX_NO_COPY        = delete
-#define VRDX_NO_DISCARD     [[nodiscard]]
-#define VRDX_OVERRIDE       override
-#define VRDX_FINAL          final
