@@ -19,8 +19,6 @@ CVrdxApplication::CVrdxApplication(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWid
 		// Window creation failed; todo: make it notified.
 		bIsRunning = false;
 	}
-
-	// bCtrl = false;
 }
 
 
@@ -79,25 +77,5 @@ void CVrdxApplication::HandleEvents()
 		}
 
 		CVrdxWidgetBase::HandleEvent(Event);
-
-#if 0
-		if (const auto* Key = Event.getIf<sf::Event::KeyPressed>())
-		{
-			switch (Key->scancode)
-			{
-				case sf::Keyboard::Scan::LControl: bCtrl = true; break;
-				case sf::Keyboard::Scan::S: if (bCtrl) { Save(); } break;
-				case sf::Keyboard::Scan::L: if (bCtrl) { Load(); } break;
-			}
-		}
-
-		if (const auto* Key = Event.getIf<sf::Event::KeyReleased>())
-		{
-			if (Key->scancode == sf::Keyboard::Scan::LControl)
-			{
-				bCtrl = false;
-			}
-		}
-#endif
 	}
 }

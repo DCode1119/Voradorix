@@ -37,6 +37,4 @@ private:
 	sf::Clock Clock;
 	bool bIsRunning = true;
 	bool bInitialized = false;
-
-	//bool bCtrl = false;
 };
