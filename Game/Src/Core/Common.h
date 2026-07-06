@@ -4,6 +4,8 @@
 // C++ Standard Library
 #include <memory>
 #include <type_traits>
+#include <functional>
+#include "Vector.h"
 
 // ============================================================================
 // Voradorix Naming Convention Types (Unreal Engine Style)
@@ -50,3 +52,44 @@ TVrdxSharedPtr<ElementType> MakeVrdxShared(ArgTypes&&... Args)
 {
 	return std::make_shared<ElementType>(std::forward<ArgTypes>(Args)...);
 }
+
+template<typename... ParamTypes>
+class TVrdxMulticastDelegate
+{
+public:
+	using FDelegate = std::function<void(ParamTypes...)>;
+
+	void Add(FDelegate&& Callback)
+	{
+		Delegates.Add(std::move(Callback));
+	}
+
+	template<typename TClass>
+	void Bind(TVrdxSharedPtr<TClass> Object, void (TClass::* Method)(ParamTypes...))
+	{
+		TVrdxWeakPtr<TClass> WeakObject = Object;
+		Add([WeakObject, Method](ParamTypes... Args)
+			{
+				if (auto Object = WeakObject.lock())
+				{
+					(Object.get()->*Method)(std::forward<ParamTypes>(Args)...);
+				}
+			});
+	}
+
+	void Broadcast(ParamTypes... Args)
+	{
+		for (auto& Delegate : Delegates)
+		{
+			if (Delegate)
+			{
+				Delegate(Args...);
+			}
+		}
+	}
+
+	void Clear() { Delegates.Clear(); }
+
+private:
+	TVrdxVector<FDelegate> Delegates;
+};

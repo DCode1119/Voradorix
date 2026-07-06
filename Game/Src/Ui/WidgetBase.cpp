@@ -165,7 +165,9 @@ void CVrdxWidgetBase::Draw(sf::RenderWindow& Window) const
 		return;
 	}
 
-	Window.draw(Shape);
+	sf::RectangleShape DrawShape = Shape;
+	DrawShape.setPosition(MapToGlobal({0,0}));
+	Window.draw(DrawShape);
 
 	for (auto& Child : Children)
 	{

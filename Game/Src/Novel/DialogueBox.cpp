@@ -25,11 +25,11 @@ CVrdxDialogueBox::CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWid
 	{
 		SpeakerText.setCharacterSize(24);
 		SpeakerText.setFillColor(sf::Color::White);
-		SpeakerText.setPosition(sf::Vector2f(60.f, 510.f));
+		SpeakerText.setPosition(sf::Vector2f(MapToGlobal({20, 10})));
 
 		LineText.setCharacterSize(20);
 		LineText.setFillColor(sf::Color(220, 220, 220));
-		LineText.setPosition(sf::Vector2f(60.f, 550.f));
+		LineText.setPosition(sf::Vector2f(MapToGlobal({20, 50})));
 	}
 }
 
@@ -55,6 +55,11 @@ void CVrdxDialogueBox::Update(const float DeltaTick)
 
 void CVrdxDialogueBox::Draw(sf::RenderWindow& Window) const
 {
+	if (!IsDrawable())
+	{
+		return;
+	}
+
 	CVrdxWidgetBase::Draw(Window);
 
 	if (bFontLoaded)

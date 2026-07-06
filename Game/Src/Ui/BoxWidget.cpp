@@ -13,7 +13,7 @@ CVrdxBoxWidget::CVrdxBoxWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget,
 	: CVrdxWidgetBase(ParentWidget, InShape)
 	, TransparentTexture(std::make_shared<sf::Texture>(CreateTransparentTexture()))
 	, Texture(TransparentTexture)
-	, Sprite(*Texture)
+	, Sprite(*TransparentTexture)
 	, bTextureSet {false}
 {
 	

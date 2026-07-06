@@ -19,6 +19,7 @@ class CVrdxButton: public CVrdxBoxWidget
 public:
 	CVrdxButton(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape);
 	
+	virtual void Update(const float DeltaTick) override;
 	virtual void OnPostCreate() override;
 	virtual void OnPreDestroy() override;
 	virtual void OnResized() override;
@@ -26,15 +27,19 @@ public:
 	virtual bool OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition) override;
 
 	void SetText(const FVrdxString& String);
+	void SetFontColors(const sf::Color& NormalColor, const sf::Color& PressedColor);
 	void SetColors(const sf::Color& NormalColor, const sf::Color& PressedColor);
 	void SetLineColors(const sf::Color& NormalColor, const sf::Color& PressedColor);
-	
-	void SetCallback(std::function<void()>&& InCallback) { Callback = std::move(InCallback); }
+
+	TVrdxMulticastDelegate<>& GetOnClicked() { return OnClicked; }
 
 private:
 	TVrdxSharedPtr<CVrdxBoxWidget> Normal;
 	TVrdxSharedPtr<CVrdxBoxWidget> Pressed;
 	TVrdxSharedPtr<CVrdxTextLabel> Text;
 
-	std::function<void()> Callback;
+	sf::Color NormalFontColor;
+	sf::Color PressedFontColor;
+
+	TVrdxMulticastDelegate<> OnClicked;
 };

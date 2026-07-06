@@ -14,12 +14,12 @@ CVrdxTextLabel::CVrdxTextLabel(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget,
 
 	Text.setCharacterSize(24);
 	Text.setFillColor(sf::Color::White);
-	Text.setPosition(MapToGlobal({0, 0}));
+	Text.setPosition(MapToGlobal(Shape.getPosition()));
 }
 
 void CVrdxTextLabel::OnResized()
 {
-	Text.setPosition(MapToGlobal({ 0, 0 }));
+	Text.setPosition(MapToGlobal(Shape.getPosition()));
 }
 
 void CVrdxTextLabel::Draw(sf::RenderWindow& Window) const

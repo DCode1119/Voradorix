@@ -12,15 +12,25 @@ CVrdxButton::CVrdxButton(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const
 	
 }
 
+
+void CVrdxButton::Update(const float DeltaTick)
+{
+	Text->SetFontColor(Normal->GetVisibility() ? NormalFontColor : PressedFontColor);
+}
+
 void CVrdxButton::OnPostCreate()
 {
+	Shape.setFillColor(sf::Color::Transparent);
+
 	sf::RectangleShape ButtonShape = Shape;
-	ButtonShape.setPosition({0,0});
+	ButtonShape.setPosition({0, 0});
+	ButtonShape.setOutlineThickness(1.0f);
 	Normal = CVrdxWidgetBase::CreateWidget<CVrdxBoxWidget>(shared_from_this(), ButtonShape);
 	Pressed = CVrdxWidgetBase::CreateWidget<CVrdxBoxWidget>(shared_from_this(), ButtonShape);
 	Pressed->SetVisibility(false);
 
 	sf::RectangleShape TextShape = ButtonShape;
+	TextShape.setPosition({ 0,0 });
 	TextShape.setFillColor(sf::Color::Transparent);
 	TextShape.setOutlineColor(sf::Color::Transparent);
 	Text = CVrdxWidgetBase::CreateWidget<CVrdxTextLabel>(shared_from_this(), TextShape);
@@ -60,9 +70,9 @@ bool CVrdxButton::OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition)
 	Normal->SetVisibility(true);
 	Pressed->SetVisibility(false);
 
-	if (Callback && ContainsInLocal(LocalPosition))
+	if (ContainsInLocal(LocalPosition))
 	{
-		Callback();
+		OnClicked.Broadcast();
 	}
 
 	return true;
@@ -71,6 +81,13 @@ bool CVrdxButton::OnMouseLeftButtonReleased(const sf::Vector2f& LocalPosition)
 void CVrdxButton::SetText(const FVrdxString& String)
 {
 	Text->SetText(String);
+}
+
+void CVrdxButton::SetFontColors(const sf::Color& NormalColor, const sf::Color& PressedColor)
+{
+	NormalFontColor = NormalColor;
+	PressedFontColor = PressedColor;
+	Text->SetFontColor(Normal->GetVisibility() ? NormalColor : PressedColor);
 }
 
 void CVrdxButton::SetColors(const sf::Color& NormalColor, const sf::Color& PressedColor)

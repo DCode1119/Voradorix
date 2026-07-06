@@ -22,8 +22,8 @@ private:
 	sf::Texture CreateTransparentTexture();
 	void UpdateSpriteGeometry();
 
-	bool bTextureSet = false;
-	sf::Sprite Sprite;
-	TVrdxSharedPtr<sf::Texture> Texture;
 	TVrdxSharedPtr<sf::Texture> TransparentTexture;
+	TVrdxSharedPtr<sf::Texture> Texture;
+	sf::Sprite Sprite;
+	bool bTextureSet = false;
 };

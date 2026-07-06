@@ -4,6 +4,7 @@
 #include "Novel/ScriptEngine.h"
 #include "Novel/NovelScene.h"
 #include "Ui/Application.h"
+#include "Novel/TitleWindow.h"
 
 int main()
 {
@@ -17,7 +18,15 @@ int main()
 			sf::RectangleShape Shape(sf::Vector2f(1280, 720));
 			Shape.setFillColor(sf::Color::Transparent);
 			Shape.setOutlineColor(sf::Color::Transparent);
-			CVrdxWidgetBase::CreateWidget<CVrdxNovelScene>(RootWidget, Shape);
+			auto NovelWindow = CVrdxWidgetBase::CreateWidget<CVrdxNovelScene>(RootWidget, Shape);
+
+            Shape.setFillColor(sf::Color::Black);
+            auto TitleWindow = CVrdxWidgetBase::CreateWidget<CVrdxTitleWindow>(RootWidget, Shape);
+            TitleWindow->GetRequestNewGame().Add([NovelWindow, TitleWindow]()
+                {
+                    TitleWindow->SetVisibility(false);
+                    NovelWindow->BringToFront();
+                });
         };
 
     // Generate and initialize
