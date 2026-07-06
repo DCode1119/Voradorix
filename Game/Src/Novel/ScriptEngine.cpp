@@ -11,9 +11,11 @@ void CVrdxScriptEngine::SetNovelScene(TVrdxSharedPtr<CVrdxNovelScene> NovelScene
 	WeakNovelScene = NovelScene;
 }
 
-bool CVrdxScriptEngine::LoadScript(const FVrdxString& ScriptPath)
+bool CVrdxScriptEngine::LoadScript(const FVrdxString& InScriptPath)
 {
 	Reset();
+
+	ScriptPath = InScriptPath;
 
 	std::ifstream FileStream(ScriptPath.ToUtf8());
 	if (!FileStream)
@@ -73,6 +75,23 @@ void CVrdxScriptEngine::JumpToLabel(const FVrdxString& TargetLabelName)
 	if (Labels.find(TargetLabelName) != Labels.end())
 	{
 		CurrentScriptLine = Labels[TargetLabelName];
+	}
+}
+
+void CVrdxScriptEngine::JumpToLine(const int32_t TargetLine)
+{
+	auto NovelScene = WeakNovelScene.lock();
+	if (!(NovelScene && TargetLine < ScriptLines.Num()))
+	{
+		return;
+	}
+
+	CurrentScriptLine = TargetLine;
+
+	if (const auto CurrentLine = ScriptLines[CurrentScriptLine++])
+	{
+		//Assume as loaded line indicates pending input.
+		CurrentLine->Dispatch(NovelScene);
 	}
 }
 

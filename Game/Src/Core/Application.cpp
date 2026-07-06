@@ -7,6 +7,7 @@ TVrdxSharedPtr<CVrdxWidgetBase> CVrdxApplication::Instance;
 
 CVrdxApplication::CVrdxApplication(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxWidgetBase(ParentWidget, InShape)
+	, bCtrl(false)
 {
 	Window.create(sf::VideoMode(sf::Vector2u(InShape.getSize())), "Voradorix");
 	Window.setVerticalSyncEnabled(true);
@@ -15,7 +16,7 @@ CVrdxApplication::CVrdxApplication(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWid
 
 CVrdxApplication::~CVrdxApplication()
 {
-	
+
 }
 
 TVrdxWeakPtr<CVrdxWidgetBase> CVrdxApplication::GetRootWidget()
@@ -66,6 +67,24 @@ void CVrdxApplication::HandleEvents()
 
 		SceneManager.HandleEvent(Event);
 		CVrdxWidgetBase::HandleEvent(Event);
+
+		if (const auto* Key = Event.getIf<sf::Event::KeyPressed>())
+		{
+			switch (Key->scancode)
+			{
+				case sf::Keyboard::Scan::LControl: bCtrl = true; break;
+				case sf::Keyboard::Scan::S: if (bCtrl) { SceneManager.Save(); } break;
+				case sf::Keyboard::Scan::L: if (bCtrl) { SceneManager.Load(); } break;
+			}
+		}
+
+		if (const auto* Key = Event.getIf<sf::Event::KeyReleased>())
+		{
+			if (Key->scancode == sf::Keyboard::Scan::LControl)
+			{
+				bCtrl = false;
+			}
+		}
 	}
 }
 

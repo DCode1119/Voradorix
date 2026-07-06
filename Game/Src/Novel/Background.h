@@ -20,6 +20,8 @@ public:
 
 	bool IsTransitioning() const;
 
+	FVrdxString GetCurrentAssetName() const { return CurrentAssetName; }
+
 private:
 	void SetupSprite(sf::Sprite& Sprite, const sf::Texture& Texture) const;
 	void ApplyFullScreenTransform(sf::Sprite& Sprite, const sf::Texture& Texture, float TargetWidth, float TargetHeight) const;

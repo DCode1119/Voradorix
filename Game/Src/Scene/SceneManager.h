@@ -32,6 +32,9 @@ public:
 	VRDX_NO_DISCARD bool IsEmpty() const;
 	VRDX_NO_DISCARD int32_t GetCount() const;
 
+	void Save() const;
+	void Load();
+
 private:
 	TVrdxVector<TVrdxSharedPtr<CVrdxScene>> SceneStack;
 };

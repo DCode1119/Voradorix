@@ -11,7 +11,7 @@
 #include "Core/String.h"
 #include "Core/Vector.h"
 
-enum class EVrdxCharacterPosition
+enum class EVrdxCharacterPosition : uint8_t
 {
 	Left,
 	Center,
@@ -38,6 +38,13 @@ struct FVrdxCharacterSlot
 	sf::Sprite Sprite;
 };
 
+struct FVrdxCharacterSlotSaveData
+{
+	EVrdxCharacterPosition Position;
+	FVrdxString CharacterName;
+	FVrdxString CharacterPose;
+};
+
 class CVrdxCharacterManager
 {
 public:
@@ -49,9 +56,12 @@ public:
 	void HideCharacter(const FVrdxString& CharacterName, float FadeSeconds = 0.25f);
 	void ClearSlot(EVrdxCharacterPosition Slot, float FadeSeconds = 0.25f);
 
-
 	void Update(float DeltaTick);
 	void Draw(sf::RenderWindow& Window) const;
+
+	TVrdxVector<FVrdxCharacterSlotSaveData> GetSaveData() const;
+
+	void Reset();
 
 private:
 	static FVrdxString MakeTextureKey(const FVrdxString& CharacterName, const FVrdxString& PoseName);
@@ -59,8 +69,11 @@ private:
 	static float GetSlotX(EVrdxCharacterPosition Slot);
 	static sf::Texture CreateTransparentTexture();
 
-	FVrdxCharacterSlot* FindSlotByPosition(EVrdxCharacterPosition Slot);
+	FVrdxCharacterSlot* FindSlotByPosition(const EVrdxCharacterPosition Slot);
+	const FVrdxCharacterSlot* FindSlotByPosition(const EVrdxCharacterPosition Slot) const;
 	FVrdxCharacterSlot* FindSlotByCharacter(const FVrdxString& CharacterName);
+	const FVrdxCharacterSlot* FindSlotByCharacter(const FVrdxString& CharacterName) const;
+
 	const TVrdxSharedPtr<sf::Texture>& ResolveTexture(const FVrdxString& CharacterName, const FVrdxString& PoseName);
 	void ResetSlot(FVrdxCharacterSlot& SlotState);
 	void BeginFade(FVrdxCharacterSlot& SlotState, float TargetAlpha, float FadeSeconds);

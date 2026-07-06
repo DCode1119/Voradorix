@@ -1,8 +1,12 @@
 ﻿#include "Scene/SceneManager.h"
 
 #include <algorithm>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 
 #include "Scene/Scene.h"
+#include "NovelScene.h"
 
 
 void CVrdxSceneManager::Push(TVrdxSharedPtr<CVrdxScene> Scene)
@@ -64,4 +68,42 @@ bool CVrdxSceneManager::IsEmpty() const
 int32_t CVrdxSceneManager::GetCount() const
 {
 	return SceneStack.Num();
+}
+
+void CVrdxSceneManager::Save() const
+{
+	if (const auto NovelScene = dynamic_cast<const CVrdxNovelScene*>(SceneStack.Last().get()))
+	{
+		FVrdxNovelSceneSaveData SaveData = NovelScene->Save();
+		FVrdxString String = SaveData.ToJson();
+
+		//Write into "Saves/Save0.dat" from String.
+		std::filesystem::create_directories("Saves");
+		std::ofstream File("Saves/Save0.dat");
+		if (File.is_open())
+		{
+			File << String.ToUtf8();
+		}
+	}
+}
+
+void CVrdxSceneManager::Load()
+{
+	if (auto NovelScene = dynamic_cast<CVrdxNovelScene*>(SceneStack.Last().get()))
+	{
+		//Read from "Saves/Save0.dat" into String.
+		FVrdxString String;
+		std::ifstream File("Saves/Save0.dat");
+		if (File.is_open())
+		{
+			std::stringstream Buffer;
+			Buffer << File.rdbuf();
+			String = Buffer.str();
+
+			FVrdxNovelSceneSaveData SaveData;
+			SaveData.FromJson(String);
+
+			NovelScene->Load(SaveData);
+		}
+	}
 }

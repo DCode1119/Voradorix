@@ -35,8 +35,8 @@ Game/
 │       ├── Core/             # Application, Common, Vector, String
 │       ├── Scene/            # Scene, SceneManager, TestScene, NovelScene
 │       ├── Novel/            # 노벨 재생 로직
-│       ├── Ui/               # WidgetBase, DialogueBox, ChoiceWidget
-│       └── Save/             # (예정) SaveManager
+│       └── Ui/               # WidgetBase, DialogueBox, ChoiceWidget, Button
+├── Extern/                    # nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서
 │   └── BACKLOG.md            # 보류/폴리싱 항목
 ├── graphify-out/             # 그래프 분석 산출물
@@ -53,7 +53,7 @@ Game/
 - [x] **4단계 — ScriptEngine**: 스크립트 로드/파싱/실행, @label/@jump 분기 완료
 - [x] **5단계 — 선택지 시스템**: 선택지 UI/입력/분기 구현 완료
 - [x] 6단계 — UI Foundation: 핵심 구현 완료, 세부 폴리싱 예정
-- [ ] 7단계 — 세이브/로드
+- [x] **7단계 — 세이브/로드**: NovelScene 상태 직렬화/복원 (JSON, nlohmann)
 - [ ] 8단계 — 메뉴 구성
 - [ ] 9단계 — 연출 효과
 
@@ -80,7 +80,8 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 ## 현재 상태
 
 - 1~5단계 빌드/테스트 확인 완료
-- 6단계 핵심 구현 완료, 7~9단계는 아직 예정
+- 6단계 핵심 구현 완료, 7단계(Save/Load) 구현 완료
+- 8~9단계는 예정
 - 작업 기록과 프로젝트 인덱스 문서는 `Docs/`를 참고
 
 ## 라이선스

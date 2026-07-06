@@ -2,6 +2,9 @@
 graphify-out/
 .obsidian/
 
+# Runtime data
+Saves/
+
 # Visual Studio
 bin/
 obj/

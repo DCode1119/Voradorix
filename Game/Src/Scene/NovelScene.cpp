@@ -1,5 +1,6 @@
 #include "NovelScene.h"
 
+#include <nlohmann/json.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Event.hpp>
 
@@ -111,7 +112,80 @@ void CVrdxNovelScene::WaitForSeconds(const float Seconds)
 	RemainingWaitSeconds = Seconds;
 }
 
+FVrdxNovelSceneSaveData CVrdxNovelScene::Save() const
+{
+	return FVrdxNovelSceneSaveData
+		{
+			.ScriptPath = ScriptEngine.GetScriptName(),
+			.CurrentLine = ScriptEngine.GetCurrentScriptLine() - 1,
+			.BackgroundName = Background.GetCurrentAssetName(),
+			.CharacterSlots = CharacterManager.GetSaveData(),
+		};
+}
+
+void CVrdxNovelScene::Load(const FVrdxNovelSceneSaveData& SaveData)
+{
+	if (!ScriptEngine.LoadScript(SaveData.ScriptPath))
+	{
+		return;
+	}
+
+	CharacterManager.Reset();
+	Background.SetBackground(SaveData.BackgroundName);
+	for (const auto& CharacterSlot : SaveData.CharacterSlots)
+	{
+		CharacterManager.ShowCharacter(CharacterSlot.CharacterName, CharacterSlot.Position);
+		CharacterManager.SetCharacterPose(CharacterSlot.CharacterName, CharacterSlot.CharacterPose);
+	}
+
+	ScriptEngine.JumpToLine(SaveData.CurrentLine);
+}
+
 void CVrdxNovelScene::EndScenario()
 {
 	RequestExit();
+}
+
+FVrdxString FVrdxNovelSceneSaveData::ToJson() const
+{
+	nlohmann::json Json;
+	Json["ScriptPath"] = ScriptPath.ToUtf8();
+	Json["CurrentLine"] = CurrentLine;
+	Json["BackgroundName"] = BackgroundName.ToUtf8();
+	for (const auto& Slot : CharacterSlots)
+	{
+		nlohmann::json SlotData;
+		SlotData["CharacterName"] = Slot.CharacterName.ToUtf8();
+		SlotData["PoseName"] = Slot.CharacterPose.ToUtf8();
+		SlotData["Position"] = (int32_t)Slot.Position;
+		Json["Characters"].push_back(SlotData);
+	}
+
+	return Json.dump(4);
+}
+
+void FVrdxNovelSceneSaveData::FromJson(const FVrdxString& String)
+{
+	try
+	{
+		auto Json = nlohmann::json::parse(String.ToUtf8());  // FVrdxString→UTF-8
+		ScriptPath = Json["ScriptPath"].get<std::string>();
+		CurrentLine = Json["CurrentLine"].get<int32_t>();
+		BackgroundName = Json["BackgroundName"].get<std::string>();
+
+		CharacterSlots.Clear();
+		for (const auto& Item : Json["Characters"])
+		{
+			FVrdxCharacterSlotSaveData Slot;
+			Slot.CharacterName = Item["CharacterName"].get<std::string>();
+			Slot.CharacterPose = Item["PoseName"].get<std::string>();
+			Slot.Position = static_cast<EVrdxCharacterPosition>(Item["Position"].get<int32_t>());
+			CharacterSlots.Add(Slot);
+		}
+	}
+	catch (const std::exception&)
+	{
+		//
+	}
+	
 }

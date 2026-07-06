@@ -173,6 +173,36 @@ tags:
 - `Docs/GAME_DESIGN.md` — 7단계 세부 문서 링크 추가
 - `Docs/Voradorix.md` — 7단계 항목에 Save/Load 명세 링크 추가
 
+## 2026-07-06
+
+### 7단계 — Save/Load 구현 완료
+
+- `Scene/SceneManager.h/cpp` — `Save()` / `Load()` 멤버 함수 추가
+  - `Save()`: const 메서드, dynamic_cast로 NovelScene 확인 후 JSON 파일 작성
+  - `Load()`: 파일 읽기 → JSON 파싱 → NovelScene.Load() 호출
+  - `std::filesystem::create_directories`로 `Saves/` 디렉토리 자동 생성
+  - 사용 라이브러리: `<fstream>`, `<sstream>`, `<filesystem>`, `nlohmann/json`
+
+- `Scene/NovelScene.h/cpp` — SaveData 구조체 및 직렬화 구현
+  - `FVrdxNovelSceneSaveData` — ScriptPath, CurrentLine, BackgroundName, CharacterSlots
+  - `Save()` — 상태 수집 (ScriptEngine, Background, CharacterManager)
+  - `Load()` — 상태 복원 (ScriptEngine 재로드, Background/Character 재설정, JumpToLine)
+  - `ToJson()` / `FromJson()` — nlohmann/json 기반 직렬화
+
+- `Novel/CharacterManager.h/cpp` — Save/Load 지원
+  - `GetSaveData()` — 슬롯 상태를 `TVrdxVector<FVrdxCharacterSlotSaveData>`로 수집
+  - `Reset()` — 전체 슬롯 초기화
+
+- `Extern/nlohmann/json.hpp` — nlohmann/json v3.12.0 헤더 설치
+- `Game.vcxproj` — `$(SolutionDir)Extern;` include 경로 추가
+- `Saves/` — 저장 파일 디렉토리 (실행 경로 기준)
+
+### const correctness 개선
+
+- `Novel/CharacterManager.h/cpp` — `FindSlotByPosition` / `FindSlotByCharacter` const 오버로드 분리
+  - const 버전: `const FVrdxCharacterSlot*` 반환
+  - non-const 버전: const_cast를 통한 위임 패턴
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (9단계)
@@ -207,7 +237,7 @@ Game/Game/Assets/
 | **4단계** | ScriptEngine — 텍스트 스크립트 파서/실행기 | `ScriptEngine.h/cpp` |
 | **5단계** | ChoiceWidget — 선택지 UI 및 분기 처리 | `ChoiceWidget.h/cpp` |
 | **6단계** | UI Foundation — 공통 위젯 계층 | `WidgetBase.h/cpp`, `DialogueBox.h/cpp`, `ChoiceWidget.h/cpp` |
-| **7단계** | SaveManager — 세이브/로드 | `SaveManager.h/cpp` |
+| **7단계** | Save/Load — NovelScene 직렬화/복원 | `SceneManager.h/cpp`, `NovelScene.h/cpp`, `CharacterManager.h/cpp` |
 | **8단계** | TitleScene, ConfigScene — 메뉴 구성 | `TitleScene.h/cpp`, `ConfigScene.h/cpp` |
 | **9단계** | EffectManager — 페이드, 셰이크 등 연출 효과 | `EffectManager.h/cpp` |
 

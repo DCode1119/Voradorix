@@ -33,4 +33,6 @@ private:
 	bool bIsRunning;
 
 	static TVrdxSharedPtr<CVrdxWidgetBase> Instance;
+
+	bool bCtrl = false;
 };

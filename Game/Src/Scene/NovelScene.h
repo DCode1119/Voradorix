@@ -12,6 +12,17 @@ struct FVrdxChoiceOption;
 class CVrdxChoiceWidget;
 class CVrdxDialogueBox;
 
+struct FVrdxNovelSceneSaveData
+{
+	FVrdxString ScriptPath;
+	int32_t CurrentLine = 0;
+	FVrdxString BackgroundName;
+	TVrdxVector<FVrdxCharacterSlotSaveData> CharacterSlots;
+
+	FVrdxString ToJson() const;
+	void FromJson(const FVrdxString& String);
+};
+
 class CVrdxNovelScene
 	: public CVrdxScene
 	, public std::enable_shared_from_this<CVrdxNovelScene>
@@ -37,6 +48,9 @@ public:
 
 	void JumpToLabel(const FVrdxString& TargetLabelName);
 	void WaitForSeconds(const float Seconds);
+
+	FVrdxNovelSceneSaveData Save() const;
+	void Load(const FVrdxNovelSceneSaveData& SaveData);
 
 private:
 	void EndScenario();

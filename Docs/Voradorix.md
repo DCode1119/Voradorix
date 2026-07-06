@@ -5,7 +5,7 @@ tags:
   - project
   - index
 status: active
-phase: 6 (UI Foundation 진행 중)
+phase: 7 (Save/Load 완료)
 ---
 
 # Voradorix
@@ -16,7 +16,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - **기술**: C++17, SFML 3.1.0, Visual Studio 2022 x64
 - **GitHub**: https://github.com/DCode1119/Voradorix
-- **상태**: 6단계 UI Foundation 진행 중
+- **상태**: 7단계 Save/Load 완료
 
 ## 구현 현황
 
@@ -56,8 +56,13 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
   - `Ui/BoxWidget.h/cpp`, `Ui/TextLabel.h/cpp` — 기본 UI 위젯 구현
   - `Ui/Button.h/cpp` — 버튼 상호작용 위젯 (핵심 구현 완료, 폴리싱 예정)
   - `Ui/DialogueBox.h/cpp`, `Ui/ChoiceWidget.h/cpp` — 위젯 기반 UI 정리
-- [ ] **7단계 — 세이브/로드** (예정)
+- [x] **7단계 — 세이브/로드** (완료)
   - [[7-SaveLoad.md]] — 세이브/로드 기능 명세
+  - `Scene/SceneManager.h/cpp` — `Save()` / `Load()` 추가 (const dynamic_cast, NovelScene 상태 직렬화)
+  - `Scene/NovelScene.h/cpp` — `Save()` / `Load()` 구현, `FVrdxNovelSceneSaveData` 구조체
+  - `Novel/CharacterManager.h/cpp` — `GetSaveData()` / `Reset()` 추가, `FVrdxCharacterSlotSaveData`
+  - `Extern/nlohmann/json.hpp` — JSON 직렬화 (nlohmann/json v3.12.0)
+  - `Saves/` — 저장 파일 디렉토리 (실행 경로 기준)
 - [ ] **8단계 — 메뉴 구성** (예정)
 - [ ] **9단계 — 연출 효과** (예정)
 

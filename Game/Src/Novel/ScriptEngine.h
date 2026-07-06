@@ -17,8 +17,14 @@ public:
 	bool IsFinished() const;
 	void JumpToLabel(const FVrdxString& TargetLabelName);
 
+	FVrdxString GetScriptName() const { return ScriptPath; }
+	int32_t GetCurrentScriptLine() const { return CurrentScriptLine; }
+	void JumpToLine(const int32_t TargetLine);
+
 private:
 	bool ParseLine();
+
+	FVrdxString ScriptPath;
 
 	int32_t CurrentScriptLine;
 	TVrdxVector<TVrdxSharedPtr<FVrdxScriptLine>> ScriptLines;

@@ -186,6 +186,59 @@ void CVrdxCharacterManager::Draw(sf::RenderWindow& Window) const
 	}
 }
 
+
+TVrdxVector<FVrdxCharacterSlotSaveData> CVrdxCharacterManager::GetSaveData() const
+{
+	TVrdxVector<FVrdxCharacterSlotSaveData> Result;
+	
+	const static EVrdxCharacterPosition Positions[] =
+	{
+		EVrdxCharacterPosition::Left,
+		EVrdxCharacterPosition::Right,
+		EVrdxCharacterPosition::Center,
+	};
+
+	for (const auto Position : Positions)
+	{
+		if (auto Slot = FindSlotByPosition(Position))
+		{
+			Result.Add({ .Position = Slot->Slot, .CharacterName = Slot->CharacterName, .CharacterPose = Slot->PoseName });
+		}
+	}
+
+	return Result;
+}
+
+
+void CVrdxCharacterManager::Reset()
+{
+	const static EVrdxCharacterPosition Positions[] =
+	{
+		EVrdxCharacterPosition::Left,
+		EVrdxCharacterPosition::Right,
+		EVrdxCharacterPosition::Center,
+	};
+
+	for (const auto Position : Positions)
+	{
+		ClearSlot(Position);
+	}
+}
+
+const FVrdxCharacterSlot* CVrdxCharacterManager::FindSlotByPosition(const EVrdxCharacterPosition Slot) const
+{
+	for (int32_t Index = 0; Index < Slots.Num(); ++Index)
+	{
+		if (Slots[Index].Slot == Slot)
+		{
+			return &Slots[Index];
+		}
+	}
+
+	return nullptr;
+}
+
+
 FVrdxCharacterSlot* CVrdxCharacterManager::FindSlotByPosition(const EVrdxCharacterPosition Slot)
 {
 	for (int32_t Index = 0; Index < Slots.Num(); ++Index)
@@ -198,6 +251,21 @@ FVrdxCharacterSlot* CVrdxCharacterManager::FindSlotByPosition(const EVrdxCharact
 
 	return nullptr;
 }
+
+const FVrdxCharacterSlot* CVrdxCharacterManager::FindSlotByCharacter(const FVrdxString& CharacterName) const
+{
+	for (int32_t Index = 0; Index < Slots.Num(); ++Index)
+	{
+		const FVrdxCharacterSlot& SlotState = Slots[Index];
+		if (SlotState.bVisible && SlotState.CharacterName == CharacterName)
+		{
+			return &SlotState;
+		}
+	}
+
+	return nullptr;
+}
+
 
 FVrdxCharacterSlot* CVrdxCharacterManager::FindSlotByCharacter(const FVrdxString& CharacterName)
 {

@@ -46,10 +46,9 @@ status: active
 
 ## 7단계 — Save/Load
 
-- `SaveManager`
-- `SaveLoadScene`
-- `NovelScene` 상태 직렬화/복원
-- 저장 파일 폴더 `Assets/Saves/`
+- [x] `NovelScene` 상태 직렬화/복원
+- [x] `SaveManager` — SceneManager.Save()/Load()에 통합
+- [ ] `SaveLoadScene` — 저장/불러오기 UI 씬 (별도 작업 예정)
 
 ## 8단계 — Menu
 
