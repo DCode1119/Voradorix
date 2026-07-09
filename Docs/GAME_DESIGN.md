@@ -135,6 +135,8 @@ Game/Game/
 │   │   ├── Background.h/cpp
 │   │   ├── DialogueLine.h
 │   │   ├── ChoiceWidget.h/cpp     # 5단계 구현
+│   │   ├── TitleWindow.h/cpp      # 8단계 — 타이틀 화면
+│   │   ├── SaveLoadWindow.h/cpp   # 8단계 — 세이브/로드 창
 │   │   └── EffectManager.h/cpp    # 9단계 예정
 │   ├── Ui/
 │   │   ├── WidgetBase.h/cpp
@@ -219,10 +221,16 @@ Game/Game/
 - SaveLoadScene에서 UI로 표시
 - 세부 문서: `Docs/7-SaveLoad.md`
 
-### 8단계 — 메뉴 구성
-- `TitleScene.h/cpp` — 타이틀 화면 (새 게임/로드/설정/종료)
-- `ConfigScene.h/cpp` — 볼륨 조절, 전역 설정
-- `UI/Button.h/cpp`, `UI/Menu.h/cpp` — 재사용 UI 컴포넌트
+### 8단계 — 메뉴 구성 (완료)
+- `Novel/TitleWindow.h/cpp` — 타이틀 화면 (New Game / Continue)
+  - `CVrdxBoxWidget` 상속, `OnPostCreate`에서 버튼 생성
+  - `RequestNewGame` / `RequestContinueGame` 델리게이트 Broadcast
+- `Novel/SaveLoadWindow.h/cpp` — 세이브/로드 오버레이
+  - 10개 슬롯, 저장/불러오기 모드 전환 (`ShowSaveLoadWindow`)
+  - `RequestSaveGame` / `RequestLoadGame` / `RequestBackToMain` 델리게이트
+- `Novel/NovelScene::ResetScriptEngine()` — New Game 재시작 지원
+- Save/Load 경로 버그 수정 (`"Saves/"` 구분자)
+- 화면 전환: `BringToFront()` 기반 (위젯 파괴/생성 없음)
 
 ### 9단계 — 연출 효과
 - `EffectManager.h/cpp` — 페이드인/아웃, 화면 셰이크, 컬러 오버레이

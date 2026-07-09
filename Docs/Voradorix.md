@@ -5,7 +5,7 @@ tags:
   - project
   - index
 status: active
-phase: 8-Menu (메뉴 구성 진행 중)
+phase: 8 (메뉴 구성 완료)
 ---
 
 # Voradorix
@@ -16,7 +16,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
 
 - **기술**: C++17, SFML 3.1.0, Visual Studio 2022 x64
 - **GitHub**: https://github.com/DCode1119/Voradorix
-- **상태**: 8단계 메뉴 구성 진행 중
+- **상태**: 8단계 메뉴 구성 완료
 
 ## 구현 현황
 
@@ -63,7 +63,12 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진
   - 모든 컴포넌트 `CVrdxWidgetBase` 상속으로 통일
   - `BringToFront()` 추가로 Z-Order 관리
   - 파일 구조 정리 (Novel 전용 / Ui 공통 분리)
-- [ ] **8단계 — 메뉴 구성** (예정, TitleScene / SaveLoadScene)
+- [x] **8단계 — 메뉴 구성** (TitleWindow / SaveLoadWindow 구현 완료)
+  - `Novel/TitleWindow.h/cpp` — `CVrdxTitleWindow` (New Game / Continue Game 버튼, 델리게이트)
+  - `Novel/SaveLoadWindow.h/cpp` — `CVrdxSaveLoadWindow` (10개 슬롯, Save/Load 모드 전환)
+  - `Novel/NovelScene.h/cpp` — `ResetScriptEngine()` 추가 (New Game 재시작 지원)
+  - `Main.cpp` — 메뉴 → NovelScene 전환 흐름 구성
+  - Save/Load 경로 버그 수정 (`"Saves/" + Filename`)
 - [ ] **9단계 — 연출 효과** (예정)
 
 ## 추가 문서

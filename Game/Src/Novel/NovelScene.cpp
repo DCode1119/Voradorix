@@ -184,13 +184,12 @@ FVrdxNovelSceneSaveData CVrdxNovelScene::Save() const
 
 void CVrdxNovelScene::Save(const FVrdxString& Filename) const
 {
-	TVrdxSharedPtr<const CVrdxNovelScene> NovelScene;
 	FVrdxNovelSceneSaveData SaveData = Save();
 	FVrdxString String = SaveData.ToJson();
 
 	//Write into "Saves/Save0.dat" from String.
 	std::filesystem::create_directories("Saves");
-	std::ofstream File("Saves" + Filename.ToUtf8());
+	std::ofstream File("Saves/" + Filename.ToUtf8());
 	if (File.is_open())
 	{
 		File << String.ToUtf8();
@@ -220,7 +219,7 @@ void CVrdxNovelScene::Load(const FVrdxString& Filename)
 {
 	//Read from "Saves/Save0.dat" into String.
 	FVrdxString String;
-	std::ifstream File("Saves/Save0.dat");
+	std::ifstream File("Saves/" + Filename.ToUtf8());
 	if (File.is_open())
 	{
 		std::stringstream Buffer;
@@ -231,6 +230,15 @@ void CVrdxNovelScene::Load(const FVrdxString& Filename)
 		SaveData.FromJson(String);
 
 		Load(SaveData);
+	}
+}
+
+
+void CVrdxNovelScene::ResetScriptEngine()
+{
+	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
+	{
+		return;
 	}
 }
 

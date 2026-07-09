@@ -264,6 +264,38 @@ tags:
 - `CreateWidget<CVrdxApplication>` → `MakeVrdxShared<CVrdxApplication>(sf::Vector2f(1280,720))` + `Initialize(Initializer)` 패턴
 - `NovelScene` 생성 람다를 `VRDX_Initializer` 콜백으로 전달
 
+## 2026-07-10
+
+### 8단계 — 메뉴 구성 (TitleWindow / SaveLoadWindow) 구현 완료
+
+**신규 파일:**
+- `Novel/TitleWindow.h/cpp` — `CVrdxTitleWindow` (`CVrdxBoxWidget` 상속)
+  - `OnPostCreate`: TitleLabel, NewGameButton, LoadGameButton 생성
+  - `OnNewGame()` / `OnContinueGame()` → `Broadcast()` 델리게이트 호출
+  - `RequestNewGame`, `RequestContinueGame` 델리게이트
+- `Novel/SaveLoadWindow.h/cpp` — `CVrdxSaveLoadWindow` (`CVrdxBoxWidget` 상속)
+  - `OnPostCreate`: TitleLabel, BackToMain 버튼, 10개 슬롯 버튼 생성
+  - `ShowSaveLoadWindow(bool bSave)` — 저장/불러오기 모드 전환, 슬롯 텍스트 변경
+  - `RequestSaveGame`, `RequestLoadGame`, `RequestBackToMain` 델리게이트
+  - `IsSaveMode()` 쿼리 메서드
+
+**수정 파일:**
+- `Novel/NovelScene.cpp` — `ResetScriptEngine()` 추가 (ScriptEngine 재로드, New Game 재시작 지원)
+- `Novel/NovelScene.cpp` — Save/Load 경로 버그 수정: `"Saves" + Filename` → `"Saves/" + Filename`
+  - Load 함수에서 하드코딩 `"Saves/Save0.dat"` → `"Saves/" + Filename.ToUtf8()` 동적 경로로 변경
+- `Ui/TextLabel.cpp` — `OnResized()` 위치 기준을 생성자와 통일 (`{0,0}`)
+- `Main.cpp` — TitleWindow/SaveLoadWindow 생성 및 델리게이트 연결
+  - New Game → `NovelWindow->BringToFront()`
+  - Continue → `SaveLoadWindow->ShowSaveLoadWindow(false)`
+  - Load 슬롯 선택 → `std::filesystem::exists()` 체크 후 `NovelWindow->Load()` + `BringToFront()`
+  - BackToMain → `TitleWindow->BringToFront()`
+
+**프로젝트 설정:**
+- `Game.vcxproj` / `.filters` — SaveLoadWindow.cpp/h, TitleWindow.cpp/h 등록
+
+**문서:**
+- `Docs/8-Menu.md` — 명세서를 실제 구현에 맞게 전면 갱신
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (10단계)
@@ -300,7 +332,7 @@ Game/Game/Assets/
 | **6단계** | UI Foundation — 공통 위젯 계층 | `WidgetBase.h/cpp`, `DialogueBox.h/cpp`, `ChoiceWidget.h/cpp` |
 | **7단계** | Save/Load — NovelScene 직렬화/복원 | `Application.h/cpp`, `NovelScene.h/cpp`, `CharacterManager.h/cpp` |
 | **8단계** | 구조 변경 — Widget Tree 기반 아키텍처 전환 | `WidgetBase.h/cpp`, `Application.h/cpp`, `NovelScene.h/cpp` |
-| **9단계** | TitleScene, SaveLoadScene — 메뉴 구성 | 예정 |
+| **9단계** | 메뉴 구성 — TitleWindow, SaveLoadWindow | `TitleWindow.h/cpp`, `SaveLoadWindow.h/cpp` |
 | **10단계** | EffectManager — 페이드, 셰이크 등 연출 효과 | 예정 |
 
 ### 스크립트 포맷 (제안)
@@ -324,11 +356,11 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 
 ### UI 컴포넌트 작업 메모
 
-- **현재 작업 단계**: `UI Foundation` 진행 중
+- **현재 작업 단계**: `8단계 — 메뉴 구성` 완료
 - **핵심 목표**: `WidgetBase`(위젯 트리 컨테이너 포함) 확장 + `BoxWidget` / `TextLabel` / `Button` 공통 계층화
 - **정리 사항**: 위젯 트리 컨테이너 역할은 `WidgetBase` 기능에 포함하며, 별도 컨테이너 클래스는 두지 않음
 - **정리 사항**: 완전 가림 상태는 `bCanBeDrawn`으로 판정해 불필요한 Draw call을 줄임
-- **적용 후보**: `DialogueBox`, `ChoiceWidget`, 이후 `TitleScene` / `ConfigScene` / `SaveLoadScene`
+- **적용 완료**: `DialogueBox`, `ChoiceWidget`, `TitleWindow`, `SaveLoadWindow`
 - **목표**: 입력 처리, Hover/Leave/Click, Draw, 계층 배치 공통화를 통해 UI와 로직 분리
 - **명세 문서**: `Docs/6-UIFoundation.md`
 

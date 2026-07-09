@@ -106,9 +106,9 @@ Src/
 
 ## 잔여 항목 (차후 단계)
 
-- **TitleWindow / SaveLoadWindow** 구현 (기존 8단계 계획)
+- **TitleWindow / SaveLoadWindow** — ✅ 구현 완료 (8단계 메뉴 구성)
 - **NovelScene의 Widget 자식 교체** — Background/CharacterManager/DialogueBox/ChoiceWidget이 모두 CreateWidget으로 생성되고 NovelScene의 멤버로 유지, 추후 NovelWindow로 rename 검토 가능
-- **BringToFront() 활용 화면 전환** — TitleWindow/NovelWindow/SaveLoadWindow 간 전환에 적용
+- **BringToFront() 활용 화면 전환** — ✅ 적용 완료 (TitleWindow ↔ SaveLoadWindow ↔ NovelScene 간 전환)
 
 ## 고려사항
 

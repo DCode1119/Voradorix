@@ -38,7 +38,7 @@ Game/                          ← Git 저장소 루트
 │   └── Saves/                # 세이브 파일 저장 디렉토리
 ├── Extern/                    # SFML 3.1.0, nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서
-│   ├── 1-SceneSystem.md ~ 8-StructureReform.md
+│   ├── 1-SceneSystem.md ~ 8-Menu.md
 │   ├── BACKLOG.md
 │   └── PROJECT_STRUCTURE.md  # opencode/Git 구조 설명
 ├── graphify-out/             # 그래프 분석 산출물 (git 미관리)
@@ -57,7 +57,9 @@ Game/                          ← Git 저장소 루트
 - [x] **7단계 — 세이브/로드**: NovelScene 상태 직렬화/복원 (JSON, nlohmann)
 - [x] **구조 변경**: Scene/SceneManager 폐기, Widget Tree 기반 아키텍처 전환 완료
   - BringToFront(), 모든 컴포넌트 WidgetBase 상속, 파일 구조 정리
-- [ ] **8단계 — 메뉴 구성** (TitleScene, SaveLoadScene)
+- [x] **8단계 — 메뉴 구성**: TitleWindow (New Game / Continue) + SaveLoadWindow (10슬롯, Save/Load 모드) 구현 완료
+  - NovelScene::ResetScriptEngine() 추가 (New Game 재시작)
+  - Save/Load 경로 버그 수정
 - [ ] 9단계 — 연출 효과
 
 ## 스크립트 문법
@@ -113,9 +115,9 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 
 ## 현재 상태
 
-- 1~7단계 + 구조 변경 빌드/테스트 확인 완료
-- 7단계(Save/Load), 구조 변경(Widget Tree 전환) 구현 완료
-- 8단계(메뉴 구성) 진행 중, 9단계(연출 효과)는 예정
+- 1~8단계 + 구조 변경 빌드/테스트 확인 완료
+- 8단계(메뉴 구성) TitleWindow / SaveLoadWindow 구현 완료
+- 9단계(연출 효과)는 예정
 - 작업 기록과 설계 문서는 `Docs/`를 참고
 
 ## 라이선스

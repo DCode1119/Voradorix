@@ -35,7 +35,7 @@ void CVrdxTitleWindow::OnPostCreate()
 	LoadGameButton->SetFontColors(sf::Color::White, sf::Color::Black);
 	LoadGameButton->GetOnClicked().Bind(WeakThis.lock(), &CVrdxTitleWindow::OnContinueGame);
 
-	sf::RectangleShape TextShape = Shape;;
+	sf::RectangleShape TextShape = Shape;
 	TextShape.setPosition({250, 30});
 	TextShape.setSize({50, 300});
 	TitleLabel = CVrdxWidgetBase::CreateWidget<CVrdxTextLabel>(WeakThis, TextShape);
@@ -49,6 +49,7 @@ void CVrdxTitleWindow::OnPreDestroy()
 {
 	NewGameButton = nullptr;
 	LoadGameButton = nullptr;
+	TitleLabel = nullptr;
 }
 
 void CVrdxTitleWindow::OnNewGame()
@@ -58,5 +59,5 @@ void CVrdxTitleWindow::OnNewGame()
 
 void CVrdxTitleWindow::OnContinueGame()
 {
-	RequestContinueGame.Broadcast()	;
+	RequestContinueGame.Broadcast();
 }

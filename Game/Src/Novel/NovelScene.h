@@ -54,6 +54,7 @@ public:
 	void Save(const FVrdxString& Filename) const;
 	void Load(const FVrdxNovelSceneSaveData& SaveData);
 	void Load(const FVrdxString& Filename);
+	void ResetScriptEngine();
 
 private:
 	void EndScenario();
