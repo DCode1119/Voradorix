@@ -6,14 +6,14 @@ tags:
   - editor
   - script-editor
   - spec
-status: planned
+status: implemented
 ---
 
 # Editor Phase 3-1: Script Editor
 
 > **목표**: @label/@jump 기반 스크립트를 편집할 수 있는 전용 에디터 구현  
 > **의존성**: Phase 2 (Asset Browser) 완료  
-> **상태**: 기획 단계 (상세는 Phase 2 이후 확정)
+> **상태**: 구현 완료
 
 ---
 
@@ -24,7 +24,7 @@ Script Editor는 `Assets/Scripts/` 디렉토리의 `.txt` 스크립트 파일을
 
 ---
 
-## 2. 핵심 기능 (초안)
+## 2. 핵심 기능
 
 ### 2.1 기본 편집 기능
 - 구문 강조 (Syntax Highlighting) — `@` 명령어, `"문자열"`, `@label` 태그
@@ -41,13 +41,21 @@ Script Editor는 `Assets/Scripts/` 디렉토리의 `.txt` 스크립트 파일을
 - 형식이 잘못된 명령어 강조
 - 파일 저장 전 기본 검증
 
+### 2.4 현재 구현된 동작
+- `.txt` 파일 선택 시 전용 Script Editor 렌더링
+- 저장/자동저장 지원
+- `@label`, `@jump`, `@choice` 검증
+- 도달 불가 블럭 및 잠재적 무한루프 탐지
+- 블럭 색상띠 및 줄번호 0-based 표시
+- `@` 입력 자동완성 및 스니펫 삽입
+- 커서 인근 팝업, 스크롤 추적, 위/아래 방향 배치
+
 ---
 
 ## 3. 고려사항
 
-- 텍스트 에디터 컴포넌트로 CodeMirror 또는 Monaco Editor( VS Code 엔진) 사용 검토
-- 두 라이브러리 모두 React와 통합 가능, 커스텀 구문 정의 지원
-- 실제 구현은 Phase 2 안정화 이후 상세 설계
+- 현재는 커스텀 textarea 기반 구현
+- 향후 다중 커서, 더 정교한 구문 강조가 필요하면 CodeMirror/Monaco 재검토 가능
 
 ---
 
