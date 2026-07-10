@@ -20,6 +20,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Asset operations
   importAsset: (sourcePath: string, type: string) => ipcRenderer.invoke('asset:import', sourcePath, type),
   registerAsset: (relativePath: string, type: string) => ipcRenderer.invoke('asset:register', relativePath, type),
+  createScriptAsset: (targetDirRelPath: string, fileName: string) => ipcRenderer.invoke('asset:createScript', targetDirRelPath, fileName),
+  renameAssetNode: (sourceRelPath: string, newName: string, isDirectory: boolean) => ipcRenderer.invoke('asset:renameNode', sourceRelPath, newName, isDirectory),
   deleteAsset: (guid: string) => ipcRenderer.invoke('asset:delete', guid),
   deleteNode: (relativePath: string, isDirectory: boolean, guid?: string) => ipcRenderer.invoke('asset:deleteNode', relativePath, isDirectory, guid),
   updateAlias: (guid: string, alias: string | null) => ipcRenderer.invoke('asset:updateAlias', guid, alias),

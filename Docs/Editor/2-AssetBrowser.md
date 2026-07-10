@@ -80,7 +80,8 @@ status: implemented
 
 ### 2.2 기능
 
-- 각 노드 우클릭 컨텍스트 메뉴: Delete
+- 각 노드 우클릭 컨텍스트 메뉴: Delete / Rename
+- 디렉토리 우클릭 컨텍스트 메뉴: Add Script
 - 상단 Import 버튼: 파일/디렉토리 다중 선택
 - 디렉토리 Import: 하위 디렉토리까지 재귀 복사
 - 더블클릭: 미리보기 갱신
@@ -93,6 +94,7 @@ status: implemented
 |--------|------|
 | 🟢 | AssetRegistry에 등록됨 |
 | ⚪ | 미등록 (파일만 있음) |
+| 🟡 | Alias 미설정(등록됨) |
 
 ---
 

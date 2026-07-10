@@ -26,6 +26,14 @@ interface ContextMenuState {
   node: AssetTreeNode | null
 }
 
+interface ActionModalState {
+  visible: boolean
+  kind: 'rename' | 'createScript' | null
+  node: AssetTreeNode | null
+  value: string
+  submitting: boolean
+}
+
 // ── Helpers ────────────────────────────────────────────────────────
 
 function normalizeAssetPath(path: string): string {
@@ -205,6 +213,15 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
   const [newFolderName, setNewFolderName] = useState('')
   const [creatingFolder, setCreatingFolder] = useState(false)
   const newFolderInputRef = useRef<HTMLInputElement>(null)
+  const contextMenuRef = useRef<HTMLDivElement>(null)
+
+  const [actionModal, setActionModal] = useState<ActionModalState>({
+    visible: false,
+    kind: null,
+    node: null,
+    value: '',
+    submitting: false
+  })
 
   const [importModal, setImportModal] = useState<ImportModalState>({
     visible: false,
@@ -255,10 +272,17 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
   }, [showNewFolder])
 
   useEffect(() => {
-    const handleClose = () => setContextMenu(prev => ({ ...prev, visible: false }))
     if (contextMenu.visible) {
-      window.addEventListener('click', handleClose)
-      return () => window.removeEventListener('click', handleClose)
+      const handleClose = (event: PointerEvent) => {
+        const menu = contextMenuRef.current
+        if (menu && menu.contains(event.target as Node)) {
+          return
+        }
+        setContextMenu(prev => ({ ...prev, visible: false }))
+      }
+
+      window.addEventListener('pointerdown', handleClose, true)
+      return () => window.removeEventListener('pointerdown', handleClose, true)
     }
   }, [contextMenu.visible])
 
@@ -303,6 +327,84 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
     } catch (err) {
       onLog(`Delete failed: ${(err as Error).message}`, 'error')
     }
+  }
+
+  const handleRenameNode = async () => {
+    const node = contextMenu.node
+    if (!node) return
+
+    setContextMenu(prev => ({ ...prev, visible: false }))
+    if (node.path === '' && node.isDirectory) return
+
+    setActionModal({
+      visible: true,
+      kind: 'rename',
+      node,
+      value: node.name,
+      submitting: false
+    })
+  }
+
+  const handleCreateScriptAsset = async () => {
+    const node = contextMenu.node
+    if (!node || !node.isDirectory) return
+
+    setContextMenu(prev => ({ ...prev, visible: false }))
+    setActionModal({
+      visible: true,
+      kind: 'createScript',
+      node,
+      value: 'NewScript',
+      submitting: false
+    })
+  }
+
+  const closeActionModal = () => {
+    if (actionModal.submitting) return
+    setActionModal({ visible: false, kind: null, node: null, value: '', submitting: false })
+  }
+
+  const submitActionModal = async () => {
+    const node = actionModal.node
+    const value = actionModal.value.trim()
+    if (!node || !value) return
+
+    setActionModal(prev => ({ ...prev, submitting: true }))
+    try {
+      if (actionModal.kind === 'rename') {
+        const result = await window.electronAPI.renameAssetNode(node.path, value, node.isDirectory)
+        if (result.success) {
+          onLog(`Renamed ${node.isDirectory ? 'directory' : 'file'} to ${value}`, 'success')
+          loadTree()
+          if (selectedNode?.path === node.path) {
+            onSelect(null)
+          }
+          setActionModal({ visible: false, kind: null, node: null, value: '', submitting: false })
+        } else {
+          onLog(`Rename failed: ${result.error ?? 'unknown error'}`, 'error')
+          setActionModal(prev => ({ ...prev, submitting: false }))
+        }
+      } else if (actionModal.kind === 'createScript') {
+        const result = await window.electronAPI.createScriptAsset(node.path, value)
+        if (result.success) {
+          onLog(`Created script asset: ${result.sourcePath}`, 'success')
+          loadTree()
+          setActionModal({ visible: false, kind: null, node: null, value: '', submitting: false })
+        } else {
+          onLog(`Create script failed: ${result.error ?? 'unknown error'}`, 'error')
+          setActionModal(prev => ({ ...prev, submitting: false }))
+        }
+      }
+    } catch (err) {
+      onLog(`Action failed: ${(err as Error).message}`, 'error')
+      setActionModal(prev => ({ ...prev, submitting: false }))
+    }
+  }
+
+  const handleContextMenuItem = (action: () => void | Promise<void>) => (event: React.MouseEvent | React.PointerEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+    void action()
   }
 
   const handleCloseImportModal = () => {
@@ -548,6 +650,47 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
         </div>
       )}
 
+      {actionModal.visible && actionModal.kind && actionModal.node && (
+        <div className="import-modal-overlay">
+          <div className="import-modal asset-action-modal">
+            <div className="import-modal-title">
+              {actionModal.kind === 'rename' ? 'Rename Node' : 'Create Script Asset'}
+            </div>
+            <div className="import-modal-meta">
+              <div>Target: <strong>{actionModal.node.path || 'Assets'}</strong></div>
+            </div>
+            <div className="import-modal-hint">
+              {actionModal.kind === 'rename'
+                ? 'Enter the new file or folder name.'
+                : 'Enter a script file name. .txt will be added automatically if omitted.'}
+            </div>
+            <input
+              className="filter-input asset-action-input"
+              type="text"
+              value={actionModal.value}
+              autoFocus
+              onChange={e => setActionModal(prev => ({ ...prev, value: e.target.value }))}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  void submitActionModal()
+                } else if (e.key === 'Escape') {
+                  closeActionModal()
+                }
+              }}
+              disabled={actionModal.submitting}
+            />
+            <div className="import-modal-actions">
+              <button className="btn btn-sm" onClick={closeActionModal} disabled={actionModal.submitting}>
+                Cancel
+              </button>
+              <button className="btn btn-sm btn-primary" onClick={submitActionModal} disabled={actionModal.submitting || !actionModal.value.trim()}>
+                {actionModal.submitting ? 'Working...' : 'OK'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <input
         className="filter-input"
         type="text"
@@ -576,10 +719,23 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
       </div>
 
       {contextMenu.visible && contextMenu.node && (
-        <div className="context-menu" style={{ left: contextMenu.x, top: contextMenu.y }}>
-          <div className="context-menu-item danger" onClick={handleDeleteNode}>
+        <div
+          ref={contextMenuRef}
+          className="context-menu"
+          style={{ left: contextMenu.x, top: contextMenu.y }}
+          onPointerDown={e => e.stopPropagation()}
+        >
+          {contextMenu.node.isDirectory && (
+            <button type="button" className="context-menu-item" onPointerDown={handleContextMenuItem(handleCreateScriptAsset)}>
+              Add Script
+            </button>
+          )}
+          <button type="button" className="context-menu-item" onPointerDown={handleContextMenuItem(handleRenameNode)}>
+            Rename
+          </button>
+          <button type="button" className="context-menu-item danger" onPointerDown={handleContextMenuItem(handleDeleteNode)}>
             Delete {contextMenu.node.isDirectory ? 'Directory' : 'File'}
-          </div>
+          </button>
         </div>
       )}
     </div>

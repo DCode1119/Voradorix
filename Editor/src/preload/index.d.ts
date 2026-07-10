@@ -82,6 +82,8 @@ export interface ElectronAPI {
   // Asset operations
   importAsset: (sourcePath: string, type: string) => Promise<{ guid: string; sourcePath: string } | { error: string }>
   registerAsset: (relativePath: string, type: string) => Promise<{ guid: string; sourcePath: string } | { error: string }>
+  createScriptAsset: (targetDirRelPath: string, fileName: string) => Promise<{ success: boolean; sourcePath?: string; guid?: string; error?: string }>
+  renameAssetNode: (sourceRelPath: string, newName: string, isDirectory: boolean) => Promise<{ success: boolean; newPath?: string; error?: string }>
   deleteAsset: (guid: string) => Promise<void>
   deleteNode: (relativePath: string, isDirectory: boolean, guid?: string) => Promise<{ success: boolean; removedRegistryCount: number; removedPaths: string[]; error?: string }>
   updateAlias: (guid: string, alias: string | null) => Promise<void>

@@ -353,6 +353,7 @@ export default function ScriptEditorPanel({ node, onLog, onAssetUpdate }: Script
   const [isLoading, setIsLoading] = useState(true)
   const [saveState, setSaveState] = useState<'idle' | 'dirty' | 'saving' | 'saved' | 'error'>('idle')
   const [errorText, setErrorText] = useState<string | null>(null)
+  const [alias, setAlias] = useState(node.assetEntry?.alias ?? '')
   const [autocomplete, setAutocomplete] = useState<{ open: boolean; start: number; prefix: string; index: number }>({
     open: false,
     start: 0,
@@ -366,6 +367,7 @@ export default function ScriptEditorPanel({ node, onLog, onAssetUpdate }: Script
     setIsLoading(true)
     setErrorText(null)
     setSaveState('idle')
+    setAlias(node.assetEntry?.alias ?? '')
     setText('')
     setSavedText('')
 
@@ -620,6 +622,17 @@ export default function ScriptEditorPanel({ node, onLog, onAssetUpdate }: Script
     await saveScript(text, 'manual')
   }, [saveScript, text])
 
+  const handleAliasSave = useCallback(async () => {
+    if (!node.assetEntry) return
+    try {
+      await window.electronAPI.updateAlias(node.assetEntry.guid, alias || null)
+      onLog(`Alias updated for ${node.name}`, 'success')
+      onAssetUpdate?.()
+    } catch (err) {
+      onLog(`Alias update failed: ${(err as Error).message}`, 'error')
+    }
+  }, [alias, node.assetEntry, node.name, onAssetUpdate, onLog])
+
   const handleKeyDown = useCallback((event: ReactKeyboardEvent<HTMLTextAreaElement>) => {
     if (autocomplete.open && filteredAutocomplete.length > 0) {
       if (event.key === 'ArrowDown') {
@@ -836,6 +849,20 @@ export default function ScriptEditorPanel({ node, onLog, onAssetUpdate }: Script
       </div>
 
       <div className="metadata-panel script-editor-footer">
+        <div className="metadata-row">
+          <span className="metadata-label">Alias:</span>
+          <span className="metadata-value">
+            <input
+              className="alias-input"
+              type="text"
+              value={alias}
+              onChange={e => setAlias(e.target.value)}
+              placeholder="(no alias)"
+              onBlur={handleAliasSave}
+              onKeyDown={e => { if (e.key === 'Enter') handleAliasSave() }}
+            />
+          </span>
+        </div>
         <div className="metadata-row">
           <span className="metadata-label">File:</span>
           <span className="metadata-value mono small">{node.name}</span>

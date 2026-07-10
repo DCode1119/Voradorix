@@ -73,6 +73,19 @@ interface DeleteNodeResult {
   error?: string
 }
 
+interface CreateScriptAssetResult {
+  success: boolean
+  sourcePath?: string
+  guid?: string
+  error?: string
+}
+
+interface RenameNodeResult {
+  success: boolean
+  newPath?: string
+  error?: string
+}
+
 // ── 헬퍼 ────────────────────────────────────────────────────────────
 
 /** 에셋 타입별 서브디렉토리 매핑 */
@@ -193,6 +206,38 @@ function cleanupEmptyParentDirectories(startFullPath: string): void {
 
     current = dirname(current)
   }
+}
+
+function normalizeRelativeDirectoryPath(relativePath: string): string {
+  return normalizeRelativePath(relativePath).replace(/^\.?\/?/, '').replace(/\/$/, '')
+}
+
+function renameRegistryPaths(registry: AssetRegistryData, oldRelPath: string, newRelPath: string, isDirectory: boolean): number {
+  const normalizedOld = normalizeRelativePath(oldRelPath)
+  const normalizedNew = normalizeRelativePath(newRelPath)
+  const oldPrefix = normalizedOld ? `${normalizedOld}/` : ''
+  const newPrefix = normalizedNew ? `${normalizedNew}/` : ''
+
+  let updatedCount = 0
+  for (const asset of registry.assets) {
+    const assetPath = normalizeRelativePath(asset.sourcePath)
+    const shouldRename = isDirectory
+      ? assetPath === normalizedOld || (oldPrefix.length > 0 && assetPath.startsWith(oldPrefix))
+      : assetPath === normalizedOld
+
+    if (!shouldRename) continue
+
+    if (isDirectory) {
+      asset.sourcePath = assetPath === normalizedOld
+        ? normalizedNew
+        : normalizeRelativePath(assetPath.replace(oldPrefix, newPrefix))
+    } else {
+      asset.sourcePath = normalizedNew
+    }
+    updatedCount++
+  }
+
+  return updatedCount
 }
 
 function deleteRegistryEntries(targetRelPath: string, isDirectory: boolean, guid?: string): { removedRegistryCount: number; removedPaths: string[] } {
@@ -772,6 +817,86 @@ export function registerIpcHandlers(): void {
     }
 
     return { success: true }
+  })
+
+  // Script Asset 생성 (디렉토리 우클릭 메뉴)
+  ipcMain.handle('asset:createScript', async (_event, targetDirRelPath: string, fileName: string): Promise<CreateScriptAssetResult> => {
+    const normalizedTargetDir = normalizeRelativeDirectoryPath(targetDirRelPath)
+    const cleanFileName = fileName.trim()
+    if (!cleanFileName) {
+      return { success: false, error: 'File name is required' }
+    }
+
+    const targetDir = join(ASSETS_DIR, normalizedTargetDir)
+    if (!existsSync(targetDir)) {
+      return { success: false, error: 'Target directory not found' }
+    }
+
+    const scriptName = cleanFileName.toLowerCase().endsWith('.txt') ? cleanFileName : `${cleanFileName}.txt`
+    const relPath = normalizeRelativePath(join(normalizedTargetDir, scriptName))
+    const fullPath = join(ASSETS_DIR, relPath)
+
+    if (existsSync(fullPath)) {
+      return { success: false, error: 'File already exists' }
+    }
+
+    try {
+      writeFileSync(fullPath, '', 'utf-8')
+    } catch (err) {
+      return { success: false, error: `Failed to create script: ${(err as Error).message}` }
+    }
+
+    const registry = readRegistry()
+    const guid = randomUUID()
+    registry.assets.push({
+      guid,
+      type: 'script',
+      alias: null,
+      sourcePath: relPath
+    })
+    saveRegistry(registry)
+
+    return { success: true, sourcePath: relPath, guid }
+  })
+
+  // 노드 이름 변경 (파일/디렉토리)
+  ipcMain.handle('asset:renameNode', async (_event, sourceRelPath: string, newName: string, isDirectory: boolean): Promise<RenameNodeResult> => {
+    const normalizedSource = normalizeRelativePath(sourceRelPath)
+    const cleanName = newName.trim()
+    if (!cleanName) {
+      return { success: false, error: 'Name is required' }
+    }
+
+    const parentRel = normalizedSource.includes('/') ? normalizedSource.slice(0, normalizedSource.lastIndexOf('/')) : ''
+    const newRelPath = normalizeRelativePath(parentRel ? join(parentRel, cleanName) : cleanName)
+    const srcFull = join(ASSETS_DIR, normalizedSource)
+    const dstFull = join(ASSETS_DIR, newRelPath)
+
+    if (!existsSync(srcFull)) {
+      return { success: false, error: 'Source not found' }
+    }
+
+    if (existsSync(dstFull)) {
+      return { success: false, error: 'Target already exists' }
+    }
+
+    try {
+      renameSync(srcFull, dstFull)
+    } catch (err) {
+      return { success: false, error: `Failed to rename: ${(err as Error).message}` }
+    }
+
+    const registry = readRegistry()
+    const updated = renameRegistryPaths(registry, normalizedSource, newRelPath, isDirectory)
+    if (updated > 0) {
+      saveRegistry(registry)
+    }
+
+    if (isDirectory) {
+      cleanupEmptyParentDirectories(dirname(srcFull))
+    }
+
+    return { success: true, newPath: newRelPath }
   })
 
   // 파일 선택 대화상자 열기

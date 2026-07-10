@@ -43,6 +43,7 @@ Script Editor는 `Assets/Scripts/` 디렉토리의 `.txt` 스크립트 파일을
 
 ### 2.4 현재 구현된 동작
 - `.txt` 파일 선택 시 전용 Script Editor 렌더링
+- Alias 편집 지원
 - 저장/자동저장 지원
 - `@label`, `@jump`, `@choice` 검증
 - 도달 불가 블럭 및 잠재적 무한루프 탐지

@@ -397,6 +397,7 @@ tags:
 
 - `Editor/src/renderer/src/components/ScriptEditorPanel.tsx`
   - `.txt` 스크립트 전용 편집 UI 추가
+  - Script Asset Alias 편집 지원
   - `@label`, `@jump`, `@choice` 검증 및 점프 대상 존재 여부 검사
   - 블럭 단위 색상띠 표시
   - 도달 불가 블럭 및 잠재적 무한루프 경고 표시
@@ -409,6 +410,8 @@ tags:
   - Renderer에서 스크립트 저장 API 노출
 - `Editor/src/renderer/src/components/AssetTree.tsx`
   - Alias 없는 리소스 노란 상태 표시 추가
+  - 디렉토리 우클릭으로 Script Asset 추가
+  - 노드 우클릭 Rename 지원
 
 
 ### 디렉토리 구조
