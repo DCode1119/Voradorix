@@ -73,6 +73,7 @@ export interface ElectronAPI {
   readDirectory: (path: string) => Promise<FileEntry[]>
   readFileBase64: (path: string) => Promise<string | null>
   readFileText: (path: string) => Promise<string | null>
+  writeFileText: (path: string, content: string) => Promise<{ success: boolean; error?: string }>
   createDirectory: (relativePath: string) => Promise<{ success: boolean; error?: string }>
   pickImportSources: () => Promise<{ canceled: boolean; sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }> }>
   previewImport: (sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }>, targetDirRelPath: string) => Promise<ImportPreviewData | { error: string }>

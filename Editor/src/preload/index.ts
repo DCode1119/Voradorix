@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   readDirectory: (path: string) => ipcRenderer.invoke('fs:readDirectory', path),
   readFileBase64: (path: string) => ipcRenderer.invoke('fs:readFileBase64', path),
   readFileText: (path: string) => ipcRenderer.invoke('fs:readFileText', path),
+  writeFileText: (path: string, content: string) => ipcRenderer.invoke('fs:writeFileText', path, content),
   createDirectory: (relativePath: string) => ipcRenderer.invoke('fs:createDirectory', relativePath),
 
   // Import helpers

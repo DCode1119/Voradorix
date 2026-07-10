@@ -446,6 +446,18 @@ export function registerIpcHandlers(): void {
     }
   })
 
+  // 파일 쓰기 (텍스트 — 스크립트 편집용)
+  ipcMain.handle('fs:writeFileText', async (_event, relativePath: string, content: string): Promise<{ success: boolean; error?: string }> => {
+    const fullPath = join(ASSETS_DIR, relativePath)
+    try {
+      ensureParentDirectory(fullPath)
+      writeFileSync(fullPath, content, 'utf-8')
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: (err as Error).message }
+    }
+  })
+
   // 에셋 Import
   ipcMain.handle('asset:import', async (_event, sourcePath: string, type: string): Promise<{ guid: string; sourcePath: string } | { error: string }> => {
     const assetType = extToAssetType(extname(sourcePath))

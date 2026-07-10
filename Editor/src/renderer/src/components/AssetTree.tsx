@@ -130,12 +130,15 @@ function TreeNodeItem({
   }
 
   const isSelected = selectedPath === node.path
+  const hasAlias = Boolean(node.assetEntry?.alias)
+  const needsAlias = Boolean(node.assetEntry && !hasAlias)
 
   const classes = [
     'tree-item',
     isSelected ? 'selected' : '',
     node.isDirectory ? 'directory' : 'file',
-    node.isRegistered ? 'registered' : 'unregistered'
+    node.isRegistered ? 'registered' : 'unregistered',
+    needsAlias ? 'alias-missing' : ''
   ].filter(Boolean).join(' ')
 
   return (
@@ -161,7 +164,12 @@ function TreeNodeItem({
                   : '📄')
           }
         </span>
-        <span className="tree-status">{node.isRegistered ? '🟢' : '⚪'}</span>
+        <span
+          className={`tree-status ${needsAlias ? 'alias-missing' : ''}`}
+          title={needsAlias ? 'Alias 없음' : (node.isRegistered ? 'Registered' : 'Not registered')}
+        >
+          {needsAlias ? '🟡' : (node.isRegistered ? '🟢' : '⚪')}
+        </span>
         <span className="tree-name">{node.name}</span>
       </div>
       {node.isDirectory && expanded && (

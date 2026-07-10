@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { AssetTreeNode, AssetEntry } from '../types'
+import { AssetTreeNode } from '../types'
+import ScriptEditorPanel from './ScriptEditorPanel'
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -27,7 +28,7 @@ interface PreviewPanelProps {
 
 export default function PreviewPanel({ node, onLog, onAssetUpdate }: PreviewPanelProps) {
   const [previewData, setPreviewData] = useState<string | null>(null)
-  const [previewType, setPreviewType] = useState<'image' | 'text' | 'font' | 'none'>('none')
+  const [previewType, setPreviewType] = useState<'image' | 'font' | 'none'>('none')
   const [alias, setAlias] = useState('')
 
   // Load preview content
@@ -49,11 +50,6 @@ export default function PreviewPanel({ node, onLog, onAssetUpdate }: PreviewPane
     } else if (ext === '.ttf' || ext === '.otf') {
       setPreviewType('font')
       window.electronAPI.readFileBase64(node.path).then(data => {
-        setPreviewData(data)
-      })
-    } else if (ext === '.txt') {
-      setPreviewType('text')
-      window.electronAPI.readFileText(node.path).then(data => {
         setPreviewData(data)
       })
     } else {
@@ -126,7 +122,6 @@ export default function PreviewPanel({ node, onLog, onAssetUpdate }: PreviewPane
 
   const renderFontPreview = () => {
     if (!previewData || !node) return <div className="preview-placeholder">Loading...</div>
-    const fontFace = new FontFace('preview-font', `url(data:font/ttf;base64,${previewData})`)
     return (
       <div className="preview-font-wrapper">
         <style>{`@font-face { font-family: 'preview-font'; src: url(data:font/ttf;base64,${previewData}); }`}</style>
@@ -135,13 +130,6 @@ export default function PreviewPanel({ node, onLog, onAssetUpdate }: PreviewPane
           <div className="font-sample-info">{node.name}</div>
         </div>
       </div>
-    )
-  }
-
-  const renderTextPreview = () => {
-    if (previewData === null) return <div className="preview-placeholder">Loading...</div>
-    return (
-      <pre className="preview-text">{previewData}</pre>
     )
   }
 
@@ -157,13 +145,16 @@ export default function PreviewPanel({ node, onLog, onAssetUpdate }: PreviewPane
     )
   }
 
+  if (node.extension === '.txt') {
+    return <ScriptEditorPanel node={node} onLog={onLog} onAssetUpdate={onAssetUpdate} />
+  }
+
   return (
     <div className="preview-panel">
       {/* Preview area */}
       <div className="preview-area">
         {previewType === 'image' && renderImagePreview()}
         {previewType === 'font' && renderFontPreview()}
-        {previewType === 'text' && renderTextPreview()}
         {previewType === 'none' && (
           <div className="preview-placeholder">No preview available</div>
         )}

@@ -389,6 +389,28 @@ tags:
 
 ## 비주얼 노벨 엔진 — 구현 계획 (10단계)
 
+---
+
+## 2026-07-11 (Editor)
+
+### Script Editor 확장
+
+- `Editor/src/renderer/src/components/ScriptEditorPanel.tsx`
+  - `.txt` 스크립트 전용 편집 UI 추가
+  - `@label`, `@jump`, `@choice` 검증 및 점프 대상 존재 여부 검사
+  - 블럭 단위 색상띠 표시
+  - 도달 불가 블럭 및 잠재적 무한루프 경고 표시
+  - `@` 입력 시 명령어 자동완성 드롭다운 및 스니펫 삽입
+  - 커서 인근 표시, 스크롤 추적, 위/아래 방향 펼침 대응
+  - 줄번호 0-based 표시, 빈 줄은 번호 건너뜀
+- `Editor/src/main/ipcHandlers.ts`
+  - 스크립트 저장용 텍스트 쓰기 IPC 추가
+- `Editor/src/preload/index.ts`, `index.d.ts`
+  - Renderer에서 스크립트 저장 API 노출
+- `Editor/src/renderer/src/components/AssetTree.tsx`
+  - Alias 없는 리소스 노란 상태 표시 추가
+
+
 ### 디렉토리 구조
 
 ```
