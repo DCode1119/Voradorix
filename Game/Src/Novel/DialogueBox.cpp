@@ -3,33 +3,33 @@
 #include "Novel/DialogueBox.h"
 
 // Third-party Library
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 
 // Project Headers
 #include "Core/Vector.h"
+#include "Core/AssetManager.h"
 
 CVrdxDialogueBox::CVrdxDialogueBox(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxWidgetBase(ParentWidget, InShape)
-	, SpeakerText(Font)
-	, LineText(Font)
 	, VisibleCount(0)
 	, TypeTimer(0.f)
 	, TypeInterval(0.05f)
-	, bFontLoaded(false)
 	, bWaiting(false)
 {
-	bFontLoaded = Font.openFromFile("Assets/Fonts/malgun.ttf");
-
-	if (bFontLoaded)
+	if (auto Font = CVrdxAssetManager::Get().GetFont("malgun"))
 	{
-		SpeakerText.setCharacterSize(24);
-		SpeakerText.setFillColor(sf::Color::White);
-		SpeakerText.setPosition(sf::Vector2f(MapToGlobal({20, 10})));
+		SpeakerText = MakeVrdxShared<sf::Text>(*Font);
+		SpeakerText->setCharacterSize(24);
+		SpeakerText->setFillColor(sf::Color::White);
+		SpeakerText->setPosition(sf::Vector2f(MapToGlobal({20, 10})));
 
-		LineText.setCharacterSize(20);
-		LineText.setFillColor(sf::Color(220, 220, 220));
-		LineText.setPosition(sf::Vector2f(MapToGlobal({20, 50})));
+		LineText = MakeVrdxShared<sf::Text>(*Font);
+		LineText->setCharacterSize(20);
+		LineText->setFillColor(sf::Color(220, 220, 220));
+		LineText->setPosition(sf::Vector2f(MapToGlobal({20, 50})));
 	}
 }
 
@@ -37,20 +37,20 @@ void CVrdxDialogueBox::Update(const float DeltaTick)
 {
 	CVrdxWidgetBase::Update(DeltaTick);
 
-	if (!IsTyping())
+	if (!IsTyping() || ! LineText)
 	{
 		return;
 	}
 
 	TypeTimer += DeltaTick;
-	while (TypeTimer >= TypeInterval && VisibleCount < CurrentText.Length())
+	while (TypeTimer >= TypeInterval && VisibleCount < CurrentTextString.Length())
 	{
 		VisibleCount++;
 		TypeTimer -= TypeInterval;
 	}
 
-	const FVrdxString DisplayText = CurrentText.Left(VisibleCount);
-	LineText.setString(DisplayText.ToSfString());
+	const FVrdxString DisplayText = CurrentTextString.Left(VisibleCount);
+	LineText->setString(DisplayText.ToSfString());
 }
 
 void CVrdxDialogueBox::Draw(sf::RenderWindow& Window) const
@@ -62,10 +62,13 @@ void CVrdxDialogueBox::Draw(sf::RenderWindow& Window) const
 
 	CVrdxWidgetBase::Draw(Window);
 
-	if (bFontLoaded)
+	if (auto Font = CVrdxAssetManager::Get().GetFont("malgun"))
 	{
-		Window.draw(SpeakerText);
-		Window.draw(LineText);
+		if (SpeakerText && LineText)
+		{
+			Window.draw(*SpeakerText);
+			Window.draw(*LineText);
+		}
 	}
 }
 
@@ -97,26 +100,26 @@ void CVrdxDialogueBox::SetSpeaker(const FVrdxString& Name)
 {
 	SpeakerName = Name;
 
-	if (bFontLoaded)
+	if (SpeakerText)
 	{
-		SpeakerText.setString(Name.ToSfString());
+		SpeakerText->setString(Name.ToSfString());
 	}
 }
 
 void CVrdxDialogueBox::SetLine(const FVrdxString& Text)
 {
-	CurrentText = Text;
+	CurrentTextString = Text;
 	StartTyping();
 }
 
 bool CVrdxDialogueBox::IsTyping() const
 {
-	return VisibleCount < CurrentText.Length();
+	return VisibleCount < CurrentTextString.Length();
 }
 
 bool CVrdxDialogueBox::IsFinished() const
 {
-	return !CurrentText.IsEmpty() && !IsTyping();
+	return !CurrentTextString.IsEmpty() && !IsTyping();
 }
 
 bool CVrdxDialogueBox::IsWaiting() const
@@ -130,19 +133,19 @@ void CVrdxDialogueBox::StartTyping()
 	VisibleCount = 0;
 	TypeTimer = 0.f;
 
-	if (bFontLoaded)
+	if (LineText)
 	{
-		LineText.setString(sf::String());
+		LineText->setString(sf::String());
 	}
 }
 
 void CVrdxDialogueBox::FinishTyping()
 {
-	VisibleCount = CurrentText.Length();
+	VisibleCount = CurrentTextString.Length();
 
-	if (bFontLoaded)
+	if (LineText)
 	{
-		LineText.setString(CurrentText.ToSfString());
+		LineText->setString(CurrentTextString.ToSfString());
 	}
 }
 

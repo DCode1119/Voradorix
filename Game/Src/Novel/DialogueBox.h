@@ -2,9 +2,9 @@
 #pragma once
 
 // Third-party Library
-#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Text.hpp>
+
+namespace sf { class Text; }
 
 // Project Headers
 #include "Core/String.h"
@@ -39,14 +39,12 @@ private:
 	void StartTyping();
 
 	// 위젯
-	sf::Font           Font;            // 폰트
-	bool               bFontLoaded;     // 폰트 로드 성공 여부
 	bool bWaiting;
-	sf::Text           SpeakerText;     // 발화자명 (Font 참조 필요)
-	sf::Text           LineText;        // 대사 내용 (Font 참조 필요)
+	TVrdxSharedPtr<sf::Text>           SpeakerText;     // 발화자명 (Font 참조 필요)
+	TVrdxSharedPtr<sf::Text>           LineText;        // 대사 내용 (Font 참조 필요)
 
 	// 타이핑 상태
-	FVrdxString        CurrentText;  // 원본 문자열
+	FVrdxString        CurrentTextString;  // 원본 문자열
 	size_t             VisibleCount; // 현재까지 표시된 글자 수
 	float              TypeTimer;    // 타이핑 누적 시간
 	float              TypeInterval; // 글자 간 시간 간격 (초)

@@ -1,13 +1,11 @@
 // Copyright DCode. All Rights Reserved.
 #pragma once
 
-// Third-party Library
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-
 // Project Headers
 #include "Core/String.h"
 #include "Ui/BoxWidget.h"
+
+namespace sf { class Text; }
 
 class CVrdxTextLabel: public CVrdxBoxWidget
 {
@@ -18,11 +16,10 @@ public:
 	virtual void Draw(sf::RenderWindow& Window) const override;
 
 	void SetText(const FVrdxString& String);
-	void SetFont(const sf::Font& InFont);
+	void SetFont(const FVrdxString& FontName);
 	void SetFontSize(const unsigned int FontSize);
 	void SetFontColor(const sf::Color& Color);
 
 private:
-	sf::Font Font;
-	sf::Text Text;
+	TVrdxSharedPtr<sf::Text> Text;
 };

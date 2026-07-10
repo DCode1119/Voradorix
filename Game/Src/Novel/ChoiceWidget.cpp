@@ -6,12 +6,12 @@
 #include <unordered_map>
 
 // Project Headers
+#include "Core/AssetManager.h"
 #include "Novel/NovelScene.h"
 
 CVrdxChoiceWidget::CVrdxChoiceWidget(const TVrdxWeakPtr<CVrdxWidgetBase> ParentWidget, const sf::RectangleShape& InShape)
 	: CVrdxWidgetBase(ParentWidget, InShape)
 {
-	bFontLoaded = Font.openFromFile("Assets/Fonts/malgun.ttf");
 }
 
 void CVrdxChoiceWidget::SetNovelScene(TVrdxSharedPtr<CVrdxNovelScene> NovelScene)
@@ -68,6 +68,7 @@ void CVrdxChoiceWidget::Update(const float DeltaTick)
 	ButtonTexts.Clear();
 	ButtonTexts.Reserve(MaxChoices);
 
+	auto Font = CVrdxAssetManager::Get().GetFont("malgun");
 	const sf::Color SelectedColors[] = { sf::Color::Blue, sf::Color::Red };
 	const sf::Color NormalColors[] = { sf::Color::Black, sf::Color::White};
 
@@ -85,9 +86,9 @@ void CVrdxChoiceWidget::Update(const float DeltaTick)
 
 		Buttons.Add(ButtonShape);
 
-		if (bFontLoaded)
+		if (Font)
 		{
-			sf::Text ButtonText(Font);
+			sf::Text ButtonText(*Font);
 			ButtonText.setCharacterSize(20);
 			ButtonText.setFillColor(sf::Color::Green);
 			ButtonText.setPosition(ButtonPosition);

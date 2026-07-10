@@ -29,7 +29,9 @@ namespace
 	{
 		Entry.Guid = FVrdxString(Json.at("guid").get<std::string>());
 		Entry.Type = StringToType(Json.at("type").get<std::string>());
-		Entry.Alias = Json.value("alias", std::string());  // null-safe, 빈 문자열 fallback
+
+		auto Alias = Json.at("alias");
+		Entry.Alias = Alias.is_null() ? "" : Alias.get<std::string>();
 		Entry.SourcePath = FVrdxString(Json.at("sourcePath").get<std::string>());
 	}
 }

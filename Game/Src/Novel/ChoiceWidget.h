@@ -2,7 +2,6 @@
 #pragma once
 
 // Third-party Library
-#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -57,9 +56,6 @@ private:
 	int32_t SelectedIndex = 0;
 
 	EVrdxChoiceState ChoiceState = EVrdxChoiceState::Hidden;
-
-	sf::Font Font;
-	bool bFontLoaded = false;
 
 	TVrdxVector<sf::RectangleShape> Buttons;
 	TVrdxVector<sf::Text> ButtonTexts;
