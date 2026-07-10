@@ -15,12 +15,13 @@ D:\Projects\SFML_Project\          ← opencode 프로젝트 루트
     │   ├─ Game.vcxproj
     │   ├─ Game.vcxproj.filters
     │   ├─ Src/
-    │   │   ├─ Core/              ← 유틸리티 (Common.h, String, Vector)
+    │   │   ├─ Core/              ← 유틸리티 (Common.h, String, Vector, AssetManager)
     │   │   ├─ Novel/             ← 비주얼 노벨 전용 컴포넌트 (NovelScene, Background,
     │   │   │                       CharacterManager, DialogueBox, ChoiceWidget, ScriptEngine 등)
     │   │   ├─ Ui/                ← 공통 UI 컴포넌트 (WidgetBase, Application, BoxWidget, Button, TextLabel)
     │   │   └─ Main.cpp
     │   ├─ Assets/
+    │   ├─ Editor/                       ← Electron 에디터 프로젝트 (Phase 2 예정)
     │   ├─ Saves/
     │   └─ Docs/
     ├─ Extern/

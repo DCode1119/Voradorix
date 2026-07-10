@@ -68,6 +68,9 @@
     <ClCompile Include="Src\Novel\TitleWindow.cpp">
       <Filter>소스 파일\Novel</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\AssetManager.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Core\Common.h">
@@ -123,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="Src\Novel\TitleWindow.h">
       <Filter>소스 파일\Novel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\AssetManager.h">
+      <Filter>소스 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

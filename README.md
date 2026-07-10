@@ -1,11 +1,14 @@
 # Voradorix
 
-SFML 3.1.0 기반 2D 비주얼 노벨 엔진
+SFML 3.1.0 기반 2D 비주얼 노벨 엔진 + Electron 에디터
 
 ## 개요
 
 C++17, Visual Studio 2022 x64 환경에서 SFML 3.1.0을 사용하여 구축하는
-비주얼 노벨(미연시) 스타일 게임 엔진입니다.
+비주얼 노벨(미연시) 스타일 게임 엔진이며, Electron 기반 에디터를 함께 개발 중입니다.
+
+> **2026-07-10: 프로젝트 방향 전환** — 게임 개발 → **게임 엔진 + 에디터 개발**
+> 자세한 내용은 [[Docs/Design/PROJECT_DIRECTION.md]] 참조.
 
 Widget Tree 기반 아키텍처, 텍스트 출력, 스크립트/분기/세이브로드 구조를 지원합니다.
 
@@ -29,18 +32,20 @@ Game/                          ← Git 저장소 루트
 │   ├── Game.vcxproj.filters
 │   ├── Src/
 │   │   ├── Main.cpp
-│   │   ├── Core/             # Common, Vector, String (유틸리티)
+│   │   ├── Core/             # Common, Vector, String, AssetManager (유틸리티)
 │   │   ├── Novel/            # NovelScene, Background, CharacterManager,
 │   │   │                       DialogueBox, ChoiceWidget, ScriptEngine
 │   │   └── Ui/               # Application, WidgetBase, BoxWidget, Button,
 │   │                           TextLabel (공통 UI)
 │   ├── Assets/               # 폰트 및 리소스
 │   └── Saves/                # 세이브 파일 저장 디렉토리
+├── Editor/                   # Electron 에디터 (Phase 2 예정)
 ├── Extern/                    # SFML 3.1.0, nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서
-│   ├── 1-SceneSystem.md ~ 8-Menu.md
-│   ├── BACKLOG.md
-│   └── PROJECT_STRUCTURE.md  # opencode/Git 구조 설명
+│   ├── Engine/               # 엔진 기능명세 (1~9단계, String, StructureReform)
+│   ├── Editor/               # 에디터 기능명세 (Phase 1~4, ARCHITECTURE)
+│   ├── Design/               # 설계문서 (DIRECTION, STRUCTURE, NAMING, GAME_DESIGN)
+│   └── Management/           # BACKLOG, 작업 기록
 ├── graphify-out/             # 그래프 분석 산출물 (git 미관리)
 ├── .gitignore
 └── README.md
@@ -48,7 +53,9 @@ Game/                          ← Git 저장소 루트
 
 ## 구현 현황
 
-- [x] **1단계 — Scene 시스템**: Scene 인터페이스, SceneManager, Application, 검증용 TestScene 완료
+### 엔진 런타임 (기존, 안정화)
+
+- [x] **1단계 — Scene 시스템**: Scene 인터페이스, SceneManager, Application, 검증용 TestScene 완료 (역사적, Widget Tree로 대체)
 - [x] **2단계 — NovelScene + DialogueBox + String 기반**: 대사창/문자열 기반과 노벨 본문 흐름 완료
 - [x] **3단계 — 배경 및 캐릭터**: CVrdxBackground (페이드 전환) + CVrdxCharacterManager (슬롯/페이드/텍스처 캐싱) 구현 완료
 - [x] **4단계 — ScriptEngine**: 스크립트 로드/파싱/실행, @label/@jump 분기 완료
@@ -60,7 +67,19 @@ Game/                          ← Git 저장소 루트
 - [x] **8단계 — 메뉴 구성**: TitleWindow (New Game / Continue) + SaveLoadWindow (10슬롯, Save/Load 모드) 구현 완료
   - NovelScene::ResetScriptEngine() 추가 (New Game 재시작)
   - Save/Load 경로 버그 수정
-- [ ] 9단계 — 연출 효과
+- [ ] **9단계 — EffectManager** (연출 효과, **보류** — 프로젝트 방향 전환으로 후순위)
+
+### 신규 — 엔진 + 에디터 개발 방향 (2026-07-10 전환)
+
+- [ ] **Phase 1 — AssetManager** (C++, Core/AssetManager.h/cpp)
+  - 싱글톤 독립 모듈, UUID v4 기반 에셋 식별
+  - `AssetRegistry.json` 중앙 레지스트리
+  - 1차 목표: `LoadFont()` 구현, 폰트 중복 로딩 제거
+  - 2차 목표: `LoadTexture()`, `ImportAsset()` 구현
+- [ ] **Phase 2 — Electron Editor** (Game/Editor/)
+  - Asset Browser (파일 트리, 미리보기, Import)
+  - Play/Stop 버튼 (Game.exe spawn)
+  - React + Vite
 
 ## 스크립트 문법
 
@@ -117,8 +136,12 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 
 - 1~8단계 + 구조 변경 빌드/테스트 확인 완료
 - 8단계(메뉴 구성) TitleWindow / SaveLoadWindow 구현 완료
-- 9단계(연출 효과)는 예정
+- **2026-07-10: 프로젝트 방향 전환** — 게임 개발 → 게임 엔진 + 에디터 개발
+  - 9단계(연출 효과)는 보류
+  - Phase 1: AssetManager (C++) 우선 구현
+  - Phase 2: Electron 에디터 (Asset Browser) 예정
 - 작업 기록과 설계 문서는 `Docs/`를 참고
+- 방향 전환 상세: `Docs/Design/PROJECT_DIRECTION.md`
 
 ## 라이선스
 

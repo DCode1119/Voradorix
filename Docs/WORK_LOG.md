@@ -296,6 +296,58 @@ tags:
 **문서:**
 - `Docs/8-Menu.md` — 명세서를 실제 구현에 맞게 전면 갱신
 
+## 2026-07-10 (Discussion)
+
+### 프로젝트 방향 전환 — 게임 개발 → 엔진 + 에디터 개발
+
+**배경:** 8단계(메뉴 구성)까지 구현 완료된 상태에서, 콘텐츠 제작이 아직 시작되지 않았으므로
+에디터를 먼저 갖추어 제작 생산성을 확보한 후 콘텐츠 작업에 들어가는 것이 효율적이라고 판단.
+
+**결정 사항:**
+- 9단계(EffectManager, 연출 효과)는 **후순위 보류**
+- 프로젝트 방향: 비주얼 노벨 게임 개발 → **게임 엔진 + 에디터 개발**로 전환
+- 엔진은 C++/SFML 유지, 에디터는 **Electron**(웹 기술)으로 제작
+- 에디터가 메인 프로세스, 엔진은 자식 프로세스로 실행 (Unreal Editor 방식)
+- 데이터 연동은 파일 기반 (`AssetRegistry.json`)
+
+**AssetManager 설계 (Phase 1):**
+- 싱글톤, 독립 모듈 (WidgetBase 미상속)
+- 내부 식별자: UUID v4
+- Alias: 옵셔널 (Name 기반 등록 시 자동 생성)
+- 레지스트리: `AssetRegistry.json` 단일 파일
+- Import 시 원본 파일명 유지하여 프로젝트 내 `Assets/`로 복사
+- 첫 구현 목표: `LoadFont()` → 폰트 3곳(DialogueBox, TextLabel, ChoiceWidget) 중복 로딩 제거
+- `LoadFont("malgun")` 호출 시 GUID 자동 생성 + Registry 등록 + 캐싱
+
+**Electron 에디터 설계 (Phase 2):**
+- 위치: `Game/Editor/`
+- 첫 기능: Asset Browser (파일 트리, 미리보기, Import)
+- 게임 실행: `child_process.spawn()`, 경로는 `build/gamePath.json`에서 조회
+
+**향후 확장 (Phase 3):**
+- Script Editor (문법 하이라이팅, @label 네비게이션)
+- Widget Designer (위젯 트리 JSON 편집)
+
+**관련 문서:**
+- `Docs/PROJECT_DIRECTION.md` — 방향 전환 상세 명세 (신규)
+- `Docs/Voradorix.md` — phase 및 구현 현황 갱신
+- `Docs/BACKLOG.md` — 백로그 갱신
+- `README.md` — 프로젝트 설명 갱신
+
+---
+
+## 2026-07-10 (Later)
+
+### 9단계 명세서 작성
+
+- `Docs/9-EffectManager.md` — EffectManager 연출 효과 시스템 명세 작성
+  - 페이드인/페이드아웃, 셰이크, 컬러 오버레이 효과 정의
+  - 효과 큐(Queue) 시스템 설계
+  - ScriptEngine `@fadein`/`@fadeout`/`@shake`/`@coloroverlay` 명령어 연동 명세
+  - NovelScene과의 협력 관계 (Draw 시 View offset 적용)
+  - 우선순위: FadeIn/Out → Shake → ColorOverlay → 큐 → ScriptLine 순으로 구현
+- `Docs/Voradorix.md` — phase를 9로 갱신, 9단계 항목에 명세서 링크 추가
+
 ---
 
 ## 비주얼 노벨 엔진 — 구현 계획 (10단계)

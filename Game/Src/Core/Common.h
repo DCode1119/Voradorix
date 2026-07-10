@@ -93,3 +93,5 @@ public:
 private:
 	TVrdxVector<FDelegate> Delegates;
 };
+
+enum class EVrdxAssetType : uint8_t { Texture, Font, Script, Count };

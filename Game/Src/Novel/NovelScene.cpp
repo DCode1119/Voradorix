@@ -3,10 +3,8 @@
 #include "Novel/NovelScene.h"
 
 // C++ Standard Library
-//#include <algorithm>
 #include <filesystem>
 #include <fstream>
-//#include <ranges>
 #include <sstream>
 
 // Third-party Library

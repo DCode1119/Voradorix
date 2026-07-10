@@ -9,7 +9,7 @@ tags:
 # Voradorix Naming Convention
 
 > 프로젝트: **Voradorix** (SFML_Project)
-> 엔진: SFML 3.1.0 — C++17 — Visual Studio 2022 x64
+> 엔진: SFML 3.1.0 — C++20 — Visual Studio 2022 x64
 > 적용일: 2026-06-30
 
 ---

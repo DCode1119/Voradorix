@@ -89,6 +89,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Core\AssetManager.cpp" />
     <ClCompile Include="Src\Novel\SaveLoadWindow.cpp" />
     <ClCompile Include="Src\Novel\TitleWindow.cpp" />
     <ClCompile Include="Src\Ui\Application.cpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="Src\Ui\WidgetBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Core\AssetManager.h" />
     <ClInclude Include="Src\Novel\SaveLoadWindow.h" />
     <ClInclude Include="Src\Novel\TitleWindow.h" />
     <ClInclude Include="Src\Ui\Application.h" />
