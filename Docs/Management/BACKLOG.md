@@ -69,31 +69,31 @@ status: active
 
 ---
 
-## Phase 1 — AssetManager (C++ Engine)
+## Phase 1 — AssetManager (C++ Engine) ✅ 완료
 
 AssetManager 코어 구축. 싱글톤 독립 모듈, GUID 기반 에셋 식별.
 
-- [ ] `Core/AssetManager.h/cpp` — 클래스 골격 + 싱글톤
-- [ ] `LoadRegistry()` / `SaveRegistry()` — AssetRegistry.json I/O
-- [x] `LoadFont()` — 폰트 로딩 + 캐싱 (Phase 1 목표)
-- [ ] `LoadTexture()` — 텍스처 로딩 + 캐싱
-- [ ] `ImportAsset()` — 파일 복사 + GUID 생성 + Registry 등록
+- [x] `Core/AssetManager.h/cpp` — 클래스 골격 + 싱글톤
+- [x] `LoadRegistry()` / `SaveRegistry()` — AssetRegistry.json I/O
+- [x] `GetFont()` — 초기화 시 캐시 구축 후 조회
+- [ ] `GetTexture()` — 초기화 시 캐시 구축 후 조회 (후속)
+- [ ] `ImportAsset()` — 파일 복사 + GUID 생성 + Registry 등록 (후속)
 - [x] 기존 폰트 로딩 코드 3곳 리팩터 (DialogueBox, TextLabel, ChoiceWidget)
 - [x] Background 텍스처 → AssetManager 경유
 - [x] CharacterManager TextureCache → AssetManager 이관
 - [x] Script 경로 조회 → AssetManager 경유
 
-## Phase 2 — Electron Editor
+## Phase 2 — Electron Editor ✅ 기본 구현 완료
 
 Electron 기반 에디터. Asset Browser 우선 개발.
 
-- [ ] Electron 프로젝트 생성 (Vite + React)
-- [ ] Asset Browser — 파일 트리
-- [ ] Asset Browser — 미리보기
-- [ ] Asset Browser — Import (파일 복사 + Registry 등록)
-- [ ] AssetRegistry.json 읽기/쓰기
-- [ ] Play/Stop 버튼 → Voradorix.exe spawn/kill
-- [ ] `Editor/build/`에 `Voradorix.exe` 및 필요 DLL 복사 (Post-Build)
+- [x] Electron 프로젝트 생성 (Vite + React)
+- [x] Asset Browser — 파일 트리
+- [x] Asset Browser — 미리보기
+- [x] Asset Browser — Import (파일 복사 + Registry 등록)
+- [x] AssetRegistry.json 읽기/쓰기
+- [x] Play/Stop 버튼 → Voradorix.exe spawn/kill
+- [x] `Editor/build/`에 `Voradorix.exe` 및 필요 DLL 복사 (Post-Build)
 
 ## Phase 3 — Editor 확장
 

@@ -37,7 +37,7 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 |-------|------|------|
 | **1** | **Project Setup** — Electron + React + Vite 프로젝트 생성, 빌드/실행 확인 | ✅ 완료 |
 | **2** | **Asset Browser** — 파일 트리, 미리보기, Import, Registry 읽기/쓰기 | ✅ 구현 |
-| **3** | **Play/Stop** — `Voradorix.exe` spawn/kill | 예정 |
+| **3** | **Play/Stop** — `Voradorix.exe` spawn/kill | ✅ 구현 |
 | **4** | **Script Editor** (Phase 3-1) — 문법 하이라이팅, @label 네비게이션 | 예정 |
 | **5** | **Widget Designer** (Phase 3-2) — 위젯 트리 JSON 편집 | 예정 |
 

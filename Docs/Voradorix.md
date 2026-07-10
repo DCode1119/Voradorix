@@ -84,14 +84,14 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진 + Electron 에디터
 
 ### 신규 계획
 
-- [ ] **Phase 1 — AssetManager** (C++, 싱글톤 독립 모듈)
+- [x] **Phase 1 — AssetManager** (C++, 싱글톤 독립 모듈)
   - GUID 기반 에셋 식별, `AssetRegistry.json` 레지스트리
-  - `LoadFont()` → 폰트 중복 로딩 제거 (1차 목표) ✅
-  - `LoadTexture()`, `ImportAsset()` (2차 목표)
-  - `GetScriptPath()` 및 배경/캐릭터 텍스처 경로 이관 ✅
-- [ ] **Phase 2 — Electron Editor** (Electron + React, [[Editor/INDEX.md]])
-  - Asset Browser (파일 트리, 미리보기, Import)
-  - Play/Stop 버튼 (Voradorix.exe spawn)
+  - `GetFont()` → 초기화 시 폰트 캐시 구축 완료
+  - `GetTexture()`, `ImportAsset()`는 다음 확장 항목
+  - `GetScriptPath()` 및 배경/캐릭터 텍스처 경로 이관 완료
+- [x] **Phase 2 — Electron Editor** (Electron + React, [[Editor/INDEX.md]])
+  - Asset Browser (파일 트리, 미리보기, Import) 구현
+  - Play/Stop 버튼 (Voradorix.exe spawn/kill) 구현
   - 위치: `Game/Editor/`
 
 ## 문서 구조

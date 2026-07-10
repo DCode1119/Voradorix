@@ -38,7 +38,7 @@ Game/                          ← Git 저장소 루트
 │   │   └── Ui/               # Application, WidgetBase, BoxWidget, Button,
 │   │                           TextLabel (공통 UI)
 │   └── Saves/                # 세이브 파일 저장 디렉토리
-├── Editor/                   # Electron 에디터 (Phase 2 예정)
+├── Editor/                   # Electron 에디터 (개발 중)
 ├── Extern/                    # SFML 3.1.0, nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서
 │   ├── Engine/               # 엔진 기능명세 (1~9단계, String, StructureReform)
@@ -70,15 +70,15 @@ Game/                          ← Git 저장소 루트
 
 ### 신규 — 엔진 + 에디터 개발 방향 (2026-07-10 전환)
 
-- [ ] **Phase 1 — AssetManager** (C++, Core/AssetManager.h/cpp)
+- [x] **Phase 1 — AssetManager** (C++, Core/AssetManager.h/cpp)
   - 싱글톤 독립 모듈, UUID v4 기반 에셋 식별
   - `AssetRegistry.json` 중앙 레지스트리
-  - 1차 목표: `LoadFont()` 구현, 폰트 중복 로딩 제거
-  - 2차 목표: `LoadTexture()`, `ImportAsset()` 구현
-- [ ] **Phase 2 — Electron Editor** (Game/Editor/)
-  - Asset Browser (파일 트리, 미리보기, Import)
-  - Play/Stop 버튼 (Voradorix.exe spawn)
-  - React + Vite
+  - `GetFont()` 구현, 초기화 시 폰트 캐시 구축 완료
+  - `GetTexture()`, `ImportAsset()`는 다음 확장 항목
+- [x] **Phase 2 — Electron Editor** (Game/Editor/)
+  - Asset Browser (파일 트리, 미리보기, Import) 구현
+  - Play/Stop 버튼 (Voradorix.exe spawn/kill) 구현
+  - React + Vite 기반 프로젝트 셋업 완료
 
 ## 스크립트 문법
 
@@ -139,8 +139,8 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 - 8단계(메뉴 구성) TitleWindow / SaveLoadWindow 구현 완료
 - **2026-07-10: 프로젝트 방향 전환** — 게임 개발 → 게임 엔진 + 에디터 개발
   - 9단계(연출 효과)는 보류
-  - Phase 1: AssetManager (C++) 우선 구현
-  - Phase 2: Electron 에디터 (Asset Browser) 예정
+  - Phase 1: AssetManager (C++) 완료
+  - Phase 2: Electron 에디터 (Asset Browser + Play/Stop) 구현 완료
 - 작업 기록과 설계 문서는 `Docs/`를 참고
 - 방향 전환 상세: `Docs/Design/PROJECT_DIRECTION.md`
 

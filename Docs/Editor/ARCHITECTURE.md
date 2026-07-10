@@ -31,8 +31,9 @@ status: planning
 │  ┌────────────────▼─────────────────────────────────────────┐   │
 │  │  Renderer Process (Chromium, React)                      │   │
 │  │  ├── Asset Browser UI                                    │   │
-│  │  ├── Script Editor UI (Phase 3-1)                        │   │
-│  │  └── Widget Designer UI (Phase 3-2)                      │   │
+│  │  ├── Play/Stop UI                                         │   │
+│  │  ├── Script Editor UI (Phase 4 예정)                     │   │
+│  │  └── Widget Designer UI (Phase 5 예정)                   │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                                                                │
 │  ┌─────────────────────────────────────────────────────────┐   │
@@ -67,7 +68,7 @@ Renderer는 오직 `contextBridge.exposeInMainWorld`로 노출된 API만 사용 
 
 ```typescript
 // preload/index.ts
-contextBridge.exposeInMainWorld('editorAPI', {
+contextBridge.exposeInMainWorld('electronAPI', {
     // 에셋 관련
     readAssetRegistry: () => ipcRenderer.invoke('registry:read'),
     writeAssetRegistry: (data) => ipcRenderer.invoke('registry:write', data),
@@ -169,6 +170,8 @@ Game.vcxproj의 Post-Build 이벤트:
   </Command>
 </PostBuildEvent>
 ```
+
+현재 구현은 이 경로와 동일하게 `Editor/build/Voradorix.exe`를 우선 실행하고, `game:status` IPC로 상태를 Renderer에 전달합니다.
 
 ---
 

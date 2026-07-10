@@ -115,7 +115,7 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 - `Ui/TextLabel.h/cpp` — 텍스트 표시 위젯 (BoxWidget 기반, sf::Text 래퍼)
 - `Ui/Button.h/cpp` — Hover/Click/Keyboard 입력 위젯, Normal/Pressed/Text 자식 구성 (핵심 구현 완료, 세부 폴리싱 예정)
 - 적용 대상: `DialogueBox`, `ChoiceWidget`, `TitleScene`, `ConfigScene`, `SaveLoadScene`
-- 텍스트 위젯 폰트는 AssetManager의 `LoadFont()`/`GetFont()` 경유로 관리
+- 텍스트 위젯 폰트는 AssetManager의 `GetFont()` 경유로 관리
 - 세부 문서: `Docs/6-UIFoundation.md`
 
 ---

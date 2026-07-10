@@ -27,7 +27,7 @@ tags:
 - **중복 로딩 제거** — 동일 에셋을 여러 위젯이 공유
 - **식별 체계 통일** — GUID + Alias 이중 접근
 - **Registry 기반** — `AssetRegistry.json`에 에셋 목록을 저장/조회
-- **Pre-load** — 엔진 시작 시 모든 에셋을 로드하여 캐싱
+- **Pre-load** — `InitializeInstance()` 시점에 모든 에셋을 미리 로드하여 캐싱
 
 ---
 
@@ -49,7 +49,7 @@ class CVrdxAssetManager
 public:
     // ── 생명주기 ──────────────────────────────────────────
     static CVrdxAssetManager& Get();                    // 싱글톤 접근자
-    bool InitializeInstance();                          // Registry 로드, pre-load
+    bool InitializeInstance();                          // Registry 로드 + pre-load
     void Shutdown();                                    // 캐시 정리
 
     // ── Font ──────────────────────────────────────────────
@@ -112,7 +112,7 @@ CVrdxApplication::Initialize() 호출
   → CVrdxAssetManager::Get().InitializeInstance()
     → Assets/AssetRegistry.json 읽기
     → JSON 파싱
-    → 각 에셋별 pre-load
+     → 각 에셋별 pre-load 및 캐시 구축
        · Font   → openFromFile() → FontCache 저장
       · Texture → loadFromFile() → TextureCache 저장
       · Script  → ScriptPathCache 저장
@@ -131,8 +131,8 @@ CVrdxApplication::Initialize() 호출
    → GUID를 찾지 못하면 nullptr 반환
 
 ② FontCache에서 GUID로 조회
-   → 있으면 shared_ptr 반환
-   → 없으면 nullptr 반환 (InitializeInstance에서 pre-load 완료)
+    → 캐시에서 조회 후 shared_ptr 반환
+    → 없으면 nullptr 반환 (정상 초기화라면 발생하지 않음)
 ```
 
 ### 3.3 GetTexture (`GetTexture("bg_room")`)
@@ -140,8 +140,8 @@ CVrdxApplication::Initialize() 호출
 ```
 ① GetGuid(NameOrGuid)로 GUID 획득 (GetFont와 동일)
 ② TextureCache에서 GUID로 조회
-   → 있으면 shared_ptr 반환
-   → 없으면 nullptr 반환
+    → 캐시에서 조회 후 shared_ptr 반환
+    → 없으면 nullptr 반환 (정상 초기화라면 발생하지 않음)
 ```
 
 ### 3.4 GetScriptPath (`GetScriptPath("script_intro")`)
@@ -259,7 +259,7 @@ Assets/
 | 항목 | 내용 |
 |------|------|
 | 싱글톤 | `Get()`, `InitializeInstance()`, `Shutdown()` |
-| Registry I/O | `LoadRegistry()` — JSON 파싱 + pre-load |
+| Registry I/O | `LoadRegistry()` — JSON 파싱 + `InitializeInstance()` 시 pre-load |
 | GUID 검증 | `IsGuid()` — 정규식 + 등록 확인 |
 | GetFont | GUID/Alias → FontCache 조회 |
 | GetTexture | GUID/Alias → TextureCache 조회 |

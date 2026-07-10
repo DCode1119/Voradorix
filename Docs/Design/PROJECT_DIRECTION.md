@@ -135,34 +135,29 @@ enum class EVrdxAssetType : uint8_t
 ```
 
 - `alias`는 null 허용 (옵셔널)
-- 최초 빈 상태로 시작, `LoadFont()` 등 호출 시 자동 등록됨
+- 최초 빈 상태로 시작, `InitializeInstance()`에서 레지스트리 로드 후 캐시를 모두 구축함
 - 현재 UI 폰트는 `DialogueBox` / `TextLabel` / `ChoiceWidget`에서 AssetManager 경유로 공유
 
-### 4.4 LoadFont 동작 흐름
+### 4.4 GetFont 조회 흐름
 
 ```
-LoadFont("malgun")
-  → GUID 형식? → No
-  → AliasToGuid["malgun"] 존재? → 없음 (최초)
-  → "Assets/Fonts/malgun.ttf" 로드 시도 (AssetManager 내부)
-  → 성공 시:
-      GUID 생성, Registry에 자동 등록
-      FontCache[GUID] = 로드된 폰트 (shared_ptr)
-      AliasToGuid["malgun"] = GUID
-  → FontCache[GUID] 반환
+InitializeInstance()
+  → Registry 로드
+  → 모든 에셋 pre-load
+  → FontCache / AliasToGuid 구축
 
-두 번째 호출:
-  LoadFont("malgun")
+GetFont("malgun")
   → AliasToGuid["malgun"] 존재 → GUID 획득
-  → FontCache[GUID] 존재 → 캐시 반환 (중복 로딩 없음)
+  → FontCache[GUID] 존재 → 캐시 반환
+  → 없으면 nullptr (정상 초기화라면 발생하지 않음)
 ```
 
 ### 4.5 점진적 전환 순서
 
 | 순서 | 내용 | 영향 파일 |
 |------|------|-----------|
-| 1 | LoadFont() 구현 + 폰트 3곳 리팩터 | DialogueBox, TextLabel, ChoiceWidget |
-| 2 | LoadTexture() + ImportAsset() | Background, CharacterManager |
+| 1 | GetFont() 구현 + 폰트 3곳 리팩터 | DialogueBox, TextLabel, ChoiceWidget |
+| 2 | GetTexture() + ImportAsset() | Background, CharacterManager |
 | 3 | Background 텍스처 캐싱 전환 | Background.cpp |
 | 4 | CharacterManager 자체 캐시 → AssetManager 이관 | CharacterManager.cpp |
 | 5 | ScriptEngine 파일 로딩 캐싱 | ScriptEngine.cpp |
@@ -219,10 +214,10 @@ Game/Editor/
 
 | Step | 내용 | 비고 |
 |------|------|------|
-| 1.0 | `AssetManager.h/cpp` 생성, 싱글톤 골격, Registry I/O | Core/ 신규 파일 |
-| 1.1 | `LoadFont()` 구현, 폰트 3곳 리팩터 | DialogueBox, TextLabel, ChoiceWidget |
-| 1.2 | `LoadTexture()`, `ImportAsset()` 구현 | Background, CharacterManager |
-| 1.3 | Background/CharacterManager 점진적 전환 | 기존 로직 유지하며 전환 |
+| 1.0 | `AssetManager.h/cpp` 생성, 싱글톤 골격, Registry I/O | 완료 |
+| 1.1 | `GetFont()` 구현, 폰트 3곳 리팩터 | 완료 |
+| 1.2 | `GetTexture()`, `ImportAsset()` 구현 | 후속 |
+| 1.3 | Background/CharacterManager 점진적 전환 | 완료 |
 
 ### Phase 2 — Electron 에디터
 
@@ -248,9 +243,9 @@ Game/Editor/
 | 문서 | 변경 사항 |
 |------|-----------|
 | `README.md` | 프로젝트 설명을 엔진+에디터 방향으로 갱신 |
-| `Docs/Voradorix.md` | phase 변경, 9단계 보류 표시, 신규 항목 추가 |
-| `Docs/BACKLOG.md` | EffectManager를 Later로 이동, AssetManager/Editor 항목 추가 |
-| `Docs/WORK_LOG.md` | 오늘 논의 내용 기록 |
+| `Docs/Voradorix.md` | phase 상태 및 구현 완료 항목 갱신 |
+| `Docs/BACKLOG.md` | AssetManager / Editor 구현 완료 반영 |
+| `Docs/WORK_LOG.md` | 방향 전환 및 구현 완료 기록 |
 | `Docs/PROJECT_STRUCTURE.md` | Editor/ 경로 추가 |
 | `Docs/GAME_DESIGN.md` | 방향 전환 노트 추가 (런타임 설계로 범위 한정) |
 | `Docs/9-EffectManager.md` | 상태를 "보류"로 변경 |
@@ -262,7 +257,7 @@ Game/Editor/
 
 | 사항 | 상태 |
 |------|------|
-| Electron UI 라이브러리 (React / Vue / Svelte) | 미정 |
+| Electron UI 라이브러리 (React / Vue / Svelte) | React 채택 |
 | Import 시 타입별 하위 폴더 구조 규칙 | 에디터 구현 시 결정 |
-| 엔진 ↔ 에디터 간 라이브 IPC 방식 | Phase 3에서 결정 |
+| 엔진 ↔ 에디터 간 라이브 IPC 방식 | 초기에는 파일 기반, 필요 시 IPC 확장 |
 | CVrdxApplication → CVrdxEngine 개명 시점 | 추후 |

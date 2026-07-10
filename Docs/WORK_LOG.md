@@ -353,8 +353,8 @@ tags:
 - Alias: 옵셔널 (Name 기반 등록 시 자동 생성)
 - 레지스트리: `AssetRegistry.json` 단일 파일
 - Import 시 원본 파일명 유지하여 프로젝트 내 `Assets/`로 복사
-- 첫 구현 목표: `LoadFont()` → 폰트 3곳(DialogueBox, TextLabel, ChoiceWidget) 중복 로딩 제거
-- `LoadFont("malgun")` 호출 시 GUID 자동 생성 + Registry 등록 + 캐싱
+- 첫 구현 목표: `GetFont()` → 폰트 3곳(DialogueBox, TextLabel, ChoiceWidget) 중복 로딩 제거
+- `InitializeInstance()`에서 Registry 로드 후 폰트/텍스처/스크립트 캐시를 일괄 구축
 
 **Electron 에디터 설계 (Phase 2):**
 - 위치: `Game/Editor/`
