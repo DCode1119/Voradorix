@@ -24,6 +24,10 @@ ipch/
 *.dll
 *.lib
 
+# Extern - keep SFML vendor tree tracked
+!Extern/SFML-3.1.0/
+!Extern/SFML-3.1.0/**
+
 # IDE
 *.vcxproj.user
 *.sln.docstates
