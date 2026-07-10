@@ -7,6 +7,24 @@ tags:
 ---
 # 작업 기록
 
+## 2026-07-10
+
+### 에디터 Import/실행 환경 정리
+
+- `Editor/src/main/ipcHandlers.ts` — Import를 단일 흐름으로 통합, 다중 선택 및 디렉토리 재귀 복사 지원
+- `Editor/src/preload/index.ts` / `index.d.ts` — 새 Import IPC 바인딩 반영
+- `Editor/src/renderer/src/components/AssetTree.tsx` — Import 버튼 단일화, 다중 소스 선택 모달, 디렉토리 포함 Import UI 반영
+- `Editor/src/renderer/src/App.css` — Import 모달/컨텍스트 메뉴 스타일 추가
+- `Game/Game.vcxproj` — 디버거 실행 시 작업 디렉토리를 솔루션 루트로 고정
+- `RunEditor.bat` — 에디터를 바로 실행하는 배치 파일 추가
+- `README.md` / `Docs/Editor/*` — 에디터 실행/Import 동작 설명 갱신
+
+### 에셋/배포 정리
+
+- `Assets/` — 로컬 에셋 작업 디렉토리로 전환, 소스관리 제외
+- `Game/Assets` — 추적 대상에서 제거
+- `Extern/SFML-3.1.0/` — 복사해둔 SFML 3.1.0 vendor 트리 반영
+
 ## 2026-06-30 (Later)
 
 ### 3단계 명세서 작성

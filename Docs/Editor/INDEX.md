@@ -25,7 +25,7 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 ### 핵심 원칙
 
 1. **에디터가 메인 프로세스** — 엔진(Game.exe)은 에디터의 `child_process.spawn()`으로 실행
-2. **파일 기반 데이터 연동** — `AssetRegistry.json`, `Assets/` 디렉토리를 통해 에디터와 엔진이 데이터 공유
+2. **파일 기반 데이터 연동** — `AssetRegistry.json`, 루트 `Assets/` 디렉토리를 통해 에디터와 엔진이 데이터 공유
 3. **점진적 확장** — Asset Browser → Script Editor → Widget Designer 순서로 기능 추가
 4. **런타임 UI는 SFML 유지** — 에디터는 개발 도구, 게임 화면 자체는 엔진이 담당
 
@@ -83,8 +83,8 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 
 | 데이터 | 위치 |读写 주체 | 비고 |
 |--------|------|----------|------|
-| `AssetRegistry.json` | `Game/Assets/` | Editor: 读写, Engine: 讀 | 엔진은 시작 시 읽고, Editor가 수정하면 재시작或 ReloadRegistry() |
-| 에셋 파일 | `Game/Assets/` | Editor: Import/삭제, Engine: Load | 엔진 시작 시점의 파일 상태 기준 |
+| `AssetRegistry.json` | `Assets/` | Editor: 读写, Engine: 讀 | 엔진은 시작 시 읽고, Editor가 수정하면 재시작或 ReloadRegistry() |
+| 에셋 파일 | `Assets/` | Editor: Import/삭제, Engine: Load | 엔진 시작 시점의 파일 상태 기준 |
 | `gamePath.json` | `Game/Editor/build/` | Post-Build 생성 | Debug/Release 경로 분기 |
 | 세이브 파일 | `Game/Saves/` | Engine: 读写 | 에디터와 무관 |
 

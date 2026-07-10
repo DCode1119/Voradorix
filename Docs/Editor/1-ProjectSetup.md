@@ -155,9 +155,12 @@ npm install
 npm run dev
 ```
 
+또는 `Game/RunEditor.bat`로 에디터를 바로 실행할 수 있다.
+
 - [ ] Electron 창이 정상적으로 열리는가?
 - [ ] 개발자 도구에서 console.log 확인
 - [ ] 프로덕션 빌드 (`npm run build`) 정상 동작 확인
+- [ ] 디버거 실행 시 작업 디렉토리가 솔루션 루트인지 확인
 
 ---
 

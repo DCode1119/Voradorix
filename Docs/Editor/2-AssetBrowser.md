@@ -80,7 +80,9 @@ status: implemented
 
 ### 2.2 기능
 
-- 각 노드 우클릭 컨텍스트 메뉴: Import, Delete, Reveal
+- 각 노드 우클릭 컨텍스트 메뉴: Delete
+- 상단 Import 버튼: 파일/디렉토리 다중 선택
+- 디렉토리 Import: 하위 디렉토리까지 재귀 복사
 - 더블클릭: 미리보기 갱신
 - 드래그 앤 드롭: (추후 고려)
 - 필터/검색: 입력 시 트리 필터링
@@ -98,8 +100,8 @@ status: implemented
 
 ### 3.1 Import 트리거
 
-1. **외부 파일 드래그 앤 드롭** — OS 파일 탐색기에서 Assets/ 폴더로 드롭
-2. **Import 버튼** — 현재 선택한 미등록 파일을 Registry에 등록
+1. **Import 버튼** — 파일/디렉토리를 한 번에 선택해 복사
+2. **외부 파일 드래그 앤 드롭** — OS 파일 탐색기에서 Assets/ 폴더로 드롭
 3. **폴더 감시** (선택) — `Assets/` 내 신규 파일 자동 감지
 
 ### 3.2 Import 절차
@@ -111,10 +113,11 @@ status: implemented
 
 내부 처리:
   ① UUID v4 생성 (Node.js crypto.randomUUID())
-  ② 소스 파일을 Assets/{Type}/ 아래로 복사 (원본 파일명 유지)
-  ③ AssetRegistry.json에 엔트리 추가
-  ④ AssetRegistry.json 저장
-  ⑤ 완료 로그 출력, 트리 갱신
+  ② 소스 파일/디렉토리를 Assets/ 아래로 복사
+  ③ 하위 디렉토리 재귀 복사
+  ④ AssetRegistry.json에 엔트리 추가
+  ⑤ AssetRegistry.json 저장
+  ⑥ 완료 로그 출력, 트리 갱신
 ```
 
 ### 3.3 Import 규칙
@@ -124,7 +127,7 @@ status: implemented
 | 파일명 | 원본 파일명 유지 (중복 시 `_1`, `_2` 접미사) |
 | 타입 추론 | 확장자 기반 (`.png`→Texture, `.ttf`→Font, `.txt`→Script) |
 | Alias | Import 시 미설정 (빈 문자열), 사용자가 수동 지정 가능 |
-| 복사 경로 | `Assets/Backgrounds/`, `Assets/Characters/`, `Assets/Fonts/`, `Assets/Scripts/` |
+| 복사 경로 | 선택한 대상 경로 아래로 복사 |
 
 ### 3.4 지원 파일 형식 (초기)
 
@@ -169,7 +172,9 @@ Renderer → Main Process → Node.js fs:
 // preload에서 노출
 window.electronAPI.readAssetRegistry() : Promise<AssetRegistryData>
 window.electronAPI.writeAssetRegistry(data: AssetRegistryData) : Promise<void>
-window.electronAPI.importAsset(sourcePath: string, type: AssetType) : Promise<AssetEntry>
+window.electronAPI.pickImportSources() : Promise<{ canceled: boolean; sources: ... }>
+window.electronAPI.previewImport(sources, targetDir) : Promise<ImportPreviewData | { error: string }>
+window.electronAPI.executeImport(sources, targetDir, overwriteTargets) : Promise<ImportExecuteResult | { error: string }>
 window.electronAPI.deleteAsset(guid: string) : Promise<void>
 window.electronAPI.readDirectory(relativePath: string) : Promise<FileEntry[]>
 ```

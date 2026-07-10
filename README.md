@@ -37,8 +37,9 @@ Game/                          ← Git 저장소 루트
 │   │   │                       DialogueBox, ChoiceWidget, ScriptEngine
 │   │   └── Ui/               # Application, WidgetBase, BoxWidget, Button,
 │   │                           TextLabel (공통 UI)
-│   ├── Assets/               # 폰트 및 리소스
+│   ├── AssetsOrigin/         # 기존 에셋 보관본
 │   └── Saves/                # 세이브 파일 저장 디렉토리
+├── Assets/                   # 로컬 에셋 작업 디렉토리 (소스관리 제외)
 ├── Editor/                   # Electron 에디터 (Phase 2 예정)
 ├── Extern/                    # SFML 3.1.0, nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서
@@ -131,6 +132,8 @@ Unreal Engine 스타일 접두어 + `Vrdx` 프로젝트 접두어 + PascalCase�
 2. x64 Debug (또는 Release) 선택
 3. 빌드 → PostBuild에서 SFML DLL 자동 복사
 4. 실행
+
+에디터는 `Game/RunEditor.bat`로 바로 실행할 수 있으며, 디버거 실행 시 작업 디렉토리는 솔루션 루트로 고정되어 있습니다.
 
 ## 현재 상태
 
