@@ -31,7 +31,7 @@ Game/Editor/
 ├── src/
 │   ├── main/                      # Electron Main Process
 │   │   ├── index.ts               # BrowserWindow 생성, 앱 생명주기
-│   │   └── gameLauncher.ts        # Game.exe spawn/kill (Phase 3)
+│   │   └── gameLauncher.ts        # Voradorix.exe spawn/kill (Phase 3)
 │   │
 │   ├── preload/                   # Preload Script
 │   │   ├── index.ts               # contextBridge API 노출
@@ -50,7 +50,7 @@ Game/Editor/
 ├── resources/                     # 앱 아이콘 등
 │
 └── build/                         # 빌드 산출물 (gitignore)
-    └── gamePath.json              # (Phase 3) 엔진 실행 파일 경로
+    └── Voradorix.exe              # (Phase 3) 엔진 실행 파일
 ```
 
 ---

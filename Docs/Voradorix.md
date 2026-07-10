@@ -91,7 +91,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진 + Electron 에디터
   - `GetScriptPath()` 및 배경/캐릭터 텍스처 경로 이관 ✅
 - [ ] **Phase 2 — Electron Editor** (Electron + React, [[Editor/INDEX.md]])
   - Asset Browser (파일 트리, 미리보기, Import)
-  - Play/Stop 버튼 (Game.exe spawn)
+  - Play/Stop 버튼 (Voradorix.exe spawn)
   - 위치: `Game/Editor/`
 
 ## 문서 구조

@@ -31,5 +31,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Game launcher (Phase 3)
   launchGame: () => ipcRenderer.invoke('game:launch'),
-  stopGame: () => ipcRenderer.invoke('game:stop')
+  stopGame: () => ipcRenderer.invoke('game:stop'),
+  onGameStatusChanged: (callback: (status: { isRunning: boolean; message: string }) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, status: { isRunning: boolean; message: string }) => callback(status)
+    ipcRenderer.on('game:status', listener)
+    return () => ipcRenderer.removeListener('game:status', listener)
+  }
 })

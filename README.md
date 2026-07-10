@@ -77,7 +77,7 @@ Game/                          ← Git 저장소 루트
   - 2차 목표: `LoadTexture()`, `ImportAsset()` 구현
 - [ ] **Phase 2 — Electron Editor** (Game/Editor/)
   - Asset Browser (파일 트리, 미리보기, Import)
-  - Play/Stop 버튼 (Game.exe spawn)
+  - Play/Stop 버튼 (Voradorix.exe spawn)
   - React + Vite
 
 ## 스크립트 문법

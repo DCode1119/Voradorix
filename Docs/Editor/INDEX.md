@@ -24,7 +24,7 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 
 ### 핵심 원칙
 
-1. **에디터가 메인 프로세스** — 엔진(Game.exe)은 에디터의 `child_process.spawn()`으로 실행
+1. **에디터가 메인 프로세스** — 엔진(Voradorix.exe)은 에디터의 `child_process.spawn()`으로 실행
 2. **파일 기반 데이터 연동** — `AssetRegistry.json`, 루트 `Assets/` 디렉토리를 통해 에디터와 엔진이 데이터 공유
 3. **점진적 확장** — Asset Browser → Script Editor → Widget Designer 순서로 기능 추가
 4. **런타임 UI는 SFML 유지** — 에디터는 개발 도구, 게임 화면 자체는 엔진이 담당
@@ -37,7 +37,7 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 |-------|------|------|
 | **1** | **Project Setup** — Electron + React + Vite 프로젝트 생성, 빌드/실행 확인 | ✅ 완료 |
 | **2** | **Asset Browser** — 파일 트리, 미리보기, Import, Registry 읽기/쓰기 | ✅ 구현 |
-| **3** | **Play/Stop** — `Game.exe` spawn/kill, `gamePath.json` 연동 | 예정 |
+| **3** | **Play/Stop** — `Voradorix.exe` spawn/kill | 예정 |
 | **4** | **Script Editor** (Phase 3-1) — 문법 하이라이팅, @label 네비게이션 | 예정 |
 | **5** | **Widget Designer** (Phase 3-2) — 위젯 트리 JSON 편집 | 예정 |
 
@@ -49,7 +49,7 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 ┌─────────────────────────────────────────────────────────────┐
 │  Electron Main Process                                      │
 │  ├─ BrowserWindow 생성                                       │
-│  ├─ gameLauncher.ts — spawn/kill Game.exe                   │
+│  ├─ gameLauncher.ts — spawn/kill Voradorix.exe              │
 │  └─ ipcMain — Renderer와의 통신 채널                         │
 │                                                              │
 │  ┌──────────────────────────────────────────────────────┐   │
@@ -62,12 +62,12 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 │                                                              │
 │  Node.js File System (fs)                                    │
 │  ├─ Assets/ ←→ AssetRegistry.json                           │
-│  └─ build/gamePath.json (읽기 전용)                         │
+│  └─ build/Voradorix.exe                                    │
 └─────────────────────────────────────────────────────────────┘
          │ spawn()
          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  Game.exe (C++ / SFML)                                      │
+│  Voradorix.exe (C++ / SFML)                                 │
 │  ┌──────────────────────────────────────────────────────┐   │
 │  │  CVrdxApplication                                    │   │
 │  │  ├─ CVrdxAssetManager (싱글톤)                        │   │
@@ -85,7 +85,7 @@ C++/SFML 엔진과는 독립 프로세스로 동작하며, `AssetRegistry.json`�
 |--------|------|----------|------|
 | `AssetRegistry.json` | `Assets/` | Editor: 读写, Engine: 讀 | 엔진은 시작 시 읽고, Editor가 수정하면 재시작或 ReloadRegistry() |
 | 에셋 파일 | `Assets/` | Editor: Import/삭제, Engine: Load | 엔진 시작 시점의 파일 상태 기준 |
-| `gamePath.json` | `Game/Editor/build/` | Post-Build 생성 | Debug/Release 경로 분기 |
+| `Voradorix.exe` | `Game/Editor/build/` | Post-Build 생성 | Debug/Release 동일 파일명 |
 | 세이브 파일 | `Game/Saves/` | Engine: 读写 | 에디터와 무관 |
 
 ---

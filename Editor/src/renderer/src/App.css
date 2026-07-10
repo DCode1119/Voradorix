@@ -64,6 +64,13 @@ html, body, #root {
   -webkit-app-region: no-drag;
 }
 
+.header-status {
+  align-self: center;
+  margin-right: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
 .app-body {
   display: flex;
   flex: 1;

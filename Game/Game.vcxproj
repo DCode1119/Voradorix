@@ -43,13 +43,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\</IntDir>
-    <TargetName>Game-d</TargetName>
+    <TargetName>Voradorix</TargetName>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\</IntDir>
-    <TargetName>Game</TargetName>
+    <TargetName>Voradorix</TargetName>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -68,7 +68,7 @@
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y /D "$(SolutionDir)Extern\SFML-3.1.0\bin\sfml-*-d-3.dll" "$(OutDir)"</Command>
+      <Command>if not exist "$(SolutionDir)Editor\build" mkdir "$(SolutionDir)Editor\build"&#x0D;&#x0A;copy /Y "$(TargetPath)" "$(SolutionDir)Editor\build\Voradorix.exe"&#x0D;&#x0A;xcopy /Y /D "$(SolutionDir)Extern\SFML-3.1.0\bin\*.dll" "$(SolutionDir)Editor\build\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -87,7 +87,7 @@
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;sfml-network.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y /D "$(SolutionDir)Extern\SFML-3.1.0\bin\sfml-*-3.dll" "$(OutDir)"</Command>
+      <Command>if not exist "$(SolutionDir)Editor\build" mkdir "$(SolutionDir)Editor\build"&#x0D;&#x0A;copy /Y "$(TargetPath)" "$(SolutionDir)Editor\build\Voradorix.exe"&#x0D;&#x0A;xcopy /Y /D "$(SolutionDir)Extern\SFML-3.1.0\bin\*.dll" "$(SolutionDir)Editor\build\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

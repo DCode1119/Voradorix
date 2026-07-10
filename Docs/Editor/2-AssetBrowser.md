@@ -252,14 +252,10 @@ ipcMain.handle('fs:readDirectory', async (_event, relativePath) => {
 
 ## 7. 게임 실행 (Phase 2.5 — Play/Stop 버튼)
 
-### 7.1 gamePath.json
+### 7.1 Voradorix.exe 실행 경로
 
-```json
-// Game/Editor/build/gamePath.json (Post-Build 자동 생성)
-{
-  "path": "Bin/x64/Debug/Game.exe",
-  "config": "Debug"
-}
+```text
+// Game/Editor/build/Voradorix.exe (Post-Build 자동 생성)
 ```
 
 ### 7.2 spawn/kill
@@ -269,9 +265,11 @@ import { spawn, ChildProcess } from 'child_process';
 
 let gameProcess: ChildProcess | null = null;
 
+const editorRoot = path.resolve(__dirname, '..', '..');
+const projectRoot = path.resolve(editorRoot, '..');
+
 ipcMain.handle('game:launch', async () => {
-    const config = JSON.parse(fs.readFileSync(gamePathFile, 'utf-8'));
-    const exePath = join(projectRoot, config.path);
+    const exePath = join(editorRoot, 'build', 'Voradorix.exe');
 
     gameProcess = spawn(exePath, [], {
         cwd: projectRoot,
@@ -302,7 +300,7 @@ ipcMain.handle('game:stop', async () => {
 | 파일 복사 실패 | 에러 메시지를 Log 영역에 출력, Import 중단 |
 | 지원하지 않는 파일 형식 Import 시도 | "Unsupported file type" 경고 |
 | 중복 파일명 | 자동 접미사 추가 후 복사 |
-| Game.exe 없음 | "Game executable not found. Build the engine first." 경고 |
+| Voradorix.exe 없음 | "Voradorix.exe not found. Build the engine first." 경고 |
 
 ---
 
@@ -316,5 +314,5 @@ ipcMain.handle('game:stop', async () => {
 - [x] Import 버튼으로 파일/디렉토리 다중 선택 등록이 가능한가?
 - [x] Import 후 Registry.json에 엔트리가 추가되는가?
 - [x] Delete 버튼으로 등록 해제가 가능한가?
-- [ ] Play 버튼으로 Game.exe가 실행되는가?
-- [ ] Stop 버튼으로 Game.exe가 종료되는가?
+- [ ] Play 버튼으로 Voradorix.exe가 실행되는가?
+- [ ] Stop 버튼으로 Voradorix.exe가 종료되는가?

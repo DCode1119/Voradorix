@@ -46,6 +46,24 @@ export interface ImportExecuteResult {
   errors: string[]
 }
 
+export interface GameStatusPayload {
+  isRunning: boolean
+  message: string
+}
+
+export interface GameLaunchResult {
+  success: boolean
+  status?: 'started' | 'already-running'
+  exePath?: string
+  error?: string
+}
+
+export interface GameStopResult {
+  success: boolean
+  status?: 'stopped' | 'not-running'
+  error?: string
+}
+
 export interface ElectronAPI {
   // Registry
   readAssetRegistry: () => Promise<AssetRegistryData>
@@ -74,8 +92,9 @@ export interface ElectronAPI {
   openFileDialog: (type: string) => Promise<{ canceled: boolean; filePath: string | null }>
 
   // Game launcher (Phase 3)
-  launchGame: () => Promise<void>
-  stopGame: () => Promise<void>
+  launchGame: () => Promise<GameLaunchResult>
+  stopGame: () => Promise<GameStopResult>
+  onGameStatusChanged: (callback: (status: GameStatusPayload) => void) => () => void
 }
 
 declare global {

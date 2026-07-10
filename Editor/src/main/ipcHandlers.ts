@@ -2,6 +2,7 @@ import { ipcMain, dialog } from 'electron'
 import { readFileSync, writeFileSync, copyFileSync, renameSync, unlinkSync, existsSync, mkdirSync, readdirSync, statSync, rmSync } from 'fs'
 import { join, relative, extname, basename, dirname } from 'path'
 import { randomUUID } from 'crypto'
+import { launchGame, stopGame } from './gameLauncher'
 
 // ── 경로 계산 ──────────────────────────────────────────────────────
 // Electron-vite dev: __dirname = Editor/out/main
@@ -788,4 +789,8 @@ export function registerIpcHandlers(): void {
       filePath: result.filePaths[0] ?? null
     }
   })
+
+  // Game launch / stop
+  ipcMain.handle('game:launch', async () => launchGame())
+  ipcMain.handle('game:stop', async () => stopGame())
 }

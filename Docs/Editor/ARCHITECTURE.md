@@ -23,8 +23,8 @@ status: planning
 │  ┌─────────────────────────────────────────────────────────┐   │
 │  │  Main Process (Node.js)                                 │   │
 │  │  ├── BrowserWindow 관리 (생성/종료)                      │   │
-│  │  ├── ipcMain 핸들러 (파일 I/O, Game.exe spawn)          │   │
-│  │  ├── Game.exe 생명주기 관리                              │   │
+│  │  ├── ipcMain 핸들러 (파일 I/O, Voradorix.exe spawn)     │   │
+│  │  ├── Voradorix.exe 생명주기 관리                         │   │
 │  │  └── 메뉴/단축키 관리                                   │   │
 │  └────────────────┬────────────────────────────────────────┘   │
 │                   │ contextBridge (preload)                     │
@@ -36,7 +36,7 @@ status: planning
 │  └─────────────────────────────────────────────────────────┘   │
 │                                                                │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Child Process (Game.exe)                               │   │
+│  │  Child Process (Voradorix.exe)                          │   │
 │  │  ├── C++ / SFML 게임 엔진                               │   │
 │  │  ├── spawn()으로 실행, kill()으로 종료                    │   │
 │  │  └── 별도 OS 창에서 실행                                 │   │
@@ -99,30 +99,27 @@ Editor에서 AssetRegistry.json 수정
 ### 3.2 File System 접근 경로
 
 ```typescript
-// 프로젝트 루트 경로 (Game.exe 위치 기준 2단계 상위 = Game/)
+// 프로젝트 루트 경로 (Voradorix.exe 위치 기준 2단계 상위 = Game/)
 const PROJECT_ROOT = path.resolve(app.getAppPath(), '..', '..', '..');
-// 실제로는 Game.exe 위치 기준으로 gamePath.json 또는 설정에서 경로 획득
+// 실제로는 Editor/build/Voradorix.exe 고정 경로 사용
 
 const ASSETS_DIR = path.join(PROJECT_ROOT, 'Assets');
 const REGISTRY_PATH = path.join(ASSETS_DIR, 'AssetRegistry.json');
-const GAME_EXE_PATH = path.join(PROJECT_ROOT, 'Bin', 'x64', 'Debug', 'Game.exe');
+const GAME_EXE_PATH = path.join(PROJECT_ROOT, 'Editor', 'build', 'Voradorix.exe');
 ```
 
 ---
 
-## 4. Game.exe 실행 상세
+## 4. Voradorix.exe 실행 상세
 
 ### 4.1 실행 절차
 
 ```typescript
 async function launchGame(): Promise<void> {
-    // 1. gamePath.json 읽기
-    const configPath = path.join(__dirname, '..', 'build', 'gamePath.json');
-    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-
-    // 2. 프로젝트 루트 기준 절대 경로 계산
-    const projectRoot = path.resolve(configPath, '..', '..', '..', '..');
-    const exePath = path.resolve(projectRoot, config.path);
+    // 1. 고정 실행 파일 경로 사용
+    const editorRoot = path.resolve(__dirname, '..', '..');
+    const projectRoot = path.resolve(editorRoot, '..');
+    const exePath = path.join(editorRoot, 'build', 'Voradorix.exe');
 
     // 3. spawn
     gameProcess = spawn(exePath, [], {
@@ -141,7 +138,7 @@ async function launchGame(): Promise<void> {
 
 ### 4.2 작업 디렉토리 중요성
 
-Game.exe는 `Assets/`, `Saves/`, `AssetRegistry.json`을 현재 작업 디렉토리 기준으로 찾습니다.
+Voradorix.exe는 `Assets/`, `Saves/`, `AssetRegistry.json`을 현재 작업 디렉토리 기준으로 찾습니다.
 따라서 `cwd: projectRoot`는 솔루션 루트(`Game/`)를 가리켜야 하며, 실행 시점에는 디버거와 Editor가 동일한 기준 경로를 사용해야 합니다.
 
 ---
@@ -155,18 +152,20 @@ Editor/                           ← Electron 프로젝트
 Game/                             ← Git 저장소 루트
   Game.sln                        ← Visual Studio 솔루션
   Game/                           ← vcxproj
-    Bin/x64/Debug/Game.exe        ← 빌드 결과
+    Editor/build/Voradorix.exe    ← 빌드 결과
   Assets/                         ← 에셋, AssetRegistry.json
 ```
 
-### 5.2 gamePath.json 자동 생성 (Post-Build)
+### 5.2 Voradorix.exe 자동 복사 (Post-Build)
 
 Game.vcxproj의 Post-Build 이벤트:
 
 ```xml
 <PostBuildEvent>
   <Command>
-    echo { "path": "$(OutputPath)$(TargetFileName)", "config": "$(Configuration)" } &gt; "$(SolutionDir)Editor\build\gamePath.json"
+    if not exist "$(SolutionDir)Editor\build" mkdir "$(SolutionDir)Editor\build"
+    copy /Y "$(TargetPath)" "$(SolutionDir)Editor\build\Voradorix.exe"
+    xcopy /Y /D "$(SolutionDir)Extern\SFML-3.1.0\bin\sfml-*-3.dll" "$(SolutionDir)Editor\build\"
   </Command>
 </PostBuildEvent>
 ```
@@ -184,4 +183,4 @@ Game.vcxproj의 Post-Build 이벤트:
 | **WebSocket** | 엔진이 WebSocket 서버 실행, 에디터가 접속 | Phase 3 이후 |
 | **공유 메모리** | 성능이 중요한 경우 | Phase 3 이후 |
 
-초기 개발에서는 **파일 기반**으로 시작하고, 필요에 따라 **stdin/stdout**을 가장 먼저 검토할 수 있습니다.
+초기 개발에서는 **고정 실행 파일 복사 방식**으로 시작하고, 필요에 따라 **stdin/stdout**을 가장 먼저 검토할 수 있습니다.

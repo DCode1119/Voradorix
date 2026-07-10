@@ -12,6 +12,8 @@ export default function App() {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [messages, setMessages] = useState<LogMessage[]>([])
   const [dragOver, setDragOver] = useState(false)
+  const [gameRunning, setGameRunning] = useState(false)
+  const [gameStatusText, setGameStatusText] = useState('Game stopped')
   const dragCounter = useRef(0)
 
   const addLog = useCallback((text: string, type: 'info' | 'success' | 'error' = 'info') => {
@@ -24,6 +26,37 @@ export default function App() {
 
   const handleAssetUpdate = useCallback(() => {
     setRefreshTrigger(prev => prev + 1)
+  }, [])
+
+  const handlePlay = useCallback(async () => {
+    const result = await window.electronAPI.launchGame()
+    if (!result.success) {
+      addLog(`Play failed: ${result.error ?? 'unknown error'}`, 'error')
+      return
+    }
+
+    setGameRunning(true)
+    setGameStatusText(result.status === 'already-running' ? 'Game already running' : 'Game running')
+    addLog(result.status === 'already-running' ? 'Game is already running.' : 'Game launched.', 'success')
+  }, [addLog])
+
+  const handleStop = useCallback(async () => {
+    const result = await window.electronAPI.stopGame()
+    if (!result.success) {
+      addLog(`Stop failed: ${result.error ?? 'unknown error'}`, 'error')
+      return
+    }
+
+    setGameRunning(false)
+    setGameStatusText(result.status === 'not-running' ? 'Game already stopped' : 'Game stopped')
+    addLog(result.status === 'not-running' ? 'Game was not running.' : 'Game stopped.', 'info')
+  }, [addLog])
+
+  useEffect(() => {
+    return window.electronAPI.onGameStatusChanged(status => {
+      setGameRunning(status.isRunning)
+      setGameStatusText(status.message)
+    })
   }, [])
 
   // ── Drag & Drop ──────────────────────────────────────────────────
@@ -109,10 +142,11 @@ export default function App() {
       <header className="app-header">
         <span className="app-title">Voradorix Editor</span>
         <div className="header-actions">
-          <button className="btn btn-play" title="Launch Game (Phase 3)">
+          <span className="header-status">{gameStatusText}</span>
+          <button className="btn btn-play" title="Launch Game (Phase 3)" onClick={handlePlay} disabled={gameRunning}>
             ▶ Play
           </button>
-          <button className="btn btn-stop" title="Stop Game (Phase 3)">
+          <button className="btn btn-stop" title="Stop Game (Phase 3)" onClick={handleStop} disabled={!gameRunning}>
             ■ Stop
           </button>
         </div>

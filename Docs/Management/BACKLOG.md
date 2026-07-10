@@ -92,8 +92,8 @@ Electron 기반 에디터. Asset Browser 우선 개발.
 - [ ] Asset Browser — 미리보기
 - [ ] Asset Browser — Import (파일 복사 + Registry 등록)
 - [ ] AssetRegistry.json 읽기/쓰기
-- [ ] Play/Stop 버튼 → Game.exe spawn/kill
-- [ ] build/gamePath.json 생성 (Post-Build)
+- [ ] Play/Stop 버튼 → Voradorix.exe spawn/kill
+- [ ] `Editor/build/`에 `Voradorix.exe` 및 필요 DLL 복사 (Post-Build)
 
 ## Phase 3 — Editor 확장
 

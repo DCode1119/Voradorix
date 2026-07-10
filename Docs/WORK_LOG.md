@@ -359,7 +359,7 @@ tags:
 **Electron 에디터 설계 (Phase 2):**
 - 위치: `Game/Editor/`
 - 첫 기능: Asset Browser (파일 트리, 미리보기, Import)
-- 게임 실행: `child_process.spawn()`, 경로는 `build/gamePath.json`에서 조회
+- 게임 실행: `child_process.spawn()`, 경로는 `Editor/build/Voradorix.exe` 고정
 
 **향후 확장 (Phase 3):**
 - Script Editor (문법 하이라이팅, @label 네비게이션)

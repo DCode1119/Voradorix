@@ -42,7 +42,7 @@ status: active
 │       │ Node.js 파일 시스템 (fs)   │    │                   │
 │       │ ├─ Assets/                 │    ▼                   │
 │       │ ├─ AssetRegistry.json      │  ┌───────────────┐    │
-│       │ └─ Saves/                  │  │ Game.exe      │    │
+│       │ └─ Saves/                  │  │ Voradorix.exe │    │
 │       └────────────────────────────┘  │ (C++ SFML)    │    │
 │                                        └───────────────┘    │
 └─────────────────────────────────────────────────────────────┘
@@ -79,8 +79,8 @@ status: active
 | UI 라이브러리 | React (권장) / 추후 결정 |
 | 번들러 | Vite |
 | 위치 | `Game/Editor/` |
-| 엔진 실행 | `child_process.spawn("Game.exe")` |
-| 게임 경로 전달 | 빌드 시 생성되는 `build/gamePath.json` |
+| 엔진 실행 | `child_process.spawn("Voradorix.exe")` |
+| 게임 경로 전달 | 빌드 후 `Editor/build/Voradorix.exe` |
 | 파일 접근 | Node.js `fs` 모듈 |
 
 ---
@@ -183,7 +183,7 @@ Game/Editor/
 ├── src/
 │   ├── main/                  # Electron main process
 │   │   ├── index.ts           # BrowserWindow 생성, 메뉴
-│   │   └── gameLauncher.ts    # spawn/kill Game.exe
+│   │   └── gameLauncher.ts    # spawn/kill Voradorix.exe
 │   ├── renderer/              # React UI
 │   │   ├── App.tsx
 │   │   ├── AssetBrowser/      # 에셋 브라우저
@@ -195,7 +195,7 @@ Game/Editor/
 │   └── preload/               # contextBridge
 │       └── index.ts
 └── build/
-    └── gamePath.json          # (자동 생성) 엔진 실행 파일 경로
+    └── Voradorix.exe          # (자동 생성) 엔진 실행 파일
 ```
 
 ### 5.2 첫 기능 — Asset Browser
@@ -208,9 +208,8 @@ Game/Editor/
 
 ### 5.3 게임 실행 경로
 
-- 엔진 빌드 시 Post-Build 이벤트로 `build/gamePath.json` 자동 생성
-- 내용: `{ "path": "Bin/x64/Debug/Game.exe" }`
-- Debug/Release에 따라 경로 분기 가능
+- 엔진 빌드 시 Post-Build 이벤트로 `Editor/build/Voradorix.exe` 및 런타임 DLL 복사
+- Debug/Release 모두 동일한 파일명(`Voradorix.exe`) 사용
 
 ---
 
