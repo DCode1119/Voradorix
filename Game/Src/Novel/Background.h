@@ -24,6 +24,7 @@ public:
 	bool IsTransitioning() const;
 
 	FVrdxString GetCurrentAssetName() const { return CurrentAssetName; }
+	void Clear();
 
 private:
 	void SetupSprite(sf::Sprite& Sprite, const sf::Texture& Texture) const;
@@ -32,8 +33,8 @@ private:
 	static sf::Texture CreateTransparentTexture();
 
 	sf::Texture TransparentTexture;
-	sf::Texture CurrentTexture;
-	sf::Texture NextTexture;
+	TVrdxSharedPtr<sf::Texture> CurrentTexture;
+	TVrdxSharedPtr<sf::Texture> NextTexture;
 	sf::Sprite   CurrentSprite;
 	sf::Sprite   NextSprite;
 

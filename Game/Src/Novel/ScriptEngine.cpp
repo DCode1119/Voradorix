@@ -49,6 +49,10 @@ void CVrdxScriptEngine::Reset()
 	CurrentScriptLine = 0;
 	ScriptLines.Clear();
 	Labels.clear();
+	if (auto NovelScene = WeakNovelScene.lock())
+	{
+		NovelScene->Reset();
+	}
 }
 
 void CVrdxScriptEngine::Update(float DeltaTick)

@@ -146,6 +146,7 @@ bool CVrdxAssetManager::LoadRegistry()
 		case EVrdxAssetType::Script:
 			{
 				ScriptPathCache.emplace(Asset.Guid, ResolvedPath);
+				bValid = true;
 				break;
 			}
 		}

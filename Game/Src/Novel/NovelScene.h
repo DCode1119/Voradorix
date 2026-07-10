@@ -56,6 +56,8 @@ public:
 	void Load(const FVrdxString& Filename);
 	void ResetScriptEngine();
 
+	void Reset();
+
 private:
 	void EndScenario();
 

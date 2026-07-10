@@ -3,7 +3,6 @@
 
 // C++ Standard Library
 #include <string>
-#include <unordered_map>
 
 // Third-party Library
 #include <SFML/Graphics/Image.hpp>
@@ -70,8 +69,6 @@ public:
 	void Reset();
 
 private:
-	static FVrdxString MakeTextureKey(const FVrdxString& CharacterName, const FVrdxString& PoseName);
-	static FVrdxString MakeTexturePath(const FVrdxString& CharacterName, const FVrdxString& PoseName);
 	static float GetSlotX(EVrdxCharacterPosition Slot);
 	static sf::Texture CreateTransparentTexture();
 
@@ -80,13 +77,12 @@ private:
 	FVrdxCharacterSlot* FindSlotByCharacter(const FVrdxString& CharacterName);
 	const FVrdxCharacterSlot* FindSlotByCharacter(const FVrdxString& CharacterName) const;
 
-	const TVrdxSharedPtr<sf::Texture>& ResolveTexture(const FVrdxString& CharacterName, const FVrdxString& PoseName);
+	TVrdxSharedPtr<sf::Texture> ResolveTexture(const FVrdxString& CharacterName, const FVrdxString& PoseName);
 	void ResetSlot(FVrdxCharacterSlot& SlotState);
 	void BeginFade(FVrdxCharacterSlot& SlotState, float TargetAlpha, float FadeSeconds);
 	void UpdateSlotTransform(FVrdxCharacterSlot& SlotState);
 	void SetSpriteAlpha(sf::Sprite& Sprite, float Alpha) const;
 
 	TVrdxSharedPtr<sf::Texture> TransparentTexture;
-	std::unordered_map<FVrdxString, TVrdxSharedPtr<sf::Texture>> TextureCache;
 	TVrdxVector<FVrdxCharacterSlot> Slots;
 };

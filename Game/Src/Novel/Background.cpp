@@ -9,6 +9,9 @@
 // Third-party Library
 #include <SFML/Graphics/Color.hpp>
 
+// Project Headers
+#include "Core/AssetManager.h"
+
 //Will be moved to configuration module.
 namespace
 {
@@ -41,13 +44,13 @@ void CVrdxBackground::SetBackground(const FVrdxString& AssetName, float Transiti
 		return;
 	}
 
-	const std::string AssetPath = "Assets/Backgrounds/" + AssetName.ToUtf8() + ".png";
-	if (!NextTexture.loadFromFile(AssetPath))
+	NextTexture = CVrdxAssetManager::Get().GetTexture(AssetName);
+	if (!NextTexture)
 	{
 		return;
 	}
 
-	SetupSprite(NextSprite, NextTexture);
+	SetupSprite(NextSprite, *NextTexture);
 	NextAssetName = AssetName;
 
 	TransitionDuration = std::max(TransitionSeconds, 0.f);
@@ -56,7 +59,7 @@ void CVrdxBackground::SetBackground(const FVrdxString& AssetName, float Transiti
 	if (!bHasCurrent || TransitionDuration <= 0.f)
 	{
 		CurrentTexture = NextTexture;
-		SetupSprite(CurrentSprite, CurrentTexture);
+		SetupSprite(CurrentSprite, *CurrentTexture);
 		CurrentAssetName = NextAssetName;
 		bHasCurrent = true;
 		bIsTransitioning = false;
@@ -83,7 +86,7 @@ void CVrdxBackground::Update(float DeltaTick)
 	}
 
 	CurrentTexture = NextTexture;
-	SetupSprite(CurrentSprite, CurrentTexture);
+	SetupSprite(CurrentSprite, *CurrentTexture);
 	CurrentAssetName = NextAssetName;
 	bHasCurrent = true;
 	bIsTransitioning = false;
@@ -121,6 +124,19 @@ void CVrdxBackground::Draw(sf::RenderWindow& Window) const
 bool CVrdxBackground::IsTransitioning() const
 {
 	return bIsTransitioning;
+}
+
+void CVrdxBackground::Clear()
+{
+	TransitionTime = 0.f;
+	TransitionDuration = 0.f;
+	bHasCurrent = false;
+	bIsTransitioning = false;
+
+	CurrentSprite.setTexture(TransparentTexture);
+	NextSprite.setTexture(TransparentTexture);
+	CurrentAssetName = "";
+	NextAssetName = "";
 }
 
 void CVrdxBackground::SetupSprite(sf::Sprite& Sprite, const sf::Texture& Texture) const

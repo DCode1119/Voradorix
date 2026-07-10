@@ -16,13 +16,13 @@ tags:
 > **대상**: 에셋 로딩/캐싱/수명 관리를 전담하는 싱글톤 코어 모듈  
 > **의존성**: nlohmann/json (Registry I/O), SFML (sf::Font, sf::Texture)  
 > **영향**: DialogueBox, TextLabel, ChoiceWidget (1순위), Background, CharacterManager (2순위)  
-> **상태**: 구현 완료 (`AssetManager.h/cpp` Phase 1.0), UI 폰트 이관 완료
+> **상태**: 구현 완료 (`AssetManager.h/cpp` Phase 1.0), UI 폰트 및 배경/캐릭터 텍스처 경로 이관 완료
 
 ---
 
 ## 1. 개요
 
-현재 엔진은 AssetManager를 통해 폰트/텍스처를 중앙 관리합니다. 초기에는 DialogueBox/TextLabel/ChoiceWidget의 폰트 중복 로딩 문제를 해결하는 것이 1차 목표였고, 현재는 해당 폰트 경로가 AssetManager로 이관되었습니다. AssetManager는 모든 에셋 로딩을 중앙에서 관리하여:
+현재 엔진은 AssetManager를 통해 폰트/텍스처/스크립트 경로를 중앙 관리합니다. 초기에는 DialogueBox/TextLabel/ChoiceWidget의 폰트 중복 로딩 문제를 해결하는 것이 1차 목표였고, 이후 배경/캐릭터 텍스처와 스크립트 경로까지 AssetManager로 이관되었습니다. AssetManager는 모든 에셋 로딩을 중앙에서 관리하여:
 
 - **중복 로딩 제거** — 동일 에셋을 여러 위젯이 공유
 - **식별 체계 통일** — GUID + Alias 이중 접근
@@ -149,11 +149,17 @@ CVrdxApplication::Initialize() 호출
 ```
 ① GetGuid(NameOrGuid)로 GUID 획득
 ② ScriptPathCache에서 GUID로 조회
-   → 있으면 경로(FVrdxString) 반환
-   → 없으면 빈 문자열 반환
+    → 있으면 경로(FVrdxString) 반환
+    → 없으면 빈 문자열 반환
 ```
 
-### 3.5 종료 (`Shutdown`)
+### 3.5 NovelScene 전환
+
+- `Background`는 자체 파일 경로 로딩 대신 `GetTexture()`를 사용
+- `CharacterManager`는 자체 텍스처 캐시를 제거하고 `GetTexture()`를 직접 사용
+- `ResetScriptEngine()`는 스크립트만 다시 읽는 것이 아니라 `NovelScene::Reset()`을 통해 배경/캐릭터/대사/선택지 상태도 초기화함
+
+### 3.6 종료 (`Shutdown`)
 
 ```
 CVrdxApplication 소멸 또는 종료 시
@@ -162,7 +168,7 @@ CVrdxApplication 소멸 또는 종료 시
   → bInitialized = false
 ```
 
-### 3.6 내부 유틸리티
+### 3.7 내부 유틸리티
 
 ```cpp
 // ── EVrdxAssetType ↔ std::string ─────────────────────────────
@@ -267,8 +273,9 @@ Assets/
 | DialogueBox 리팩터 | `GetFont()`로 교체 ✅ |
 | TextLabel 리팩터 | `GetFont()`로 교체 ✅ |
 | ChoiceWidget 리팩터 | `GetFont()`로 교체 ✅ |
-| Background 리팩터 | `GetTexture()`로 교체 (자체 캐시 제거) |
-| CharacterManager 리팩터 | 에셋 로딩을 AssetManager로 이관 (선택) |
+| Background 리팩터 | `GetTexture()`로 교체 ✅ |
+| CharacterManager 리팩터 | 에셋 로딩을 AssetManager로 이관 ✅ |
+| Script 경로 조회 | `GetScriptPath()` 추가 ✅ |
 
 ---
 

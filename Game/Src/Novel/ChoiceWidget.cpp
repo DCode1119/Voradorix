@@ -198,6 +198,18 @@ bool CVrdxChoiceWidget::OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode)
 	return true;
 }
 
+void CVrdxChoiceWidget::Reset()
+{
+	ChoiceOptions.Clear();
+	SelectedIndex = 0;
+
+	Buttons.Clear();
+	ButtonTexts.Clear();
+	ChoiceState = EVrdxChoiceState::Hidden;
+
+	SetVisibility(false);
+}
+
 void CVrdxChoiceWidget::MoveSelection(int32_t Delta)
 {
 	const int32_t DesiredIndex = SelectedIndex + Delta;

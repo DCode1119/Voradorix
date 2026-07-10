@@ -46,6 +46,8 @@ public:
 	virtual bool OnMouseLeftButtonPressed(const sf::Vector2f& LocalPosition) override;
 	virtual bool OnKeyboardPressed(const sf::Keyboard::Scancode ScanCode) override;
 
+	void Reset();
+
 private:
 	void MoveSelection(int32_t Delta);
 	void ConfirmSelection();

@@ -35,6 +35,8 @@ public:
 
 	void AdvanceProcess();
 
+	void Clear();
+
 private:
 	void StartTyping();
 

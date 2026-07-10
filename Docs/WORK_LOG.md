@@ -131,6 +131,18 @@ tags:
   - 슬롯 위치: Left=320, Center=640, Right=960, AnchorY=660, 높이 제한 640px, 중심점 기준 정렬
   - 파일 경로: `Assets/Characters/{Name}/{Pose}.png`
 
+### 2026-07-10 — AssetManager 텍스처/스크립트 전환
+
+- `Src/Core/AssetManager.cpp` — `ScriptPathCache` 엔트리도 유효 에셋으로 등록하도록 수정
+- `Src/Novel/Background.h/cpp` — 배경 로딩을 `AssetManager::GetTexture()` 경유로 전환, `Clear()` 추가
+- `Src/Novel/CharacterManager.h/cpp` — 캐릭터 텍스처 로딩을 `AssetManager::GetTexture()` 경유로 전환, 내부 `TextureCache` 제거
+- `Src/Novel/DialogueBox.h/cpp` — `Clear()` 추가, 리셋 시 표시 문자열/발화자 문자열 초기화
+- `Src/Novel/ChoiceWidget.h/cpp` — `Reset()` 추가, 리셋 시 선택지/버튼/가시성 초기화
+- `Src/Novel/NovelScene.h/cpp` — `Reset()` 추가, `ScriptEngine.Reset()`에서 배경/캐릭터/대사창/선택지 상태 동기 초기화
+- `Src/Novel/ScriptEngine.cpp` — `Reset()` 시 NovelScene 상태까지 함께 초기화
+- `Src/Main.cpp` — New Game/Continue/Load 전환 시 창 가시성 일원화
+- `Docs/Engine/AssetManager.md`, `Docs/Engine/3-BackgroundCharacter.md`, `Docs/Management/BACKLOG.md` — 구현 상태와 로딩 경로 반영 완료
+
 ### 문서 갱신
 
 - `Docs/3-BackgroundCharacter.md` — 설계서를 실제 구현과 정합하도록 갱신

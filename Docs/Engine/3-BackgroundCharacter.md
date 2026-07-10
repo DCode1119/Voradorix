@@ -234,7 +234,7 @@ private:
 
 | 메서드 | 설명 |
 |--------|------|
-| `ShowCharacter(CharacterName, PoseName, Position)` | 지정 위치 슬롯에 캐릭터 스프라이트를 표시. 텍스처 캐시에서 로드하거나 파일(`Assets/Characters/{Name}/{Pose}.png`)에서 로드하여 캐시에 저장. 알파를 즉시 1.0으로 설정, 페이드 없이 표시 |
+| `ShowCharacter(CharacterName, PoseName, Position)` | 지정 위치 슬롯에 캐릭터 스프라이트를 표시. `AssetManager::GetTexture()`로 `{CharacterName}/{PoseName}` alias를 조회하여 스프라이트에 적용. 알파를 즉시 1.0으로 설정, 페이드 없이 표시 |
 | `HideCharacter(CharacterName, FadeSeconds)` | 이름이 일치하는 슬롯을 페이드아웃. `BeginFade(Slot, 0.0f, FadeSeconds)` 호출 |
 | `ClearSlot(Position, FadeSeconds)` | 지정 위치 슬롯을 페이드아웃. `BeginFade(Slot, 0.0f, FadeSeconds)` 호출 |
 | `Update(DeltaTick)` | 페이드 중인 모든 슬롯의 `Alpha`를 보간(`StartAlpha → TargetAlpha`). 페이드 완료 시 `TargetAlpha <= 0`이면 `ResetSlot`으로 비움 |
@@ -254,8 +254,9 @@ private:
 
 ### 5.8 텍스처 캐싱
 
-- `std::map<FVrdxString, TVrdxSharedPtr<sf::Texture>> TextureCache` — 키는 `"{CharacterName}/{PoseName}"` 문자열
-- `ResolveTexture()`: 캐시 조회 후 미스 시 파일 로드 후 캐시에 등록, 실패 시 투명 텍스처 반환
+- 텍스처 캐시는 제거됨
+- `ResolveTexture()`: `{CharacterName}/{PoseName}` alias를 `AssetManager`에 전달해 텍스처를 조회
+- 조회 실패 시 상위 호출부에서 방어 후 동작 중단
 
 ### 5.9 캐릭터 배치
 

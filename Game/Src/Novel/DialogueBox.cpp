@@ -164,5 +164,20 @@ void CVrdxDialogueBox::AdvanceProcess()
 	{
 		bWaiting = false;
 	}
+}
 
+void CVrdxDialogueBox::Clear()
+{
+	bWaiting = false;
+	CurrentTextString = "";
+	VisibleCount = 0;
+	if (LineText)
+	{
+		LineText->setString("");
+	}
+
+	if (SpeakerText)
+	{
+		SpeakerText->setString("");
+	}
 }

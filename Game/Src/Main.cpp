@@ -25,14 +25,36 @@ int main()
             auto TitleWindow = CVrdxWidgetBase::CreateWidget<CVrdxTitleWindow>(RootWidget, Shape);
 			auto SaveLoadWindow = CVrdxWidgetBase::CreateWidget<CVrdxSaveLoadWindow>(RootWidget, Shape);
 
-            TitleWindow->GetRequestNewGame().Add([NovelWindow]() {
-                NovelWindow->ResetScriptEngine();
-                NovelWindow->BringToFront();
-                });
-			TitleWindow->GetRequestContinueGame().Add([SaveLoadWindow]() { SaveLoadWindow->ShowSaveLoadWindow(false); });
+            auto ToggleShowWindow = [NovelWindow, TitleWindow, SaveLoadWindow](TVrdxSharedPtr<CVrdxWidgetBase> Target)
+                {
+                    TVrdxSharedPtr<CVrdxWidgetBase> Widgets[] = {
+                        NovelWindow, TitleWindow, SaveLoadWindow,
+                    };
 
-            SaveLoadWindow->GetRequestBackToMain().Add([TitleWindow]() { TitleWindow->BringToFront(); });
-            SaveLoadWindow->GetRequestLoadGame().Add([NovelWindow](int32_t SlotIndex)
+                    for (auto& Widget : Widgets)
+                    {
+                        Widget->SetVisibility(Widget == Target);
+                    }
+                };
+
+            TitleWindow->GetRequestNewGame().Add([NovelWindow, ToggleShowWindow]() {
+                    NovelWindow->ResetScriptEngine();
+                    NovelWindow->BringToFront();
+                    ToggleShowWindow(NovelWindow);
+                });
+
+			TitleWindow->GetRequestContinueGame().Add([SaveLoadWindow, ToggleShowWindow]()
+                {
+                    SaveLoadWindow->ShowSaveLoadWindow(false);
+                    ToggleShowWindow(SaveLoadWindow);
+                });
+
+            SaveLoadWindow->GetRequestBackToMain().Add([TitleWindow, ToggleShowWindow]()
+                {
+                    TitleWindow->BringToFront();
+                    ToggleShowWindow(TitleWindow);
+                });
+            SaveLoadWindow->GetRequestLoadGame().Add([NovelWindow, ToggleShowWindow](int32_t SlotIndex)
                 {
                     const std::string Filename = "Save" + std::to_string(SlotIndex) + ".dat";
 
@@ -40,6 +62,7 @@ int main()
                     {
                         NovelWindow->Load(Filename);
                         NovelWindow->BringToFront();
+                        ToggleShowWindow(NovelWindow);
                     }
                     else
                     {
@@ -48,6 +71,8 @@ int main()
                 });
 
             TitleWindow->BringToFront();
+            ToggleShowWindow(TitleWindow);
+
         };
 
     // Generate and initialize

@@ -10,6 +10,9 @@
 // Third-party Library
 #include <SFML/Graphics/Color.hpp>
 
+// Project Headers
+#include "Core/AssetManager.h"
+
 namespace
 {
 	constexpr float LeftSlotX = 320.f;
@@ -44,9 +47,16 @@ void CVrdxCharacterManager::ShowCharacter(const FVrdxString& CharacterName, EVrd
 		return;
 	}
 
+	auto Texture = ResolveTexture(CharacterName, PoseName);
+	if (!Texture)
+	{
+		// @todo: display error
+		return;
+	}
+
 	SlotState->CharacterName = CharacterName;
 	SlotState->PoseName = PoseName;
-	SlotState->Texture = ResolveTexture(CharacterName, PoseName);
+	SlotState->Texture = Texture;
 	SlotState->Sprite.setTexture(*SlotState->Texture, true);
 	UpdateSlotTransform(*SlotState);
 
@@ -76,10 +86,17 @@ void CVrdxCharacterManager::SetCharacterPose(const FVrdxString& CharacterName, c
 		return;
 	}
 
+	auto Texture = ResolveTexture(CharacterName, PoseName);
+	if (!Texture)
+	{
+		// @todo: display error
+		return;
+	}
+
 	if (FadeSeconds <= 0.0f)
 	{
 		SlotState->PoseName = PoseName;
-		SlotState->Texture = ResolveTexture(CharacterName, PoseName);
+		SlotState->Texture = Texture;
 		SlotState->Sprite.setTexture(*SlotState->Texture, true);
 		UpdateSlotTransform(*SlotState);
 		SlotState->Alpha = 1.0f;
@@ -97,7 +114,7 @@ void CVrdxCharacterManager::SetCharacterPose(const FVrdxString& CharacterName, c
 
 	SlotState->bPendingPoseChange = true;
 	SlotState->PendingPoseName = PoseName;
-	SlotState->PendingTexture = ResolveTexture(CharacterName, PoseName);
+	SlotState->PendingTexture = Texture;
 	BeginFade(*SlotState, 0.0f, FadeSeconds * 0.5f);
 
 }
@@ -287,26 +304,10 @@ FVrdxCharacterSlot* CVrdxCharacterManager::FindSlotByCharacter(const FVrdxString
 	return nullptr;
 }
 
-const TVrdxSharedPtr<sf::Texture>& CVrdxCharacterManager::ResolveTexture(const FVrdxString& CharacterName, const FVrdxString& PoseName)
+TVrdxSharedPtr<sf::Texture> CVrdxCharacterManager::ResolveTexture(const FVrdxString& CharacterName, const FVrdxString& PoseName)
 {
-	const FVrdxString Key = MakeTextureKey(CharacterName, PoseName);
-	if (const auto It = TextureCache.find(Key); It != TextureCache.end())
-	{
-		return It->second;
-	}
-
-	TVrdxSharedPtr<sf::Texture> LoadedTexture = std::make_shared<sf::Texture>();
-	if (!LoadedTexture->loadFromFile(MakeTexturePath(CharacterName, PoseName).ToUtf8()))
-	{
-		LoadedTexture = TransparentTexture;
-	}
-	else
-	{
-		LoadedTexture->setSmooth(true);
-	}
-
-	auto [It, _] = TextureCache.emplace(Key, LoadedTexture);
-	return It->second;
+	const FVrdxString AssetAlias = CharacterName + "/" + PoseName;
+	return CVrdxAssetManager::Get().GetTexture(AssetAlias);
 }
 
 void CVrdxCharacterManager::ResetSlot(FVrdxCharacterSlot& SlotState)
@@ -368,16 +369,6 @@ void CVrdxCharacterManager::UpdateSlotTransform(FVrdxCharacterSlot& SlotState)
 	SlotState.Sprite.setOrigin(sf::Vector2f(TextureSize.x * 0.5f, TextureSize.y * 0.5f));
 	SlotState.Sprite.setScale(sf::Vector2f(Scale, Scale));
 	SlotState.Sprite.setPosition(sf::Vector2f(GetSlotX(SlotState.Slot), SlotAnchorY));
-}
-
-FVrdxString CVrdxCharacterManager::MakeTextureKey(const FVrdxString& CharacterName, const FVrdxString& PoseName)
-{
-	return CharacterName.ToUtf8() + "/" + PoseName.ToUtf8();
-}
-
-FVrdxString CVrdxCharacterManager::MakeTexturePath(const FVrdxString& CharacterName, const FVrdxString& PoseName)
-{
-	return std::string("Assets/Characters/") + MakeTextureKey(CharacterName, PoseName).ToUtf8() + ".png";
 }
 
 float CVrdxCharacterManager::GetSlotX(const EVrdxCharacterPosition Slot)

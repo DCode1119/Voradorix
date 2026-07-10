@@ -13,6 +13,7 @@
 #include <SFML/Window/Event.hpp>
 
 // Project Headers
+#include "Core/AssetManager.h"
 #include "Core/String.h"
 #include "Novel/Background.h"
 #include "Novel/CharacterManager.h"
@@ -38,7 +39,7 @@ void CVrdxNovelScene::OnPostCreate()
 	}
 
 	ScriptEngine.SetNovelScene(SharedThis);
-	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
+	if (!ScriptEngine.LoadScript(CVrdxAssetManager::Get().GetScriptPath("TestScript")))
 	{
 		return;
 	}
@@ -234,10 +235,35 @@ void CVrdxNovelScene::Load(const FVrdxString& Filename)
 
 void CVrdxNovelScene::ResetScriptEngine()
 {
-	if (!ScriptEngine.LoadScript("Assets/Scripts/TestScript.txt"))
+	if (!ScriptEngine.LoadScript(CVrdxAssetManager::Get().GetScriptPath("TestScript")))
 	{
 		return;
 	}
+}
+
+void CVrdxNovelScene::Reset()
+{
+	if (CharacterManager)
+	{
+		CharacterManager->Reset();
+	}
+
+	if (DialogueBox)
+	{
+		DialogueBox->Clear();
+	}
+
+	if (Background)
+	{
+		Background->Clear();
+	}
+
+	if (ChoiceWidget)
+	{
+		ChoiceWidget->Reset();
+	}
+
+	RemainingWaitSeconds = 0.f;
 }
 
 void CVrdxNovelScene::EndScenario()
