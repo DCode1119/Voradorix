@@ -21,6 +21,31 @@ export interface FileEntry {
   isRegistered: boolean
 }
 
+export interface ImportCandidate {
+  sourcePath: string
+  targetPath: string
+  exists: boolean
+}
+
+export interface ImportPreviewData {
+  sources: Array<{ sourcePath: string; sourceIsDirectory: boolean; sourceName: string }>
+  sourcePath: string
+  sourceIsDirectory: boolean
+  targetDir: string
+  destinationRoot: string
+  directories: Array<{ sourcePath: string; targetPath: string; exists: boolean }>
+  candidates: ImportCandidate[]
+  conflicts: string[]
+}
+
+export interface ImportExecuteResult {
+  success: boolean
+  imported: string[]
+  overwritten: string[]
+  skipped: string[]
+  errors: string[]
+}
+
 export interface ElectronAPI {
   // Registry
   readAssetRegistry: () => Promise<AssetRegistryData>
@@ -31,11 +56,15 @@ export interface ElectronAPI {
   readFileBase64: (path: string) => Promise<string | null>
   readFileText: (path: string) => Promise<string | null>
   createDirectory: (relativePath: string) => Promise<{ success: boolean; error?: string }>
+  pickImportSources: () => Promise<{ canceled: boolean; sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }> }>
+  previewImport: (sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }>, targetDirRelPath: string) => Promise<ImportPreviewData | { error: string }>
+  executeImport: (sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }>, targetDirRelPath: string, overwriteTargets: string[]) => Promise<ImportExecuteResult | { error: string }>
 
   // Asset operations
   importAsset: (sourcePath: string, type: string) => Promise<{ guid: string; sourcePath: string } | { error: string }>
   registerAsset: (relativePath: string, type: string) => Promise<{ guid: string; sourcePath: string } | { error: string }>
   deleteAsset: (guid: string) => Promise<void>
+  deleteNode: (relativePath: string, isDirectory: boolean, guid?: string) => Promise<{ success: boolean; removedRegistryCount: number; removedPaths: string[]; error?: string }>
   updateAlias: (guid: string, alias: string | null) => Promise<void>
   importExternal: () => Promise<{ guid?: string; sourcePath?: string; error?: string }>
   importFile: (filePath: string) => Promise<{ guid?: string; sourcePath?: string; error?: string }>

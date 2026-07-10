@@ -10,7 +10,54 @@ interface AssetTreeProps {
   selectedNode: AssetTreeNode | null
 }
 
-// ── 디렉토리 구조 스캔 (재귀) ──────────────────────────────────────
+interface ImportModalState {
+  visible: boolean
+  sources: Array<{ sourcePath: string; sourceIsDirectory: boolean; sourceName: string }>
+  targetDir: string
+  conflicts: string[]
+  selections: Record<string, boolean>
+  submitting: boolean
+}
+
+interface ContextMenuState {
+  visible: boolean
+  x: number
+  y: number
+  node: AssetTreeNode | null
+}
+
+// ── Helpers ────────────────────────────────────────────────────────
+
+function normalizeAssetPath(path: string): string {
+  return path.replace(/\\/g, '/')
+}
+
+function getParentAssetPath(path: string): string {
+  const normalized = normalizeAssetPath(path).replace(/\/+$/, '')
+  const parts = normalized.split('/').filter(Boolean)
+  parts.pop()
+  return parts.join('/')
+}
+
+function getTargetDirectoryPath(node: AssetTreeNode | null): string {
+  if (!node) {
+    return ''
+  }
+
+  if (node.isDirectory) {
+    return normalizeAssetPath(node.path)
+  }
+
+  return getParentAssetPath(node.path)
+}
+
+function buildTargetLabel(targetDir: string): string {
+  return targetDir ? `Assets/${targetDir}` : 'Assets'
+}
+
+function buildSourceLabel(source: { sourcePath: string; sourceIsDirectory: boolean; sourceName: string }): string {
+  return `${source.sourceIsDirectory ? 'Dir' : 'File'}: ${source.sourceName}`
+}
 
 async function scanDirectory(
   relativePath: string,
@@ -20,10 +67,11 @@ async function scanDirectory(
   const nodes: AssetTreeNode[] = []
 
   for (const e of entries) {
-    const match = registryAssets.find(a => a.sourcePath === e.path)
+    const entryPath = normalizeAssetPath(e.path)
+    const match = registryAssets.find(a => normalizeAssetPath(a.sourcePath) === entryPath)
     const node: AssetTreeNode = {
       name: e.name,
-      path: e.path,
+      path: entryPath,
       isDirectory: e.isDirectory,
       children: [],
       extension: e.extension,
@@ -33,7 +81,7 @@ async function scanDirectory(
     }
 
     if (e.isDirectory) {
-      node.children = await scanDirectory(e.path, registryAssets)
+      node.children = await scanDirectory(entryPath, registryAssets)
     }
 
     nodes.push(node)
@@ -54,69 +102,31 @@ function TreeNodeItem({
   node,
   depth,
   onSelect,
-  onMove,
-  selectedPath
+  selectedPath,
+  onContextMenu
 }: {
   node: AssetTreeNode
   depth: number
   onSelect: (node: AssetTreeNode) => void
-  onMove: (srcPath: string, dstDirPath: string) => void
   selectedPath: string | null
+  onContextMenu: (event: React.MouseEvent, node: AssetTreeNode) => void
 }) {
   const [expanded, setExpanded] = useState(depth < 1)
-  const [dragOver, setDragOver] = useState(false)
 
   const handleClick = () => {
-    if (!node.isDirectory) {
-      onSelect(node)
-    }
-  }
-
-  const handleToggle = () => {
     if (node.isDirectory) {
       setExpanded(prev => !prev)
       onSelect(node)
+      return
     }
+
+    onSelect(node)
   }
 
-  // ── Drag source (files only) ──────────────────────────────────────
   const handleDragStart = (e: React.DragEvent) => {
     if (node.isDirectory) return
     e.dataTransfer.setData('text/x-voradorix-asset-path', node.path)
     e.dataTransfer.effectAllowed = 'move'
-  }
-
-  // ── Drop target (directories only) ────────────────────────────────
-  const handleDragOver = (e: React.DragEvent) => {
-    if (!node.isDirectory) return
-    // Only accept internal drags
-    if (!e.dataTransfer.types.includes('text/x-voradorix-asset-path')) return
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
-    setDragOver(true)
-  }
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    if (!node.isDirectory) return
-    setDragOver(false)
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    setDragOver(false)
-    if (!node.isDirectory) return
-
-    const srcPath = e.dataTransfer.getData('text/x-voradorix-asset-path')
-    if (!srcPath || srcPath === node.path) return
-
-    // Prevent dropping onto own parent chain
-    const srcParts = srcPath.replace(/\\/g, '/').split('/')
-    const dstParts = node.path.replace(/\\/g, '/').split('/')
-    if (srcParts[0] === dstParts[0] && srcParts.length === 1) {
-      // Same root directory level, skip
-      return
-    }
-
-    onMove(srcPath, node.path)
   }
 
   const isSelected = selectedPath === node.path
@@ -125,8 +135,7 @@ function TreeNodeItem({
     'tree-item',
     isSelected ? 'selected' : '',
     node.isDirectory ? 'directory' : 'file',
-    node.isRegistered ? 'registered' : 'unregistered',
-    dragOver ? 'drag-over' : ''
+    node.isRegistered ? 'registered' : 'unregistered'
   ].filter(Boolean).join(' ')
 
   return (
@@ -134,13 +143,11 @@ function TreeNodeItem({
       <div
         className={classes}
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
-        onClick={node.isDirectory ? handleToggle : handleClick}
+        onClick={handleClick}
         onDoubleClick={node.isDirectory ? undefined : handleClick}
         draggable={!node.isDirectory}
         onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+        onContextMenu={event => onContextMenu(event, node)}
       >
         <span className="tree-icon">
           {node.isDirectory
@@ -165,8 +172,8 @@ function TreeNodeItem({
               node={child}
               depth={depth + 1}
               onSelect={onSelect}
-              onMove={onMove}
               selectedPath={selectedPath}
+              onContextMenu={onContextMenu}
             />
           ))}
           {node.children.length === 0 && (
@@ -191,12 +198,37 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
   const [creatingFolder, setCreatingFolder] = useState(false)
   const newFolderInputRef = useRef<HTMLInputElement>(null)
 
+  const [importModal, setImportModal] = useState<ImportModalState>({
+    visible: false,
+    sources: [],
+    targetDir: '',
+    conflicts: [],
+    selections: {},
+    submitting: false
+  })
+
+  const [contextMenu, setContextMenu] = useState<ContextMenuState>({
+    visible: false,
+    x: 0,
+    y: 0,
+    node: null
+  })
+
   const loadTree = useCallback(async () => {
     setLoading(true)
     try {
       const registry = await window.electronAPI.readAssetRegistry()
-      const roots = await scanDirectory('', registry.assets)
-      setTreeData(roots)
+      const children = await scanDirectory('', registry.assets)
+      const rootNode: AssetTreeNode = {
+        name: 'Assets',
+        path: '',
+        isDirectory: true,
+        children,
+        extension: '',
+        size: 0,
+        isRegistered: false
+      }
+      setTreeData([rootNode])
     } catch (err) {
       onLog(`Failed to load asset tree: ${(err as Error).message}`, 'error')
     } finally {
@@ -208,27 +240,159 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
     loadTree()
   }, [loadTree, refreshTrigger])
 
-  // Focus input when New Folder mode activates
   useEffect(() => {
     if (showNewFolder) {
       newFolderInputRef.current?.focus()
     }
   }, [showNewFolder])
 
-  // ── Import External File ──────────────────────────────────────────
-  const handleImportFile = async () => {
-    const result = await window.electronAPI.importExternal()
-    if (result.error) {
-      if (result.error !== 'Canceled') {
-        onLog(`Import failed: ${result.error}`, 'error')
-      }
+  useEffect(() => {
+    const handleClose = () => setContextMenu(prev => ({ ...prev, visible: false }))
+    if (contextMenu.visible) {
+      window.addEventListener('click', handleClose)
+      return () => window.removeEventListener('click', handleClose)
+    }
+  }, [contextMenu.visible])
+
+  const handleContextMenu = (event: React.MouseEvent, node: AssetTreeNode) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (node.path === '' && node.isDirectory) {
       return
     }
-    onLog(`Imported: ${result.sourcePath} (GUID: ${result.guid})`, 'success')
-    loadTree()
+
+    onSelect(node)
+    setContextMenu({
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      node
+    })
   }
 
-  // ── Create New Folder ─────────────────────────────────────────────
+  const handleDeleteNode = async () => {
+    const node = contextMenu.node
+    if (!node) return
+
+    setContextMenu(prev => ({ ...prev, visible: false }))
+
+    const label = node.isDirectory ? `directory "${node.name}"` : `file "${node.name}"`
+    const confirmed = window.confirm(`Delete ${label} and all related asset records?\nThis cannot be undone.`)
+    if (!confirmed) return
+
+    try {
+      const result = await window.electronAPI.deleteNode(node.path, node.isDirectory, node.assetEntry?.guid)
+      if (result.success) {
+        onLog(`Deleted ${label}`, 'success')
+        loadTree()
+        if (selectedNode?.path === node.path) {
+          onSelect(null)
+        }
+      } else {
+        onLog(`Delete failed: ${result.error ?? 'unknown error'}`, 'error')
+      }
+    } catch (err) {
+      onLog(`Delete failed: ${(err as Error).message}`, 'error')
+    }
+  }
+
+  const handleCloseImportModal = () => {
+    if (importModal.submitting) return
+    setImportModal(prev => ({ ...prev, visible: false }))
+  }
+
+  const executeImport = useCallback(async (
+    sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }>,
+    targetDir: string,
+    overwriteTargets: string[]
+  ) => {
+    setImportModal(prev => ({ ...prev, submitting: true }))
+    try {
+      const result = await window.electronAPI.executeImport(sources, targetDir, overwriteTargets)
+
+      if ('error' in result) {
+        onLog(`Import failed: ${result.error}`, 'error')
+        return
+      }
+
+      if (result.errors.length > 0) {
+        onLog(`Import finished with ${result.errors.length} error(s)`, 'error')
+        for (const error of result.errors.slice(0, 5)) {
+          onLog(`  ${error}`, 'error')
+        }
+      }
+
+      if (result.imported.length > 0 || result.overwritten.length > 0) {
+        const importedCount = result.imported.length + result.overwritten.length
+        onLog(`Import complete: ${importedCount} file(s) (${result.overwritten.length} overwritten)`, 'success')
+        loadTree()
+      } else {
+        onLog('Import skipped: no files were copied', 'info')
+      }
+    } catch (err) {
+      onLog(`Import failed: ${(err as Error).message}`, 'error')
+    } finally {
+      setImportModal(prev => ({ ...prev, submitting: false, visible: false }))
+    }
+  }, [loadTree, onLog])
+
+  const openImportDialog = useCallback(async () => {
+    const pickerResult = await window.electronAPI.pickImportSources()
+    if (pickerResult.canceled || pickerResult.sources.length === 0) {
+      return
+    }
+
+    const targetDir = getTargetDirectoryPath(selectedNode)
+    const preview = await window.electronAPI.previewImport(pickerResult.sources, targetDir)
+    if ('error' in preview) {
+      onLog(`Import preview failed: ${preview.error}`, 'error')
+      return
+    }
+
+    if (preview.conflicts.length === 0) {
+      await executeImport(pickerResult.sources, targetDir, [])
+      return
+    }
+
+    setImportModal({
+      visible: true,
+      sources: pickerResult.sources.map(source => ({
+        ...source,
+        sourceName: source.sourcePath.split(/[\\/]/).filter(Boolean).pop() ?? source.sourcePath
+      })),
+      targetDir,
+      conflicts: preview.conflicts,
+      selections: Object.fromEntries(preview.conflicts.map(conflict => [conflict, true])),
+      submitting: false
+    })
+  }, [executeImport, onLog, selectedNode])
+
+  const handleImportFile = async () => {
+    await openImportDialog()
+  }
+
+  const handleConfirmImportModal = async () => {
+    if (!importModal.visible) return
+
+    const overwriteTargets = importModal.conflicts.filter(path => importModal.selections[path])
+    await executeImport(
+      importModal.sources,
+      importModal.targetDir,
+      overwriteTargets
+    )
+  }
+
+  const handleToggleConflict = (targetPath: string) => {
+    setImportModal(prev => ({
+      ...prev,
+      selections: {
+        ...prev.selections,
+        [targetPath]: !prev.selections[targetPath]
+      }
+    }))
+  }
+
   const handleStartNewFolder = () => {
     setNewFolderName('')
     setShowNewFolder(true)
@@ -238,11 +402,14 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
     const name = newFolderName.trim()
     if (!name) return
 
+    const targetDir = getTargetDirectoryPath(selectedNode)
+    const relativePath = normalizeAssetPath(targetDir ? `${targetDir}/${name}` : name)
+
     setCreatingFolder(true)
     try {
-      const result = await window.electronAPI.createDirectory(name)
+      const result = await window.electronAPI.createDirectory(relativePath)
       if (result.success) {
-        onLog(`Created folder: ${name}`, 'success')
+        onLog(`Created folder: ${relativePath}`, 'success')
         setShowNewFolder(false)
         setNewFolderName('')
         loadTree()
@@ -269,7 +436,6 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
     }
   }
 
-  // ── Filter ────────────────────────────────────────────────────────
   const filterTree = (nodes: AssetTreeNode[], query: string): AssetTreeNode[] => {
     const lower = query.toLowerCase()
     return nodes.reduce((acc: AssetTreeNode[], node) => {
@@ -294,11 +460,11 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
 
       {/* Toolbar */}
       <div className="tree-toolbar">
-        <button className="btn btn-sm" onClick={handleImportFile} title="Import file from outside project">
-          📥 Import File
+        <button className="btn btn-sm" onClick={handleImportFile} title="Import files or folders into selected folder">
+          📥 Import
         </button>
         <button className="btn btn-sm" onClick={handleStartNewFolder} title="Create new folder">
-          📁 New Folder
+          🗂 New Folder
         </button>
       </div>
 
@@ -324,6 +490,56 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
         </div>
       )}
 
+      {/* Import conflict modal */}
+      {importModal.visible && (
+        <div className="import-modal-overlay">
+          <div className="import-modal">
+            <div className="import-modal-title">Import Sources</div>
+            <div className="import-modal-meta">
+              <div>Selected: <strong>{importModal.sources.length} item(s)</strong></div>
+              <div>Target: <strong>{buildTargetLabel(importModal.targetDir)}</strong></div>
+            </div>
+
+            <div className="import-modal-hint">
+              Selected files and folders will be copied into the target location. Uncheck any conflicts you do not want to overwrite.
+            </div>
+
+            <div className="import-modal-list">
+              {importModal.sources.map(source => (
+                <div key={source.sourcePath} className="import-modal-item">
+                  <span className="import-modal-item-path">{buildSourceLabel(source)}</span>
+                  <span className="import-modal-item-path">{source.sourcePath}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="import-modal-hint">Conflicts</div>
+            <div className="import-modal-list">
+              {importModal.conflicts.map(targetPath => (
+                <label key={targetPath} className="import-modal-item">
+                  <input
+                    type="checkbox"
+                    checked={importModal.selections[targetPath] ?? false}
+                    onChange={() => handleToggleConflict(targetPath)}
+                    disabled={importModal.submitting}
+                  />
+                  <span className="import-modal-item-path">{targetPath}</span>
+                </label>
+              ))}
+            </div>
+
+            <div className="import-modal-actions">
+              <button className="btn btn-sm" onClick={handleCloseImportModal} disabled={importModal.submitting}>
+                Cancel
+              </button>
+              <button className="btn btn-sm btn-primary" onClick={handleConfirmImportModal} disabled={importModal.submitting}>
+                {importModal.submitting ? 'Importing...' : 'Import Selected'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <input
         className="filter-input"
         type="text"
@@ -344,11 +560,20 @@ export default function AssetTree({ onSelect, onLog, refreshTrigger, selectedNod
               node={root}
               depth={0}
               onSelect={onSelect}
-              selectedPath={selectedNode?.path ?? null}
+              selectedPath={selectedNode ? normalizeAssetPath(selectedNode.path) : null}
+              onContextMenu={handleContextMenu}
             />
           ))
         )}
       </div>
+
+      {contextMenu.visible && contextMenu.node && (
+        <div className="context-menu" style={{ left: contextMenu.x, top: contextMenu.y }}>
+          <div className="context-menu-item danger" onClick={handleDeleteNode}>
+            Delete {contextMenu.node.isDirectory ? 'Directory' : 'File'}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

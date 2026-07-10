@@ -11,10 +11,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
   readFileText: (path: string) => ipcRenderer.invoke('fs:readFileText', path),
   createDirectory: (relativePath: string) => ipcRenderer.invoke('fs:createDirectory', relativePath),
 
+  // Import helpers
+  pickImportSources: () => ipcRenderer.invoke('asset:pickImportSources'),
+  previewImport: (sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }>, targetDirRelPath: string) => ipcRenderer.invoke('asset:previewImport', sources, targetDirRelPath),
+  executeImport: (sources: Array<{ sourcePath: string; sourceIsDirectory: boolean }>, targetDirRelPath: string, overwriteTargets: string[]) => ipcRenderer.invoke('asset:executeImport', sources, targetDirRelPath, overwriteTargets),
+
   // Asset operations
   importAsset: (sourcePath: string, type: string) => ipcRenderer.invoke('asset:import', sourcePath, type),
   registerAsset: (relativePath: string, type: string) => ipcRenderer.invoke('asset:register', relativePath, type),
   deleteAsset: (guid: string) => ipcRenderer.invoke('asset:delete', guid),
+  deleteNode: (relativePath: string, isDirectory: boolean, guid?: string) => ipcRenderer.invoke('asset:deleteNode', relativePath, isDirectory, guid),
   updateAlias: (guid: string, alias: string | null) => ipcRenderer.invoke('asset:updateAlias', guid, alias),
   importExternal: () => ipcRenderer.invoke('asset:importExternal'),
   importFile: (filePath: string) => ipcRenderer.invoke('asset:importFile', filePath),

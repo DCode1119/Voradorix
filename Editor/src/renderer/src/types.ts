@@ -38,3 +38,28 @@ export interface LogMessage {
   text: string
   type: 'info' | 'success' | 'error'
 }
+
+export interface ImportCandidate {
+  sourcePath: string
+  targetPath: string
+  exists: boolean
+}
+
+export interface ImportPreviewData {
+  sources: Array<{ sourcePath: string; sourceIsDirectory: boolean; sourceName: string }>
+  sourcePath: string
+  sourceIsDirectory: boolean
+  targetDir: string
+  destinationRoot: string
+  directories: Array<{ sourcePath: string; targetPath: string; exists: boolean }>
+  candidates: ImportCandidate[]
+  conflicts: string[]
+}
+
+export interface ImportExecuteResult {
+  success: boolean
+  imported: string[]
+  overwritten: string[]
+  skipped: string[]
+  errors: string[]
+}
