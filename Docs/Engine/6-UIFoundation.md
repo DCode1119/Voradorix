@@ -114,7 +114,7 @@ public:
 - `SetFontSize()`
 - `SetFontColor()`
 
-현재는 `Assets/Fonts/malgun.ttf`를 직접 로드하며, 이후 Font Asset Manager로 분리할 예정이다.
+현재는 폰트 리소스를 `AssetManager` 경유로 공유하며, `DialogueBox` / `ChoiceWidget` / `TextLabel`이 동일 자원을 사용한다.
 
 ### 5.3 Button
 

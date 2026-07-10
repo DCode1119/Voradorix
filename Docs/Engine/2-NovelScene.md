@@ -444,7 +444,7 @@ void CVrdxNovelScene::EndScenario()
 | 항목 | 내용 |
 |------|------|
 | 권장 폰트 | Pretendard Variable, Noto Sans CJK KR, 나눔고딕 |
-| 경로 | `Assets/Fonts/` |
+| 경로 | `Assets/Fonts/` (현재는 AssetManager가 관리) |
 | 폴백 | `sf::Font::getDefaultFont()` (한글 깨짐 가능) |
 | 1차 목표 | 시스템 폰트 또는 프로젝트 내 TTF 포함 |
 

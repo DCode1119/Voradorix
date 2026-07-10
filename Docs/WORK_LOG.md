@@ -22,7 +22,7 @@ tags:
 ### 에셋/배포 정리
 
 - `Assets/` — 로컬 에셋 작업 디렉토리로 전환, 소스관리 제외
-- `Game/Assets` — 추적 대상에서 제거
+- `Assets/` — 로컬 작업용 에셋 디렉토리로 전환, 소스관리 제외
 - `Extern/SFML-3.1.0/` — 복사해둔 SFML 3.1.0 vendor 트리 반영
 
 ### 런타임 자원 로딩 정리
@@ -387,7 +387,7 @@ Game/Game/Src/
 ├── Ui/            # Application, WidgetBase, BoxWidget, Button, TextLabel
 └── Main.cpp
 
-Game/Game/Assets/
+Assets/
 ├── Scripts/       # 시나리오 텍스트 파일
 ├── Backgrounds/   # 배경 이미지
 ├── Characters/    # 캐릭터 스프라이트
@@ -445,7 +445,7 @@ choice "미안해" → chapter2 "변명하지마" → chapter3
 
 - `CVrdxTextLabel` 추가 완료
 - `CVrdxBoxWidget` 기반으로 `sf::Text`를 함께 렌더링
-- 폰트는 현재 `Assets/Fonts/malgun.ttf`를 직접 로드하며, 추후 Asset Manager로 분리 예정
+- 폰트는 현재 `AssetManager`의 `malgun` 엔트리를 통해 공유됨
 
 ### Button 작업 메모
 

@@ -193,7 +193,7 @@ Game/Game/
   - Background + CharacterManager + DialogueBox 통합 소유
   - Update 순서: Background → CharacterManager → DialogueBox
   - Draw 순서: Background → CharacterManager → DialogueBox
-- 폰트: `Assets/Fonts/malgun.ttf` (Malgun Gothic)
+- 폰트: `AssetManager`가 관리하는 `malgun` 기본 폰트
 
 ### 3단계 — 배경 및 캐릭터
 - `Background.h/cpp` — 배경 이미지 전환 (페이드)
@@ -263,7 +263,7 @@ Game/Game/
 
 ### 폰트
 - 한글 렌더링을 위해 한글 TTF 필요
-- 현재: `Assets/Fonts/malgun.ttf` (Malgun Gothic, Windows 기본)
+- 현재: `AssetManager`의 `malgun` 폰트 엔트리 사용
 - 추후 변경 가능: Noto Sans CJK KR, Pretendard
 
 ### 프레임 속도

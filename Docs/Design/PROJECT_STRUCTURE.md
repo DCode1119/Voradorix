@@ -20,11 +20,11 @@ D:\Projects\SFML_Project\          ← opencode 프로젝트 루트
     │   │   │                       CharacterManager, DialogueBox, ChoiceWidget, ScriptEngine 등)
     │   │   ├─ Ui/                ← 공통 UI 컴포넌트 (WidgetBase, Application, BoxWidget, Button, TextLabel)
     │   │   └─ Main.cpp
-    │   ├─ Assets/
-    │   ├─ Editor/                       ← Electron 에디터 프로젝트 (Phase 2 예정)
+    │   ├─ Editor/                       ← Electron 에디터 프로젝트
     │   ├─ Saves/
     │   └─ Docs/
     ├─ Extern/
+    ├─ Assets/                           ← 로컬 작업용 에셋 디렉토리 (소스관리 제외)
     └─ .gitignore
 ```
 

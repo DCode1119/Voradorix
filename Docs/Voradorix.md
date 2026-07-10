@@ -86,7 +86,7 @@ SFML 3.1.0 기반 2D 비주얼 노벨 엔진 + Electron 에디터
 
 - [ ] **Phase 1 — AssetManager** (C++, 싱글톤 독립 모듈)
   - GUID 기반 에셋 식별, `AssetRegistry.json` 레지스트리
-  - `LoadFont()` → 폰트 중복 로딩 제거 (1차 목표)
+  - `LoadFont()` → 폰트 중복 로딩 제거 (1차 목표) ✅
   - `LoadTexture()`, `ImportAsset()` (2차 목표)
 - [ ] **Phase 2 — Electron Editor** (Electron + React, [[Editor/INDEX.md]])
   - Asset Browser (파일 트리, 미리보기, Import)

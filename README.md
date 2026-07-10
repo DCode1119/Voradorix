@@ -37,9 +37,7 @@ Game/                          ← Git 저장소 루트
 │   │   │                       DialogueBox, ChoiceWidget, ScriptEngine
 │   │   └── Ui/               # Application, WidgetBase, BoxWidget, Button,
 │   │                           TextLabel (공통 UI)
-│   ├── AssetsOrigin/         # 기존 에셋 보관본
 │   └── Saves/                # 세이브 파일 저장 디렉토리
-├── Assets/                   # 로컬 에셋 작업 디렉토리 (소스관리 제외)
 ├── Editor/                   # Electron 에디터 (Phase 2 예정)
 ├── Extern/                    # SFML 3.1.0, nlohmann/json (v3.12.0)
 ├── Docs/                     # 설계/작업 기록 문서

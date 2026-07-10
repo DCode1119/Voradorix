@@ -16,13 +16,13 @@ tags:
 > **대상**: 에셋 로딩/캐싱/수명 관리를 전담하는 싱글톤 코어 모듈  
 > **의존성**: nlohmann/json (Registry I/O), SFML (sf::Font, sf::Texture)  
 > **영향**: DialogueBox, TextLabel, ChoiceWidget (1순위), Background, CharacterManager (2순위)  
-> **상태**: 구현 완료 (`AssetManager.h/cpp` Phase 1.0)
+> **상태**: 구현 완료 (`AssetManager.h/cpp` Phase 1.0), UI 폰트 이관 완료
 
 ---
 
 ## 1. 개요
 
-현재 엔진은 DialogueBox/TextLabel/ChoiceWidget에서 각자 `malgun.ttf`를 직접 로드하고 있어 폰트가 중복 로딩됩니다. AssetManager는 모든 에셋 로딩을 중앙에서 관리하여:
+현재 엔진은 AssetManager를 통해 폰트/텍스처를 중앙 관리합니다. 초기에는 DialogueBox/TextLabel/ChoiceWidget의 폰트 중복 로딩 문제를 해결하는 것이 1차 목표였고, 현재는 해당 폰트 경로가 AssetManager로 이관되었습니다. AssetManager는 모든 에셋 로딩을 중앙에서 관리하여:
 
 - **중복 로딩 제거** — 동일 에셋을 여러 위젯이 공유
 - **식별 체계 통일** — GUID + Alias 이중 접근
@@ -113,7 +113,7 @@ CVrdxApplication::Initialize() 호출
     → Assets/AssetRegistry.json 읽기
     → JSON 파싱
     → 각 에셋별 pre-load
-      · Font   → openFromFile() → FontCache 저장
+       · Font   → openFromFile() → FontCache 저장
       · Texture → loadFromFile() → TextureCache 저장
       · Script  → ScriptPathCache 저장
     → 로드 성공한 에셋만 GuidIndex / AliasToGuid 구축
@@ -240,7 +240,7 @@ Game/Src/Core/
 ├── AssetManager.cpp   → 구현
 ├── String.h           → FVrdxString
 
-Game/Assets/
+Assets/
 └── AssetRegistry.json → 중앙 레지스트리 (Editor와 공유)
 ```
 
@@ -260,13 +260,13 @@ Game/Assets/
 | GetScriptPath | GUID/Alias → ScriptPathCache 조회 |
 | EVrdxAssetType | `Common.h`에 `Font`, `Texture`, `Script` 정의 |
 
-### Phase 1.1 — 기존 코드 전환 (예정)
+### Phase 1.1 — 기존 코드 전환 (부분 완료)
 
 | 항목 | 내용 |
 |------|------|
-| DialogueBox 리팩터 | `GetFont()`로 교체 |
-| TextLabel 리팩터 | `GetFont()`로 교체 |
-| ChoiceWidget 리팩터 | `GetFont()`로 교체 |
+| DialogueBox 리팩터 | `GetFont()`로 교체 ✅ |
+| TextLabel 리팩터 | `GetFont()`로 교체 ✅ |
+| ChoiceWidget 리팩터 | `GetFont()`로 교체 ✅ |
 | Background 리팩터 | `GetTexture()`로 교체 (자체 캐시 제거) |
 | CharacterManager 리팩터 | 에셋 로딩을 AssetManager로 이관 (선택) |
 

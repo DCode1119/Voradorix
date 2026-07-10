@@ -142,7 +142,7 @@ async function launchGame(): Promise<void> {
 ### 4.2 작업 디렉토리 중요성
 
 Game.exe는 `Assets/`, `Saves/`, `AssetRegistry.json`을 현재 작업 디렉토리 기준으로 찾습니다.
-따라서 `cwd: projectRoot`는 `Game/` 디렉토리를 가리켜야 하며, 이는 Game.exe가 빌드된 `Bin/x64/...`가 아닌 프로젝트 루트여야 합니다.
+따라서 `cwd: projectRoot`는 솔루션 루트(`Game/`)를 가리켜야 하며, 실행 시점에는 디버거와 Editor가 동일한 기준 경로를 사용해야 합니다.
 
 ---
 

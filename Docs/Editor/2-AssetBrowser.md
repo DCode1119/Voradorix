@@ -108,7 +108,7 @@ status: implemented
 
 ```
 사용자 동작:
-  ① 파일 선택 (또는 드래그)
+  ① 파일/디렉토리 선택 (또는 드래그)
   ② Import 버튼 클릭
 
 내부 처리:
@@ -308,13 +308,13 @@ ipcMain.handle('game:stop', async () => {
 
 ## 9. 완료 조건
 
-- [ ] Asset Tree에 `Assets/` 디렉토리 구조가 표시되는가?
-- [ ] 등록된 에셋과 미등록 에셋이 시각적으로 구분되는가?
-- [ ] PNG/JPEG 이미지 미리보기가 표시되는가?
-- [ ] TTF 폰트 미리보기가 표시되는가?
-- [ ] TXT 스크립트 내용이 표시되는가?
-- [ ] Import 버튼으로 파일 등록이 가능한가?
-- [ ] Import 후 Registry.json에 엔트리가 추가되는가?
-- [ ] Delete 버튼으로 등록 해제가 가능한가?
+- [x] Asset Tree에 `Assets/` 디렉토리 구조가 표시되는가?
+- [x] 등록된 에셋과 미등록 에셋이 시각적으로 구분되는가?
+- [x] PNG/JPEG 이미지 미리보기가 표시되는가?
+- [x] TTF 폰트 미리보기가 표시되는가?
+- [x] TXT 스크립트 내용이 표시되는가?
+- [x] Import 버튼으로 파일/디렉토리 다중 선택 등록이 가능한가?
+- [x] Import 후 Registry.json에 엔트리가 추가되는가?
+- [x] Delete 버튼으로 등록 해제가 가능한가?
 - [ ] Play 버튼으로 Game.exe가 실행되는가?
 - [ ] Stop 버튼으로 Game.exe가 종료되는가?

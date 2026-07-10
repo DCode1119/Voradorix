@@ -75,7 +75,7 @@ AssetManager 코어 구축. 싱글톤 독립 모듈, GUID 기반 에셋 식별.
 
 - [ ] `Core/AssetManager.h/cpp` — 클래스 골격 + 싱글톤
 - [ ] `LoadRegistry()` / `SaveRegistry()` — AssetRegistry.json I/O
-- [ ] `LoadFont()` — 폰트 로딩 + 캐싱 (Phase 1 목표)
+- [x] `LoadFont()` — 폰트 로딩 + 캐싱 (Phase 1 목표)
 - [ ] `LoadTexture()` — 텍스처 로딩 + 캐싱
 - [ ] `ImportAsset()` — 파일 복사 + GUID 생성 + Registry 등록
 - [x] 기존 폰트 로딩 코드 3곳 리팩터 (DialogueBox, TextLabel, ChoiceWidget)

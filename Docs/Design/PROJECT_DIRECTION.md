@@ -136,6 +136,7 @@ enum class EVrdxAssetType : uint8_t
 
 - `alias`는 null 허용 (옵셔널)
 - 최초 빈 상태로 시작, `LoadFont()` 등 호출 시 자동 등록됨
+- 현재 UI 폰트는 `DialogueBox` / `TextLabel` / `ChoiceWidget`에서 AssetManager 경유로 공유
 
 ### 4.4 LoadFont 동작 흐름
 
@@ -143,7 +144,7 @@ enum class EVrdxAssetType : uint8_t
 LoadFont("malgun")
   → GUID 형식? → No
   → AliasToGuid["malgun"] 존재? → 없음 (최초)
-  → "Assets/Fonts/malgun.ttf" 직접 로드 시도
+  → "Assets/Fonts/malgun.ttf" 로드 시도 (AssetManager 내부)
   → 성공 시:
       GUID 생성, Registry에 자동 등록
       FontCache[GUID] = 로드된 폰트 (shared_ptr)
