@@ -5,6 +5,9 @@ graphify-out/
 # Runtime data
 Saves/
 
+# Local asset working set
+/Assets/
+
 # Visual Studio
 bin/
 obj/
