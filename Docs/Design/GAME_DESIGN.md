@@ -72,6 +72,8 @@ Scene (추상 인터페이스)
 - 텍스처, 폰트, 사운드버퍼, 음악 파일을 `std::unordered_map<std::string, T>`에 캐싱
 - 중복 로딩 방지, 느리게 로딩(Lazy load)
 - 키(파일명) 기반 참조 → NovelScene 등에서 문자열로 어셋 지정
+- 레지스트리의 `alias`는 null 허용, 로딩 시 빈 문자열로 정규화 가능
+- 폰트 로딩은 `DialogueBox` / `ChoiceWidget` / `TextLabel`에서 AssetManager 경유로 통일
 
 ### 2.3 스크립트 엔진 (ScriptEngine)
 
@@ -113,6 +115,7 @@ NovelScene이 `shared_from_this()`를 넘겨 ScriptEngine이 `weak_ptr`로 참�
 - `Ui/TextLabel.h/cpp` — 텍스트 표시 위젯 (BoxWidget 기반, sf::Text 래퍼)
 - `Ui/Button.h/cpp` — Hover/Click/Keyboard 입력 위젯, Normal/Pressed/Text 자식 구성 (핵심 구현 완료, 세부 폴리싱 예정)
 - 적용 대상: `DialogueBox`, `ChoiceWidget`, `TitleScene`, `ConfigScene`, `SaveLoadScene`
+- 텍스트 위젯 폰트는 AssetManager의 `LoadFont()`/`GetFont()` 경유로 관리
 - 세부 문서: `Docs/6-UIFoundation.md`
 
 ---

@@ -100,6 +100,8 @@ status: active
 | Source 경로 | Import 시 프로젝트 내 `Assets/`로 복사 |
 | 파일명 규칙 | 원본 파일명 유지 (Import 경로는 에디터에서 편집 가능) |
 
+- `AssetRegistry.json` 파싱 시 `alias` 값이 null이면 내부에서는 빈 문자열로 정규화
+
 ### 4.2 에셋 타입 체계
 
 ```cpp

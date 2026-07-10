@@ -78,7 +78,7 @@ AssetManager 코어 구축. 싱글톤 독립 모듈, GUID 기반 에셋 식별.
 - [ ] `LoadFont()` — 폰트 로딩 + 캐싱 (Phase 1 목표)
 - [ ] `LoadTexture()` — 텍스처 로딩 + 캐싱
 - [ ] `ImportAsset()` — 파일 복사 + GUID 생성 + Registry 등록
-- [ ] 기존 폰트 로딩 코드 3곳 리팩터 (DialogueBox, TextLabel, ChoiceWidget)
+- [x] 기존 폰트 로딩 코드 3곳 리팩터 (DialogueBox, TextLabel, ChoiceWidget)
 - [ ] Background 텍스처 → AssetManager 경유
 - [ ] CharacterManager TextureCache → AssetManager 이관
 

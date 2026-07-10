@@ -170,9 +170,9 @@ private:
 
 #### 생성자
 
-1. 폰트 로드: `Assets/Fonts/` 경로에서 기본 폰트 로드
-   - 추후 AssetManager로 이관
-   - 로드 실패 시 기본 `sf::Font::getDefaultFont()` 사용 (fallback)
+1. 폰트 로드: `AssetManager.GetFont("malgun")`로 기본 폰트 획득
+   - `DialogueBox`, `ChoiceWidget`, `TextLabel`이 동일한 폰트 리소스를 공유
+   - 로드 실패 시 텍스트 객체 생성을 생략하고 draw/update에서 방어 처리
 2. Panel 설정:
    - `sf::Color(0, 0, 0, 180)` — 반투명 검정
 3. SpeakerText 설정:
@@ -448,9 +448,8 @@ void CVrdxNovelScene::EndScenario()
 | 폴백 | `sf::Font::getDefaultFont()` (한글 깨짐 가능) |
 | 1차 목표 | 시스템 폰트 또는 프로젝트 내 TTF 포함 |
 
-1단계에서는 프로젝트 내부에 한글 TTF를 포함하고,
-`CVrdxDialogueBox` 생성자에서 이를 로드한다.
-추후 AssetManager로 이관.
+현재는 프로젝트 내부 한글 TTF를 `AssetManager`가 관리하고,
+`CVrdxDialogueBox` 생성자에서 공용 폰트 리소스를 가져와 사용한다.
 
 ---
 

@@ -25,6 +25,13 @@ tags:
 - `Game/Assets` — 추적 대상에서 제거
 - `Extern/SFML-3.1.0/` — 복사해둔 SFML 3.1.0 vendor 트리 반영
 
+### 런타임 자원 로딩 정리
+
+- `Src/Core/AssetManager.cpp` — 레지스트리 로딩 시 `alias` null을 빈 문자열로 처리하도록 수정
+- `Src/Ui/TextLabel.cpp` — 폰트 직접 로드 제거, AssetManager 기반 `sf::Text` 보관으로 변경
+- `Src/Novel/DialogueBox.cpp` — 대사창 텍스트도 AssetManager 폰트를 사용하도록 변경
+- `Src/Novel/ChoiceWidget.cpp` — 선택지 텍스트도 AssetManager 폰트를 사용하도록 변경
+
 ## 2026-06-30 (Later)
 
 ### 3단계 명세서 작성
